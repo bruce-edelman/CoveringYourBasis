@@ -92,6 +92,18 @@ from B-Splines by a normalization factor, namely:
 \end{equation}
 \noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
 
+\begin{figure*}[ht!]
+    \script{spline_basis_plot.py}
+    \begin{centering}
+        \includegraphics[width=\textwidth]{figures/spline_basis_plot.pdf}
+        \caption{Plot showing proper (left) and improper (right) MSpline bases with 20 degrees of freedom and equal weights for each component. The 
+            difference penalty as described in Section II hinges on the fact that basis coeficients that are close produce smoother or flatter 
+            curves. This means one does not want to use an improper basis (i.e. right) with a difference penalty as the resulting curve is not flat 
+            with each component having equal weights.}
+        \label{fig:spline_basis}
+    \end{centering}
+\end{figure*}
+
 Figure shows examples of two different M-Spline bases with 10 degrees of freedom and knots spaced linearly from 0 to 1. Notice 
 that when we introduced knots and in equation \ref{eq:MB_SplineRelation}, you can see there needs to be knots up to $t_{i+k}$ while $i$ 
 indexes the desired degrees of freedom in your basis. This means in practice one must define $n+k$ knots. However, you have control 
@@ -106,6 +118,32 @@ boundary conditions by having $k-1=2$ knots at each boundary (right).
 \subsection{Parameterized Perturbations} \label{sec:perturbation_model}
 \subsection{Generic Mass Model} \label{sec:nonparametric_model}
 \section{Results} \label{sec:results}
+
+\begin{figure*}[ht!]
+    \script{mass_distribution_plot.py}
+    \begin{centering}
+        \includegraphics[width=\textwidth]{figures/mass_distribution_plot.pdf}
+        \caption{Plot showing the primary mass (left) and mass ratio (right) distributions inferred with the 
+        \textsc{MSpline} model (black) with 40 knots for $m_1$, and 15 knots for $q$. We show the results for the \textsc{PowerlawPeak} (blue) and 
+        \textsc{PowerlawSpline} (orange) models fromthe LVK's GWTC-3 population analyses. Solid lines show the median of the posterior while the shaded
+        bands show the 90\% credible intervals.}
+        \label{fig:mass_distribution}
+    \end{centering}
+\end{figure*}
+
+
+\begin{figure*}[ht!]
+    \script{component_spin_distribution_plot.py}
+    \begin{centering}
+        \includegraphics[width=\textwidth]{figures/component_spin_distribution_plot.pdf}
+        \caption{Plot showing the inferred component spin magnitude (top) and spin tilt (bottom) distributions inferred with the 9-knot \textsc{MSpline} models. 
+        There are two independent \textsc{MSpline} (black) models for each primary/secondary spin magnitude and spin tilt. We compare by showing the results for the
+        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
+        \label{fig:component_spin_distribution}
+    \end{centering}
+\end{figure*}
+
+
 \subsection{Mass Spectrum Inference with GWTC-3} \label{sec:GWTC3_inferece}
 \section{Conclusions}\label{sec:conclusion}
 \section{Acknowledgements}\label{sec:acknowledments}
