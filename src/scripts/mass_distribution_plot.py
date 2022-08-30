@@ -5,10 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import deepdish as dd
 
-
 def load_ppd():
     datadict = dd.io.load(paths.data / 'mspline_m1q_indmag_indtilt_mass_ppds.h5')
-    return datadict['m1'], datadict['pm1'], datadict['q'], datadict['pqs']
+    return datadict['m1'], datadict['pm1'], datadict['q'], datadict['pq']
 
 
 def load_o3b_paper_run_masspdf(filename):

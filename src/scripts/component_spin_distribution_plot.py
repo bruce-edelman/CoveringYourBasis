@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import deepdish as dd
 
-
 def load_mag_ppd():
     datadict = dd.io.load(paths.data / 'mspline_m1q_indmag_indtilt_spinmag_ppds.h5')
     return datadict['a1'], datadict['pa1'], datadict['a2'], datadict['pa2']
