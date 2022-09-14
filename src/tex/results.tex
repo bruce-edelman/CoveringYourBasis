@@ -1,0 +1,64 @@
+\section{Population Inference of GWTC-3 BBHs} \label{sec:results}
+
+\subsection{Mass Distribution} \label{sec:mass_dist}
+
+We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
+We find consistent features in the mass disribution with what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} 
+mass models. In particular our MSpline model finds a peak in merger rate density at both 10 and 35 soloar masses, agreeing with those reported
+in \bruce{CITE o3b paper}. We also find a significantly less declining mass distribution that has considerably larger support for higher mass 
+mergers when compared to the other power-law based models. Another interesting consequence of this is that we thus infer a much less steeply
+evolving merger rate with redshift. It is known that there is a strong correlation between the primary mass power law index, $alpha$, and the 
+redshift power-law index, $\lambda_z$. When one infers a steeper mass distribution -- the inferred rate must drastically increase 
+with resdshift to explain the few higher mass events in our catalog, but when one infers a flatter distribution like the MSPline inferred
+distribition in plot \ref{fig:mass_distribution}, the higher mass mergers are consistent with the local merger rate denstiy as a function of mass, 
+and thus the model does not need to have as steep of power-law in redshift. With this more flexible mass population model, we now 
+find that the merger rate is fully consistent with being unifom with co-moving volume, rather than the confidently evolving merger rate 
+conclusion from \bruce{cite O3b}. 
+
+\begin{figure*}[ht!]
+    \script{mass_distribution_plot.py}
+    \begin{centering}
+        \includegraphics[width=\textwidth]{figures/mass_distribution_plot.pdf}
+        \caption{Plot showing the primary mass (left) and mass ratio (right) distributions inferred with the 
+        \textsc{MSpline} model (black) with 40 knots for $m_1$, and 15 knots for $q$. We show the results for the \textsc{PowerlawPeak} (blue) and 
+        \textsc{PowerlawSpline} (orange) models fromthe LVK's GWTC-3 population analyses. Solid lines show the median of the posterior while the shaded
+        bands show the 90\% credible intervals.}
+        \label{fig:mass_distribution}
+    \end{centering}
+\end{figure*}
+
+
+In addition to the primary mass distirbution there is some mild evidence for a mass ratio distibution that is not well described by a power law, 
+which is how the mass ratio distribution is commonly modeled. In particular our smoothed MSpline model finds a decrease in the merger rate at $q\sim1$, 
+while agreeing well with the power-law on the decline in rate from $q \in [0.4, 0.8]$, and a much larger tail extending to more asymmetric
+mass ratios. 
+
+\subsection{Spin Distributions} \label{sec:spin_dist}
+
+The spins distribution of merging combact binaries provides a very useful insight into the formation history of the binary. In particular the two main subcategories, 
+the isolated and dynamical formation channels, would produce distinct signatures in the spin distribution when looking at a population of observations. Isolated formation
+is where the only interactions with the binary are between each other. As the binary evolves and mass transfer happens between the two components, we expect the orientation
+of each components spin vector to be preferentially aligned with the orbital angular mommentumof the system. Some misalignment is epected to occur due to the kicks from 
+each star exploding in supernovae leaving behind the compact objects. Conversely, the dynamical channel     
+
+\begin{figure*}[ht!]
+    \script{component_spin_distribution_plot.py}
+    \begin{centering}
+        \includegraphics[width=\textwidth]{figures/component_spin_distribution_plot.pdf}
+        \caption{Plot showing the inferred component spin magnitude (top) and spin tilt (bottom) distributions inferred with the 9-knot \textsc{MSpline} models. 
+        There are two independent \textsc{MSpline} (black) models for each primary/secondary spin magnitude and spin tilt. We compare by showing the results for the
+        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
+        \label{fig:component_spin_distribution}
+    \end{centering}
+\end{figure*}
+
+\begin{figure*}
+    \script{iid_component_spin_distribution_plot.py}
+    \begin{centering}
+        \includegraphics[width=\textwidth]{figures/iid_component_spin_distribution_plot.pdf}
+        \caption{Plot showing the inferred component spin magnitude (left) and spin tilt (right) distributions inferred with the 9-knot \textsc{MSpline} models. 
+        Each components spin magnitude and tilt are assumed to be IID. We compare by showing the results for the
+        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
+        \label{fig:iid_component_spin_distribution}
+    \end{centering}
+\end{figure*}

@@ -11,6 +11,7 @@
 \usepackage[perpage]{footmisc}
 \usepackage{colortbl}
 \usepackage{lineno}
+\usepackage{bm}
 \usepackage{amsmath}
 \usepackage{appendix}
 \definecolor{Gray}{gray}{0.9}
@@ -33,134 +34,12 @@ binary black holes using GWTC-3.
 \end{abstract}
 
 
-\section{Introduction} \label{sec:intro}
 
-Now that gravitational wave observations of compact binary coalescence is a regular occurrence, producing catalogs of nearly 
-100 such detections, we are beginning to have access to a more complete understanding of the population of compact binaries. 
-In the coming fourth observing run of the LIGO-Virgo-KAGRA collaboration, the catalog size is expected to increase by up to a factor of 5. 
-Looking at population properties of compact objects lets us probe the complex physics common to all of our observations that governs the 
-formation and evolution of merging compact objects. The history of these dense objects is imprinted on the properties of the population 
-of CBCs, allowing us to learn about these not well understood ideas through careful evaluation of the enture distribution of observed GWs. 
-The mass distribution of binary black holes has been used to measure cosmological parameters, constrain modified gravitational wave propagation, 
-constrain a non-constant Planck mass, look for evidence of ultralight bosons through superradiance, put constraints on the uncertain nuclear reaction 
-rates important for stellar evolution, look for primordial black holes, to constrain the neutron star equation of state, 
-and to understand the fromation channels/environments of compact binary coalescences (CBCs). Through a better understanding of the mass, spin, 
-and redshift distribution of compact binaries that will come with the increased catalog size, one can probe these dufferent physical phenoma with 
-greater fidelity.
+\input{intro.tex}
+\input{methods.tex}
+\input{results.tex}
+\input{conclusion.tex}
 
-With the latest LIGO-Virgo-KAGRA (LVK) catalog of CBCs (GWTC-3), new understanding of the population has come into light. One of the main findings was that 
-the mass distribution exhibits substructure with peaks rather than being perfectly described by a smooth power law distribution. The evidence for this was 
-found with mutliple different flexible or non-parametric models that aim to be data-oriented with little bias on the function form. While these models are 
-useful for looking for unexpected features in the data, or finding where our simpler models fail, they can be harder to interpret and are not based on specific
-astrophysical motivation. These types of models will become more important as the size of our catalogs increase and we enter a data-dominated regime rather than
-prior/model dominated. 
-
-The spin distribution of binary black holes (BBHs) has also been of controversial interest in the literature recently, with different parameteric approaches finding 
-rather different conclusions on the distribution of spins of BBHs which has significant impact on the inferences about relative contribution of dynamically formed
-binaries versus ones formed in the field. This is another use case for flexible data-driven models to alleivate the discrepencies among parametric approaches. 
-In particular there has been little work on flexible model development for the spin distribution of BBHs, which makes sense given the relatively smaller catalog 
-sizes and the large uncertainty in individual black hole spin measurements with GWs.
-
-In this paper we highlight how the use of basis-splines can be a useful model-agnostic modeling approach to the astrophysical distributions of compact 
-binaries. We show that with a particular choice of basis, one can efficiently model the spin, mass and redshift distributions of compact binaries in GWTC-3 with
-hierarchical Bayesian inference. We discuss our results in the context of current literature on compact object populations and illustrate how our results are similar
-to those produced with the more simpler and astrophysically motivated parametric models. This data-drien approach will be capable of finding more subtle features, that 
-may not be expected, should they appear in future catalogs. Additionally this method can be extended to higher-dimensional basis-splines in order to model 
-joint population disributions over multiple surce parameters, which will be important to confidently disentangle different competing formation channels 
-should they exist. In Section II we go over the background of basis splines and model construction. In Section III we present results using our basis spline model 
-on the mass and spin distributions of BBHs in GWTC-3, followed by discussing the results and astrophysical implications in Section IV and concluding in Section V.
-
-\section{Methods} \label{sec:methods}
-\subsection{Constructing A Basis} \label{sec:basis_splines}
-
-A common non-parametric method in statistical applications is the use of B-Splines or basis splines. A spline function of order $k$, 
-is a piece-wise polynomial of order $k-1$ polynomials stitched together from defined ``knot'' locations across the domain. 
-They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
-B-Splines of order $k$ are a set of order $k-1$ polynomials that form a complete basis for any spline function of order $k$. 
-Given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
-every possible spline function with knots, $\mathbf{t}$. One can construct the B-Splines for a given knot vector using the Cox-de Boor 
-recursion formula -- for knots $t_0$, $t_1$,...,$t_{i+k}$ the basis components are given by:
-\begin{equation}
-    B_{i,1}(x | \mathbf{t}) = 
-    \begin{cases}
-        1, & \text{if } t_i \leq x < t_{i+1} \\
-        0, & \text{otherwise}
-    \end{cases}
-\end{equation}
-\begin{equation}
-    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x)B_{i,k}(x) + \big[1-\omega_{i+1,k}(x)\big]B_{i+1,k}(x)
-\end{equation}
-\noindent Where $\omega_{i,k}$ above is defined as:
-\begin{equation}
-    \omega_{i,k}(x | \mathbf{t}) =
-    \begin{cases}
-        \frac{x-t_i}{t_{i+k}-t_i}, & t_{i+k} \neq t_i \\
-        0, & \text{otherwise}
-    \end{cases}
-\end{equation}
-
-A similar basis, the M-Spline basis, has desirable properties when looking to model a probability density function. Namely, 
-$M_i \geq 0$ within $(t_i, t_i+k)$, zero elsewhere, and normalized to unity, $\int M_i(x)dx = 1$. The M-Spline basis only differs 
-from B-Splines by a normalization factor, namely:
-\begin{equation}\label{eq:MB_SplineRelation}
-    M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
-\end{equation}
-\noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
-
-\begin{figure*}[ht!]
-    \script{spline_basis_plot.py}
-    \begin{centering}
-        \includegraphics[width=\textwidth]{figures/spline_basis_plot.pdf}
-        \caption{Plot showing proper (left) and improper (right) MSpline bases with 20 degrees of freedom and equal weights for each component. The 
-            difference penalty as described in Section II hinges on the fact that basis coeficients that are close produce smoother or flatter 
-            curves. This means one does not want to use an improper basis (i.e. right) with a difference penalty as the resulting curve is not flat 
-            with each component having equal weights.}
-        \label{fig:spline_basis}
-    \end{centering}
-\end{figure*}
-
-Figure shows examples of two different M-Spline bases with 10 degrees of freedom and knots spaced linearly from 0 to 1. Notice 
-that when we introduced knots and in equation \ref{eq:MB_SplineRelation}, you can see there needs to be knots up to $t_{i+k}$ while $i$ 
-indexes the desired degrees of freedom in your basis. This means in practice one must define $n+k$ knots. However, you have control 
-in the boundary conditions by how many of the $n+k$ knots you place at the lower and upper bounds. By placing $k$ knots at each boundary 
-(leaving $n-k$ interior knots), the first and last basis components are maximized at the boundaries. Alternatively one may want to 
-a-priori enforce vanishing boundary conditions, for example, if they knew for a fact that the function they are modeling has 
-$p(x_\mathrm{bound}) = 0$.  This can be done by placing $k-1$ knots at the boundaries you wish the spline to vanish at. See figure for 
-an example of a cubic M-Spline (k=3) basis with 10 degrees of freedom with $k=3$ knots at each boundary (left) versus enforcing vanishing 
-boundary conditions by having $k-1=2$ knots at each boundary (right).
-
-
-\subsection{Parameterized Perturbations} \label{sec:perturbation_model}
-\subsection{Generic Mass Model} \label{sec:nonparametric_model}
-\section{Results} \label{sec:results}
-
-\begin{figure*}[ht!]
-    \script{mass_distribution_plot.py}
-    \begin{centering}
-        \includegraphics[width=\textwidth]{figures/mass_distribution_plot.pdf}
-        \caption{Plot showing the primary mass (left) and mass ratio (right) distributions inferred with the 
-        \textsc{MSpline} model (black) with 40 knots for $m_1$, and 15 knots for $q$. We show the results for the \textsc{PowerlawPeak} (blue) and 
-        \textsc{PowerlawSpline} (orange) models fromthe LVK's GWTC-3 population analyses. Solid lines show the median of the posterior while the shaded
-        bands show the 90\% credible intervals.}
-        \label{fig:mass_distribution}
-    \end{centering}
-\end{figure*}
-
-
-\begin{figure*}[ht!]
-    \script{component_spin_distribution_plot.py}
-    \begin{centering}
-        \includegraphics[width=\textwidth]{figures/component_spin_distribution_plot.pdf}
-        \caption{Plot showing the inferred component spin magnitude (top) and spin tilt (bottom) distributions inferred with the 9-knot \textsc{MSpline} models. 
-        There are two independent \textsc{MSpline} (black) models for each primary/secondary spin magnitude and spin tilt. We compare by showing the results for the
-        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
-        \label{fig:component_spin_distribution}
-    \end{centering}
-\end{figure*}
-
-
-\subsection{Mass Spectrum Inference with GWTC-3} \label{sec:GWTC3_inferece}
-\section{Conclusions}\label{sec:conclusion}
 \section{Acknowledgements}\label{sec:acknowledments}
 This research has made use of data, software and/or web tools obtained from the Gravitational Wave Open Science Center 
 (\url{https://www.gw-openscience.org/}), a service of LIGO Laboratory, the LIGO Scientific Collaboration and the Virgo Collaboration. 
@@ -172,103 +51,16 @@ fully funded by the National Science Foundation.
 \textsc{NumPy}~\citep{harris2020array},
 \textsc{Matplotlib}~\citep{Hunter:2007},
 \textsc{bilby}~\citep{Ashton_2019},
-\textsc{GWPopulation}~\citep{Talbot_2019}
+\textsc{GWPopulation}~\citep{Talbot_2019},
+\textsc{jax},
+\textsc{numpyro},
+\textsc{arviz},
+\textsc{seaborn},
+\textsc{corner} \bruce{CITE ALL ABOVE}
 }
 \bibliography{bib}{}
 \bibliographystyle{aasjournal}
 
-\appendix
-\section{Hierarchical Bayesian Inference} \label{sec:hierarchical_inference}
-
-% This appendix goes over in detail the hierarchical bayeisan inference framework
-We use hierarchical Bayesian inference to simultaneously infer the population distributions of the primary masses ($m_1$), mass ratios 
-($q$) and the redshifts ($z$) of observed BBHs. For a set of hyper-parameters, $\Lambda$, and local ($z=0$) merger rate density (units of 
-mergers per co-moving volume per time), $\mathcal{R}_0$, we write the overall number density of BBH mergers in the universe as: 
-
-\begin{equation} \label{number_density}
-     \frac{dN(m_1, q, z | \mathcal{R}_0, \Lambda)}{dm_1dqdz} = \frac{dV_c}{dz}\bigg(\frac{T_\mathrm{obs}}{1+z}\bigg) \frac{d\mathcal{R}(m_1, q, z | \mathcal{R}_0, \Lambda)}{dm_1dq} = \mathcal{R}_0 p(m_1 | \Lambda) p(q | m_1, \Lambda) p(z | \Lambda)
-\end{equation}
-
-\noindent
-Above, $dV_c$ is the co-moving volume element \citep{hogg_cosmo} and $T_\mathrm{obs}$, the observing time period that produced the 
-catalog with the related factor of $1+z$ converting this detector-frame time to source-frame. We assume a LambdaCDM cosmology using 
-the cosmological parameters from \citet{Planck2015}. The redshift evolution of the merger rate follows 
-$p(z|\lambda) \propto \frac{dV_c}{dz}\frac{1}{1+z}(1+z)^\lambda$. Integrating equation \ref{number_density} across all masses, 
-and up to some redshift, $z_m$, returns the total number of BBH mergers in the universe out to that redshift. Let $\{d_i\}$ represent a 
-set of data from $N_\mathrm{obs}$ observed gravitational waves associated with BBH mergers. We model the merger rate as an inhomogenous 
-point process and when imposing a log-uniform prior on the merger rate, we can marginalize over the merger rate to get the posterior 
-distribution of our hyper-parameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}.
-
-\begin{equation} \label{posterior}
-    p\left(\Lambda | \{d_i\} \right) \propto \frac{p(\Lambda)}{\xi(\Lambda)^{N_\mathrm{obs}}} \prod_{i=1}^{N_\mathrm{obs}} \Bigg[ \int \mathcal{L}\left(d_i | m_1^i, q^i, z^i \right) p(m_1 | \Lambda) p(q | m_1, \Lambda) p(z | \Lambda) dm_1 dq dz \Bigg],
-\end{equation}
-
-\noindent
-where, $\mathcal{L}(d_i|m_1, q, z)$, is the single-event likelihood function from each events original analysis, and $\xi(\Lambda)$ 
-is the detection efficiency given a population distribution described by $\Lambda$. The procedure for calculating $\xi(\Lambda)$ is 
-described in more detail below. The LVC reports out posterior samples for each observed event, with which we can use importance sampling 
-to estimate the integrals above in equation \ref{posterior}. We replace the integrals with ensemble averages over $K_i$ posterior samples 
-associated with each event in the catalog:
-
-\begin{equation}
- p\left(\Lambda | \{d_i\}\right) \propto p(\Lambda) \prod_{i=1}^{N_\mathrm{obs}} \bigg[ \frac{1}{K_i} \sum_{j=1}^{K_i} \frac{p(m_1^{i,j}|\Lambda)p(q^{i,j}|\Lambda)p(z^{i,j}|\Lambda)}{\pi(m_1^{i,j}, q^{i,j}, z^{i,j})} \bigg]
-\end{equation}
-
-\noindent 
-Here $j$ indexes the $K_i$ posterior samples from each event and $\pi(m_1, q, z)$ is the default prior used by parameter estimations that 
-produced the posterior samples for each event. In the analyses of GWTC-2 the default prior used is uniform in detector frame masses and 
-Euclidean volume. The corresponding prior evaluated in source frame masses and redshift is 
-$\pi(m_1, q, z) \propto m_1(1+z)^2 D_L^2(z) \frac{dD_L}{dz}$, where $D_L$ is the luminosity distance. 
-
-To carefully incorporate selection effects to our model we need to quantify the detection efficiency, $\xi(\Lambda)$, of the search 
-pipelines that were used to create GWTC-2, at a given population distribution described by $\Lambda$.
- 
-\begin{equation} \label{det_eff}
-     \xi(\Lambda) = \int dm_1 dq dz P_\mathrm{det}(m_1, q, z)p(m_1 | \Lambda) p(q | m_1, \Lambda) p(z | \Lambda)
-\end{equation}
- 
-\noindent The above integral is not tractable since there is no analytic prescription for $P_\mathrm{det}(m_1,q,z)$, the detection 
-probability of an individual event. To estimate this integral we use a software injection campaign where GWs from a fixed, broad 
-population of sources are simulated, put into real detector data, and then run through the same search pipelines that were used to 
-produce the catalog we are analyzing \footnote{For O3a we used the injection sets used by \citet{o3a_pop}, which can be found at 
-https://dcc.ligo.org/LIGO-P2000217/public. For O1/O2 we used the mock injection sets used by \citet{o1o2_pop} which can be found at 
-https://dcc.ligo.org/LIGO-P2000434/public}. With these search results in hand, we use importance sampling to evaluate the integral 
-in equation \ref{det_eff}:
-
-\begin{equation} \label{xi}
-     \xi(\Lambda) = \frac{1}{N_\mathrm{inj}} \sum_{i=1}^{N_\mathrm{found}} \frac{p(m_1^i | \Lambda) p(q^i | m_1, \Lambda) p(z^i | \Lambda)}{p_\mathrm{inj}(m_1^i, q^i, z^i)}
-\end{equation}
-
-\noindent
-Where the sum indexes only over the $N_\mathrm{found}$ injections that were successfully detected out of $N_\mathrm{inj}$ total injections, 
-and $p_\mathrm{inj}(m_1, q, z)$ is the reference distribution from which the injections were drawn. Additionally, we follow the procedure 
-outlined in \citet{Farr_2019} to marginalize the uncertainty in our estimate of $\xi(\Lambda)$ due to a finite number of simulated events. 
-We make the assumption that repeated sampling of $\xi(\Lambda)$ will follow a normal distribution with 
-$\xi(\Lambda) \sim \mathcal{N}(\mu(\Lambda), \sigma(\Lambda))$, where the mean, $\mu$, is the estimate from equation \ref{xi}, 
-while the variance, $\sigma^2$, is defined as:
-
-\begin{equation}
-    \sigma^2(\Lambda) \equiv \frac{\mu^2(\Lambda)}{N_\mathrm{eff}} \simeq \frac{1}{N^2_\mathrm{inj}} \sum_{i=1}^{N_\mathrm{found}} \bigg[\frac{p(m_1 | \Lambda) p(q | m_1, \Lambda) p(z | \Lambda)}{p_\mathrm{inj}(m_1, q, z)}\bigg]^2 - \frac{\mu^2(\Lambda)}{N_\mathrm{inj}}
-\end{equation}
-
-\noindent
-Above we define $N_\mathrm{eff}$ as the effective number of independent draws contributing to the importance sampled estimate, 
-in which we verify to be sufficiently high after re-weighting the injections to a given population (i.e. $N_\mathrm{eff} > 4N_\mathrm{obs}$). 
-We write the hyper-posterior marginalized over the merger rate and uncertainty in estimation of $\xi(\Lambda)$, neglecting terms of 
-$\mathcal{O}(N_\mathrm{eff}^{-2})$ or greater \citep{Farr_2019}, as:
-
-\begin{equation}\label{importance-posterior}
-    \log p\left(\Lambda | \{d_i\}\right) \propto \sum_{i=1}^{N_\mathrm{obs}} \log \bigg[ \frac{1}{K_i} \sum_{j=1}^{K_i} \frac{p(m_1^{i,j}|\Lambda)p(q^{i,j}|\Lambda)p(z^{i,j}|\Lambda)}{\pi(m_1^{i,j}, q^{i,j}, z^{i,j})} \bigg] -  \\
-    N_\mathrm{obs} \log \mu + \frac{3N_\mathrm{obs} + N_\mathrm{obs}^2}{2N_\mathrm{eff}} + \mathcal{O}(N_\mathrm{eff}^{-2}).
-\end{equation}
-
-\noindent
-We explicitly enumerate each of the models used in this work for $p(m_1|\Lambda)$, $p(q|m_1, \Lambda)$, and $p(z|\Lambda)$ along with 
-their respective hyper-parameters and prior distributions in Table \ref{tab:model_params}. To calculate marginal likelihoods and draw 
-samples of the hyper parameters from the hierarchical posterior distribution shown in equation \ref{importance-posterior}, we use the 
-\textsc{Bilby} \citep{Ashton_2019, bilby_gwtc1} and \textsc{GWPopulation} \citep{Talbot_2019} Bayesian inference software libraries with 
-the \textsc{Dynesty} dynamic nested sampling algorithm \citep{Speagle_2020}.
-
-\section{Validation Studies} \label{sec:validation}
+\input{appendicies.tex}
 
 \end{document}

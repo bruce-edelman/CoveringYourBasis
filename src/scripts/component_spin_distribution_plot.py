@@ -104,7 +104,7 @@ for ax, ps, lab in zip([axs[1,0], axs[1,1]], [ct1_pdfs, ct2_pdfs], ['cos_tilt_1'
     med = np.median(ps, axis=0)
     low = np.percentile(ps, 5, axis=0)
     high = np.percentile(ps, 95, axis=0)
-    ax.fill_between(xs, low, high, color='k', alpha=0.3)#, label='90% CI')
+    ax.fill_between(xs, low, high, color='k', alpha=0.2)#, label='90% CI')
     ax.plot(xs, med, color='k', lw=4, alpha=0.9, label='MSpline')
     ax.plot(xs, low, color='k', lw=0.25, alpha=0.3)
     ax.plot(xs, high, color='k', lw=0.25, alpha=0.3)

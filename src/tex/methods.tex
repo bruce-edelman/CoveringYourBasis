@@ -1,0 +1,128 @@
+\section{Methods} \label{sec:methods}
+
+\subsection{Constructing A Basis} \label{sec:basis_splines}
+
+A common non-parametric method in statistical applications is the use of B-Splines or basis splines. A spline function of order $k$, 
+is a piece-wise polynomial of order $k-1$ polynomials stitched together from defined ``knot'' locations across the domain. 
+They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
+B-Splines of order $k$ are a set of order $k-1$ polynomials that form a complete basis for any spline function of order $k$. 
+Given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
+every possible spline function with knots, $\mathbf{t}$. One can construct the B-Splines for a given knot vector using the Cox-de Boor 
+recursion formula -- for knots $t_0$, $t_1$,...,$t_{i+k}$ the basis components are given by:
+\begin{equation}
+    B_{i,1}(x | \mathbf{t}) = 
+    \begin{cases}
+        1, & \text{if } t_i \leq x < t_{i+1} \\
+        0, & \text{otherwise}
+    \end{cases}
+\end{equation}
+\begin{equation}
+    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x)B_{i,k}(x) + \big[1-\omega_{i+1,k}(x)\big]B_{i+1,k}(x)
+\end{equation}
+\noindent Where $\omega_{i,k}$ above is defined as:
+\begin{equation}
+    \omega_{i,k}(x | \mathbf{t}) =
+    \begin{cases}
+        \frac{x-t_i}{t_{i+k}-t_i}, & t_{i+k} \neq t_i \\
+        0, & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+A similar basis, the M-Spline basis, has desirable properties when looking to model a probability density function. Namely, 
+$M_i \geq 0$ within $(t_i, t_i+k)$, zero elsewhere, and normalized to unity, $\int M_i(x)dx = 1$. The M-Spline basis only differs 
+from B-Splines by a normalization factor, namely:
+\begin{equation}\label{eq:MB_SplineRelation}
+    M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
+\end{equation}
+\noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
+
+\subsection{Penalized Splines}
+A common issue when using splines as a flexible fitting method is their sensitivity to the chosen number of knots, and their locations. 
+Adding more knots knots will increase the natural a-priori variance in the spline function, while the space between knots can limit the 
+resolution of features in the data the spline is capable of fitting. To ensure your spline based model is flexible enough to find sharp
+features in data, one would want to add as many knots as densely as possible, but this comes with the sometimes un-wanted affect of the 
+larger variance as mentioned above. To overcome this we resort to the frequentist penalized spline (PSpline) in which one applies a penalty
+to the likelihood based on the difference of adjacent knot coeficients. Since the resulting linear combination of spline basis components is 
+smoother, or flatter, when the basis coeficients are near each other, this has a natural smoothing affect to the spline function. Since we are 
+using hierarchical Bayesian inferece as our statistical framework, we formulate this penalized likelihood with its Bayesian analog, by applying 
+the stochastic differnece prior described in \bruce{CITE THIS PAPER}, which is equivalent to a Gaussian random walk prior where each succeeding 
+coeficient is normally distributed about its neighboring coeficients. Thus our smoothing prior for our bayesian framework is:
+
+\begin{equation}
+    \tau_\lambda \sim \mathcal{G}(a, b)
+\end{equation}
+\begin{equation}
+    p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}' \bm{D} \bm{c}}
+\end{equation}
+
+The smoothing prior removes the strong dependence on number and location of knots that arises with using splines. By adding in a 
+very large number of knots such that your domain is densly populated with basis coeficients, the smoothing prior will smooth out regions where 
+the data can be described smoothly, and relax when the data has features for the spline function to fit. In practice one would want to add knots 
+of order the number of observations or more. One downside of this prior specification is a moderate dependence on choice of the b hyper-parameter for 
+Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method in \bruce{CITE BAYESIAN PSPLINES} where we construct 
+a mixture model on a wide range of gamma distributions with different b hyper-parameters. Our prior is now defined as:
+
+\begin{equation}
+    \bm{p} \sim \mathcal{D}(n)
+\end{equation}
+\begin{equation}
+    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \mathcal{G}(1, b_m)
+\end{equation}
+\begin{equation}
+    p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}' \bm{D} \bm{c}}
+\end{equation}
+
+
+Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
+that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve 
+across the knots. \bruce{CITE BAYESIAN PSPLINES}, formulates a spatially adaptive prior 
+
+\begin{equation}
+    \bm{p} \sim \mathcal{D}(n)
+\end{equation}
+\begin{equation}
+    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \mathcal{G}(1, b_m)
+\end{equation}
+\begin{equation}
+    \lambda_k = \mathcal{G}(\omega, \omega)
+\end{equation}
+\begin{equation}
+    p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}' \bm{D} \bm{\Lambda} \bm{D}' \bm{c}}
+\end{equation}
+
+Where above the matrix $\bm{\Lambda}$ is defined as: $\bm{\Lambda} = \mathrm{diag}\big(1,\lambda_0,...\lambda_k\big)$. This enforces a smooth evolution of the smoothing penalty 
+across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
+the power-law like mass distributions that are commonly used. 
+
+
+\begin{figure*}[ht!]
+    \script{spline_basis_plot.py}
+    \begin{centering}
+        \includegraphics[width=\textwidth]{figures/spline_basis_plot.pdf}
+        \caption{Plot showing proper (left) and improper (right) MSpline bases with 20 degrees of freedom and equal weights for each component. The 
+            difference penalty as described in Section II hinges on the fact that basis coeficients that are close produce smoother or flatter 
+            curves. This means one does not want to use an improper basis (i.e. right) with a difference penalty as the resulting curve is not flat 
+            with each component having equal weights.}
+        \label{fig:spline_basis}
+    \end{centering}
+\end{figure*}
+
+Since the smoothing prior is really wanting to pull the coeficients closer to each other to smooth the distribution, 
+we must ensure that the spline function is in fact flat or smooth with all equal coeficients. We follow the distinction from \bruce{CITE bayesian psplines} that the difference
+penalty or prior is only valid with ``proper'' spline bases. This is where the knots are evenly spaced and are not stacked at the extremal values, 
+as is sometimes done. Figure shows examples of two different M-Spline bases with 10 degrees of freedom and knots spaced linearly from 0 to 1. The ``proper''
+basis is shown on the left where the resulting (black) curve is flat with equal components, while the ``improper'' basis on the right has the 
+components squeezed up against the boundaries where multiple knots are located causing the sharp increases at the bounds even with all 10 coeficients equal.
+
+\subsection{Model Specfication}
+
+We use hierarchical Bayesian inference to simultaneosly infer the mass, spin and redshift distributions of binary black holes (BBHs) using 
+the 69 confident BBH detections reported in the recent LVK catalog of observations, GWTC-3. In particular we choose to parameterize the two
+masses with the primary (more massive component) mass and the mass ratio defined as $q=\frac{m_2}{m_1}$. We choose to model 4 of the 6 total 
+spin degrees of freedom of a binary merger with each component spin magnitude, and the cosine of the tilt angle which is defined as the angle 
+between each spin vector and the binaries orbital angular mommentum vector. We additionally will fit a population model on the redshift distribution
+of BBHs. We assume a $\Lambda\mathrm{CDM}$ cosmology defined by the Planck 2015 results, which defines an analytical mapping between each event's inferred
+luminosity distance and it's redshift. While we choose to use MSpline distibutions for the masses and spins, we use the canonical \textsc{PowrerlawRedshift}
+model describing the evolution of CBC merger rates as a power law in $(1+z)$ with a slope of $\lambda_z$. The corresponsing distribution is Thus
+desribed by $p(z|\lambda)\propto \frac{dV_c}{dz} \frac{T_\mathrm{obs}}{1+z} (1+z)^\lambda$. We model the spin magnitude and tilt distibutions to be 
+described by independent MSpline distributions for each component. 

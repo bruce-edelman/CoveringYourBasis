@@ -11,6 +11,13 @@ dependencies:
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
     - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
     - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
+  src/scripts/iid_component_spin_distribution_plot.py:
+    - src/data/from_cit/mspline_m1q_iid_spins_expprior_posterior_samples.h5
+    - src/data/from_cit/mspline_m1q_iid_spins_expprior_ppds.h5
+    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
+    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
+    - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
+    - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
 datasets:
   10.5072/zenodo.1097541:
     contents:
@@ -24,10 +31,10 @@ datasets:
       spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5: src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
       spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
       spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5: src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
+      mspline_m1q_iid_spins_expprior_posterior_samples.h5: src/data/from_cit/mspline_m1q_iid_spins_expprior_posterior_samples.h5
+      mspline_m1q_iid_spins_expprior_ppds.h5: src/data/from_cit/mspline_m1q_iid_spins_expprior_ppds.h5
 #      mspline_fit_500samples_per_posterior_sample.h5: src/data/mspline_fit_500samples_per_posterior_sample.h5
 #      mspline_m1q_expprior_fixspin_posterior_samples.h5: src/data/from_cit/mspline_m1q_expprior_fixspin_posterior_samples.h5
 #      mspline_m1q_expprior_fixspin_ppds.h5: src/data/from_cit/mspline_m1q_expprior_fixspin_ppds.h5
-#      mspline_m1q_iid_spins_expprior_posterior_samples.h5: src/data/from_cit/mspline_m1q_iid_spins_expprior_posterior_samples.h5
-#      mspline_m1q_iid_spins_expprior_ppds.h5: src/data/from_cit/mspline_m1q_iid_spins_expprior_ppds.h5
 #      mspline_m1q_smoothingprior_fixspin_posterior_samples.h5: src/data/from_cit/mspline_m1q_smoothingprior_fixspin_posterior_samples.h5
 #      mspline_m1q_smoothingprior_fixspin_ppds.h5: src/data/from_cit/mspline_m1q_smoothingprior_fixspin_ppds.h5
