@@ -1,5 +1,12 @@
 version: 0.3.0
 dependencies:
+  src/tex/ms.tex:
+    - src/tex/intro.tex
+    - src/tex/methods.tex
+    - src/tex/results.tex
+    - src/tex/conclusion.tex
+    - src/tex/appendicies.tex
+
   src/scripts/mass_distribution_plot.py: 
     - src/data/mspline_m1q_indmag_indtilt_mass_ppds.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5

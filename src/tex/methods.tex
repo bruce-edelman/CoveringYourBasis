@@ -2,13 +2,14 @@
 
 \subsection{Constructing A Basis} \label{sec:basis_splines}
 
-A common non-parametric method in statistical applications is the use of B-Splines or basis splines. A spline function of order $k$, 
-is a piece-wise polynomial of order $k-1$ polynomials stitched together from defined ``knot'' locations across the domain. 
+A common non-parametric method in statistical applications is the use of basis splines. A spline function of order $k$, 
+is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
 They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
-B-Splines of order $k$ are a set of order $k-1$ polynomials that form a complete basis for any spline function of order $k$. 
+Basis splines of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
 Given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
-every possible spline function with knots, $\mathbf{t}$. One can construct the B-Splines for a given knot vector using the Cox-de Boor 
-recursion formula -- for knots $t_0$, $t_1$,...,$t_{i+k}$ the basis components are given by:
+every possible spline function with knots, $\mathbf{t}$. One can construct the B-Splines basis components for a given knot vector 
+using the Cox-de Boor recursion formula. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
+
 \begin{equation}
     B_{i,1}(x | \mathbf{t}) = 
     \begin{cases}
@@ -16,24 +17,35 @@ recursion formula -- for knots $t_0$, $t_1$,...,$t_{i+k}$ the basis components a
         0, & \text{otherwise}
     \end{cases}
 \end{equation}
+
+\noindent combined with the recursion relation:
+
 \begin{equation}
-    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x)B_{i,k}(x) + \big[1-\omega_{i+1,k}(x)\big]B_{i+1,k}(x)
+    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x | \mathbf{t})B_{i,k}(x | \mathbf{t}) + \\
+                                \big[1-\omega_{i+1,k}(x | \mathbf{t})\big] B_{i+1,k}(x | \mathbf{t})
 \end{equation}
-\noindent Where $\omega_{i,k}$ above is defined as:
+
+\noindent where $\omega_{i,k}$ is defined as:
+
 \begin{equation}
-    \omega_{i,k}(x | \mathbf{t}) =
-    \begin{cases}
-        \frac{x-t_i}{t_{i+k}-t_i}, & t_{i+k} \neq t_i \\
-        0, & \text{otherwise}
-    \end{cases}
+\omega_{i,k}(x | \mathbf{t}) =
+\begin{cases}
+    \frac{x-t_i}{t_{i+k}-t_i}, & t_{i+k} \neq t_i \\
+    0, & \text{otherwise}
+\end{cases}
 \end{equation}
+
+\noindent allowing one to build a basis of $i$ components that spans the vector space of order-$k$ spline functions interpolated 
+from this knot vector. This is known as the ``B-Spline'' basis. 
 
 A similar basis, the M-Spline basis, has desirable properties when looking to model a probability density function. Namely, 
 $M_i \geq 0$ within $(t_i, t_i+k)$, zero elsewhere, and normalized to unity, $\int M_i(x)dx = 1$. The M-Spline basis only differs 
 from B-Splines by a normalization factor, namely:
+
 \begin{equation}\label{eq:MB_SplineRelation}
-    M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
+M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
 \end{equation}
+
 \noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
 
 \subsection{Penalized Splines}
@@ -46,54 +58,42 @@ to the likelihood based on the difference of adjacent knot coeficients. Since th
 smoother, or flatter, when the basis coeficients are near each other, this has a natural smoothing affect to the spline function. Since we are 
 using hierarchical Bayesian inferece as our statistical framework, we formulate this penalized likelihood with its Bayesian analog, by applying 
 the stochastic differnece prior described in \bruce{CITE THIS PAPER}, which is equivalent to a Gaussian random walk prior where each succeeding 
-coeficient is normally distributed about its neighboring coeficients. Thus our smoothing prior for our bayesian framework is:
+coeficient is normally distributed about its neighboring coeficients. Thus the smoothing prior for $n$ degree's of freedom basis with a smoothing 
+difference order of $r$ is defined as:
 
-\begin{equation}
-    \tau_\lambda \sim \mathcal{G}(a, b)
-\end{equation}
-\begin{equation}
-    p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}' \bm{D} \bm{c}}
-\end{equation}
+\begin{eqnarray}
+\tau_\lambda \sim \mathcal{G}(a, b), \\
+p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{D_r} \bm{c}}
+\end{eqnarray}
 
-The smoothing prior removes the strong dependence on number and location of knots that arises with using splines. By adding in a 
-very large number of knots such that your domain is densly populated with basis coeficients, the smoothing prior will smooth out regions where 
+\noindent Above $\bm{D_r}$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $a$, $b$, shape parameters for the Gamma distribution, such that
+the mean is at 1, with a large vairabce. This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. 
+By adding in a very large number of knots such that your domain is densly populated with basis coeficients, the smoothing prior will smooth out regions where 
 the data can be described smoothly, and relax when the data has features for the spline function to fit. In practice one would want to add knots 
 of order the number of observations or more. One downside of this prior specification is a moderate dependence on choice of the b hyper-parameter for 
 Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method in \bruce{CITE BAYESIAN PSPLINES} where we construct 
-a mixture model on a wide range of gamma distributions with different b hyper-parameters. Our prior is now defined as:
+a mixture model on a wide range of gamma distributions with different b hyper-parameters. We can now replace the prior on $\tau_\lambda$ with:
 
-\begin{equation}
-    \bm{p} \sim \mathcal{D}(n)
-\end{equation}
-\begin{equation}
-    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \mathcal{G}(1, b_m)
-\end{equation}
-\begin{equation}
-    p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}' \bm{D} \bm{c}}
-\end{equation}
-
+\begin{eqnarray}
+\bm{p} \sim \mathcal{D}(m), \\
+p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \mathcal{G}(1, b_m)
+\end{eqnarray}
 
 Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
-that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve 
-across the knots. \bruce{CITE BAYESIAN PSPLINES}, formulates a spatially adaptive prior 
+that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly
+across the knots. \bruce{CITE BAYESIAN PSPLINES}, formulates a spatially adaptive prior in this way by adding in $n-r-1$ additional parameters that
+effectively modulate the $\tau_\lambda$ across each difference. We now replace our prior on the coeficients with:
 
-\begin{equation}
-    \bm{p} \sim \mathcal{D}(n)
-\end{equation}
-\begin{equation}
-    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \mathcal{G}(1, b_m)
-\end{equation}
-\begin{equation}
-    \lambda_k = \mathcal{G}(\omega, \omega)
-\end{equation}
-\begin{equation}
-    p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}' \bm{D} \bm{\Lambda} \bm{D}' \bm{c}}
-\end{equation}
+\begin{eqnarray}
+\bm{\lambda} \sim \mathcal{G}(\omega, \omega), \\
+\bm{\Lambda} \equiv \mathrm{diag}\big(1, \lambda_0,...,\lambda_{n-r-1}\big), \\
+p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{\Lambda} \bm{D_r} \bm{c}}
+\end{eqnarray}
 
-Where above the matrix $\bm{\Lambda}$ is defined as: $\bm{\Lambda} = \mathrm{diag}\big(1,\lambda_0,...\lambda_k\big)$. This enforces a smooth evolution of the smoothing penalty 
+Where above the matrix $\bm{\Lambda}$ a diagonal matrix of shape $(n-r \times n-r)$, and $\omega$ an arbitrarily small value such that the Gamma distribution 
+prior on $\bm{\lambda}$ has a mean of 1 and an arbitrarily large variance. This enforces a smooth evolution of the smoothing penalty 
 across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
 the power-law like mass distributions that are commonly used. 
-
 
 \begin{figure*}[ht!]
     \script{spline_basis_plot.py}
