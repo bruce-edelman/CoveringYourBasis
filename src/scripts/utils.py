@@ -1,12 +1,8 @@
-import pickle
-import paths
 import numpy as np
 
 
-def load_posterior(fi):
-    with open(paths.data / fi, 'rb') as f:
-        posterior_dict = pickle.load(f)
-    return posterior_dict
+HARDCODED_CHIEFF_KNOTS = np.array([-1.4, -1.2, -1.0, -0.8, -0.6, -0.5, -0.4, -0.32, -0.25, -0.19, -0.14, -0.1, -0.07, -0.05, -0.025, 
+                   0.0, 0.025, 0.05, 0.07, 0.1, 0.14, 0.19, 0.25, 0.32, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.4])
 
 
 class MSpline(object):
