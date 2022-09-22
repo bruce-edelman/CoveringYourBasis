@@ -1,6 +1,9 @@
-\section{Population Inference of GWTC-3 BBHs} \label{sec:results}
+\section{Binary Black Hole Population Inference with GWTC-3} \label{sec:results}
 
-\subsection{Mass Distribution} \label{sec:mass_dist}
+\bruce{intro paragraph here to describe GWTC3 catalog and the selection we made for our analyses}
+
+
+\subsection{BBH Mass Distibution} \label{sec:mass_dist}
 
 We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
 We find consistent features in the mass disribution with what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} 
@@ -19,10 +22,8 @@ conclusion from \bruce{cite O3b}.
     \script{mass_distribution_plot.py}
     \begin{centering}
         \includegraphics[width=\textwidth]{figures/mass_distribution_plot.pdf}
-        \caption{Plot showing the primary mass (left) and mass ratio (right) distributions inferred with the 
-        \textsc{MSpline} model (black) with 40 knots for $m_1$, and 15 knots for $q$. We show the results for the \textsc{PowerlawPeak} (blue) and 
-        \textsc{PowerlawSpline} (orange) models fromthe LVK's GWTC-3 population analyses. Solid lines show the median of the posterior while the shaded
-        bands show the 90\% credible intervals.}
+        \caption{Plot showing the primary mass distribution inferred with the \textsc{MSpline} model with 40 knots for $m_1$. We show the results for the 
+        \textsc{PowerlawSpline} (blue) model from the LVK's GWTC-3 population analyses.}
         \label{fig:mass_distribution}
     \end{centering}
 \end{figure*}
@@ -33,32 +34,72 @@ which is how the mass ratio distribution is commonly modeled. In particular our 
 while agreeing well with the power-law on the decline in rate from $q \in [0.4, 0.8]$, and a much larger tail extending to more asymmetric
 mass ratios. 
 
-\subsection{Spin Distributions} \label{sec:spin_dist}
+\subsection{BBH Component Spin Distributions} \label{sec:spin_dist}
 
 The spins distribution of merging combact binaries provides a very useful insight into the formation history of the binary. In particular the two main subcategories, 
 the isolated and dynamical formation channels, would produce distinct signatures in the spin distribution when looking at a population of observations. Isolated formation
 is where the only interactions with the binary are between each other. As the binary evolves and mass transfer happens between the two components, we expect the orientation
 of each components spin vector to be preferentially aligned with the orbital angular mommentumof the system. Some misalignment is epected to occur due to the kicks from 
 each star exploding in supernovae leaving behind the compact objects. Conversely, the dynamical channel     
+\begin{figure}
+    \script{plot_iid_spinmag.py}
+    \includegraphics[width=0.45\textwidth]{figures/iid_spinmag.pdf}
+    \caption{Caption.}
+    \label{fig:iid_spinmag_dist}
+\end{figure}
 
-\begin{figure*}[ht!]
-    \script{component_spin_distribution_plot.py}
-    \begin{centering}
-        \includegraphics[width=\textwidth]{figures/component_spin_distribution_plot.pdf}
-        \caption{Plot showing the inferred component spin magnitude (top) and spin tilt (bottom) distributions inferred with the 9-knot \textsc{MSpline} models. 
-        There are two independent \textsc{MSpline} (black) models for each primary/secondary spin magnitude and spin tilt. We compare by showing the results for the
-        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
-        \label{fig:component_spin_distribution}
-    \end{centering}
-\end{figure*}
+\begin{figure}
+    \script{plot_iid_spintilt.py}
+    \includegraphics[width=0.45\textwidth]{figures/iid_spintilt.pdf}
+    \caption{Caption.}
+    \label{fig:iid_spintilt_dist}
+\end{figure}
+%\begin{figure*}[ht!]
+%    \script{component_spin_distribution_plot.py}
+%    \begin{centering}
+%%        \includegraphics[width=\textwidth]{figures/component_spin_distribution_plot.pdf}
+ %       \caption{Plot showing the inferred component spin magnitude (top) and spin tilt (bottom) distributions inferred with the 9-knot \textsc{MSpline} models. 
+%        There are two independent \textsc{MSpline} (black) models for each primary/secondary spin magnitude and spin tilt. We compare by showing the results for the
+%        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
+%        \label{fig:component_spin_distribution}
+%    \end{centering}
+%\end{figure*}
 
-\begin{figure*}
-    \script{iid_component_spin_distribution_plot.py}
-    \begin{centering}
-        \includegraphics[width=\textwidth]{figures/iid_component_spin_distribution_plot.pdf}
-        \caption{Plot showing the inferred component spin magnitude (left) and spin tilt (right) distributions inferred with the 9-knot \textsc{MSpline} models. 
-        Each components spin magnitude and tilt are assumed to be IID. We compare by showing the results for the
-        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
-        \label{fig:iid_component_spin_distribution}
-    \end{centering}
-\end{figure*}
+%\begin{figure*}
+%    \script{iid_component_spin_distribution_plot.py}
+%    \begin{centering}
+%        \includegraphics[width=\textwidth]{figures/iid_component_spin_distribution_plot.pdf}
+%        \caption{Plot showing the inferred component spin magnitude (left) and spin tilt (right) distributions inferred with the 9-knot \textsc{MSpline} models. 
+%        Each components spin magnitude and tilt are assumed to be IID. We compare by showing the results for the
+%        \textsc{Default} (iid) spin model used with the \textsc{PowerlawPeak} mass model (blue) and the \textsc{PowerlawSpline} mass model (orange).}
+%        \label{fig:iid_component_spin_distribution}
+%    \end{centering}
+%\end{figure*}
+
+Comment here are the inferences of iid model vs Default and then iid vs independent test pointing out possible reasons for why spin tilt 
+does not peak at cos theta = 1 i.e. salvo's paper
+
+\subsection{The Effective Spin Dimensions}
+
+Transform comp spin results to effective dims to see how strong changes in mag/tilt dont significantly affect our best constrained/measured
+effective spins
+
+Present results fitting chi eff dist with MSpline I am making a change. 
+
+\subsection{Discussion}
+
+\begin{figure}
+    \script{plot_ind_spinmag.py}
+    \includegraphics[width=0.45\textwidth]{figures/ind_spinmag.pdf}
+    \caption{Caption.}
+    \label{fig:ind_spinmag_dist}
+\end{figure}
+
+\begin{figure}
+    \script{plot_ind_spintilt.py}
+        \includegraphics[width=0.45\textwidth]{figures/ind_spintilt.pdf}
+        \caption{Caption.}
+        \label{fig:ind_spintilt_dist}
+\end{figure}
+
+\bruce{Here we discuss the astrophysical implications of work -- connect to wider literature}

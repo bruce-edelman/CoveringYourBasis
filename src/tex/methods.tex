@@ -1,6 +1,4 @@
-\section{Methods} \label{sec:methods}
-
-\subsection{Constructing A Basis} \label{sec:basis_splines}
+\section{Constructing A Basis} \label{sec:basis_splines}
 
 A common non-parametric method in statistical applications is the use of basis splines. A spline function of order $k$, 
 is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
@@ -20,10 +18,10 @@ using the Cox-de Boor recursion formula. Given knots $t_0$, $t_1$,...,$t_{i+k}$ 
 
 \noindent combined with the recursion relation:
 
-\begin{equation}
-    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x | \mathbf{t})B_{i,k}(x | \mathbf{t}) + \\
-                                \big[1-\omega_{i+1,k}(x | \mathbf{t})\big] B_{i+1,k}(x | \mathbf{t})
-\end{equation}
+\begin{multline*}
+    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x | \mathbf{t})B_{i,k}(x | \mathbf{t})\\
+                                + \big[1-\omega_{i+1,k}(x | \mathbf{t})\big] B_{i+1,k}(x | \mathbf{t})
+\end{multline*}
 
 \noindent where $\omega_{i,k}$ is defined as:
 
@@ -34,6 +32,13 @@ using the Cox-de Boor recursion formula. Given knots $t_0$, $t_1$,...,$t_{i+k}$ 
     0, & \text{otherwise}
 \end{cases}
 \end{equation}
+
+\begin{figure}[ht!]
+    \script{spline_basis_plot.py}
+        \includegraphics[width=0.45\textwidth]{figures/spline_basis_plot.pdf}
+        \caption{Plot showing proper MSpline bases with 20 degrees of freedom and equal weights for each component.}
+        \label{fig:spline_basis}
+\end{figure}
 
 \noindent allowing one to build a basis of $i$ components that spans the vector space of order-$k$ spline functions interpolated 
 from this knot vector. This is known as the ``B-Spline'' basis. 
@@ -48,74 +53,9 @@ M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
 
 \noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
 
-\subsection{Penalized Splines}
-A common issue when using splines as a flexible fitting method is their sensitivity to the chosen number of knots, and their locations. 
-Adding more knots knots will increase the natural a-priori variance in the spline function, while the space between knots can limit the 
-resolution of features in the data the spline is capable of fitting. To ensure your spline based model is flexible enough to find sharp
-features in data, one would want to add as many knots as densely as possible, but this comes with the sometimes un-wanted affect of the 
-larger variance as mentioned above. To overcome this we resort to the frequentist penalized spline (PSpline) in which one applies a penalty
-to the likelihood based on the difference of adjacent knot coeficients. Since the resulting linear combination of spline basis components is 
-smoother, or flatter, when the basis coeficients are near each other, this has a natural smoothing affect to the spline function. Since we are 
-using hierarchical Bayesian inferece as our statistical framework, we formulate this penalized likelihood with its Bayesian analog, by applying 
-the stochastic differnece prior described in \bruce{CITE THIS PAPER}, which is equivalent to a Gaussian random walk prior where each succeeding 
-coeficient is normally distributed about its neighboring coeficients. Thus the smoothing prior for $n$ degree's of freedom basis with a smoothing 
-difference order of $r$ is defined as:
+\section{Model Construction}
 
-\begin{eqnarray}
-\tau_\lambda \sim \mathcal{G}(a, b), \\
-p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{D_r} \bm{c}}
-\end{eqnarray}
-
-\noindent Above $\bm{D_r}$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $a$, $b$, shape parameters for the Gamma distribution, such that
-the mean is at 1, with a large vairabce. This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. 
-By adding in a very large number of knots such that your domain is densly populated with basis coeficients, the smoothing prior will smooth out regions where 
-the data can be described smoothly, and relax when the data has features for the spline function to fit. In practice one would want to add knots 
-of order the number of observations or more. One downside of this prior specification is a moderate dependence on choice of the b hyper-parameter for 
-Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method in \bruce{CITE BAYESIAN PSPLINES} where we construct 
-a mixture model on a wide range of gamma distributions with different b hyper-parameters. We can now replace the prior on $\tau_\lambda$ with:
-
-\begin{eqnarray}
-\bm{p} \sim \mathcal{D}(m), \\
-p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \mathcal{G}(1, b_m)
-\end{eqnarray}
-
-Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
-that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly
-across the knots. \bruce{CITE BAYESIAN PSPLINES}, formulates a spatially adaptive prior in this way by adding in $n-r-1$ additional parameters that
-effectively modulate the $\tau_\lambda$ across each difference. We now replace our prior on the coeficients with:
-
-\begin{eqnarray}
-\bm{\lambda} \sim \mathcal{G}(\omega, \omega), \\
-\bm{\Lambda} \equiv \mathrm{diag}\big(1, \lambda_0,...,\lambda_{n-r-1}\big), \\
-p(\bm{c} | \tau_\lambda) \propto \exp{-\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{\Lambda} \bm{D_r} \bm{c}}
-\end{eqnarray}
-
-Where above the matrix $\bm{\Lambda}$ a diagonal matrix of shape $(n-r \times n-r)$, and $\omega$ an arbitrarily small value such that the Gamma distribution 
-prior on $\bm{\lambda}$ has a mean of 1 and an arbitrarily large variance. This enforces a smooth evolution of the smoothing penalty 
-across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
-the power-law like mass distributions that are commonly used. 
-
-\begin{figure*}[ht!]
-    \script{spline_basis_plot.py}
-    \begin{centering}
-        \includegraphics[width=\textwidth]{figures/spline_basis_plot.pdf}
-        \caption{Plot showing proper (left) and improper (right) MSpline bases with 20 degrees of freedom and equal weights for each component. The 
-            difference penalty as described in Section II hinges on the fact that basis coeficients that are close produce smoother or flatter 
-            curves. This means one does not want to use an improper basis (i.e. right) with a difference penalty as the resulting curve is not flat 
-            with each component having equal weights.}
-        \label{fig:spline_basis}
-    \end{centering}
-\end{figure*}
-
-Since the smoothing prior is really wanting to pull the coeficients closer to each other to smooth the distribution, 
-we must ensure that the spline function is in fact flat or smooth with all equal coeficients. We follow the distinction from \bruce{CITE bayesian psplines} that the difference
-penalty or prior is only valid with ``proper'' spline bases. This is where the knots are evenly spaced and are not stacked at the extremal values, 
-as is sometimes done. Figure shows examples of two different M-Spline bases with 10 degrees of freedom and knots spaced linearly from 0 to 1. The ``proper''
-basis is shown on the left where the resulting (black) curve is flat with equal components, while the ``improper'' basis on the right has the 
-components squeezed up against the boundaries where multiple knots are located causing the sharp increases at the bounds even with all 10 coeficients equal.
-
-\subsection{Model Specfication}
-
+\bruce{placeholder paragraph here to introduce our model constructions.}
 We use hierarchical Bayesian inference to simultaneosly infer the mass, spin and redshift distributions of binary black holes (BBHs) using 
 the 69 confident BBH detections reported in the recent LVK catalog of observations, GWTC-3. In particular we choose to parameterize the two
 masses with the primary (more massive component) mass and the mass ratio defined as $q=\frac{m_2}{m_1}$. We choose to model 4 of the 6 total 

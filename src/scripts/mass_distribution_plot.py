@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import deepdish as dd
 
 def load_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_m1q_indmag_indtilt_mass_ppds.h5')
-    return datadict['m1'], datadict['pm1'], datadict['q'], datadict['pq']
+    datadict = dd.io.load(paths.data / 'mspline_60m1_14iid_compspins_powerlaw_q_z_ppds.h5')
+    return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
 
 def load_o3b_paper_run_masspdf(filename):
@@ -37,42 +37,45 @@ def plot_o3b_res(ax, fi, m1=False, col='tab:blue', lab='PP'):
         med = np.median(plpeak_mpdfs, axis=0)
         low = np.percentile(plpeak_mpdfs, 5, axis=0)
         high = np.percentile(plpeak_mpdfs, 95, axis=0)
-        ax.plot(plpeak_ms, med, color=col, lw=3, alpha=0.75, label=lab)
+        ax.plot(plpeak_ms, med, color=col, lw=5, alpha=0.5, label=lab)
         ax.fill_between(plpeak_ms, low, high, color=col, alpha=0.3)
-        ax.plot(plpeak_ms, low, color=col, lw=0.2, alpha=0.4)#, label=lab)
-        ax.plot(plpeak_ms, high, color=col, lw=0.2, alpha=0.4)
+        ax.plot(plpeak_ms, low, color='k', lw=0.1, alpha=0.1)#, label=lab)
+        ax.plot(plpeak_ms, high, color='k', lw=0.1, alpha=0.1)
     else:
         med = np.median(plpeak_qpdfs, axis=0)
         low = np.percentile(plpeak_qpdfs, 5, axis=0)
         high = np.percentile(plpeak_qpdfs, 95, axis=0)
-        ax.plot(plpeak_qs, med, color=col, lw=3, alpha=0.75, label=lab)
+        ax.plot(plpeak_qs, med, color=col, lw=5, alpha=0.5, label=lab)
         ax.fill_between(plpeak_qs, low, high, color=col, alpha=0.3)
-        ax.plot(plpeak_qs, low, color=col, lw=0.2, alpha=0.4)#, label=lab)
-        ax.plot(plpeak_qs, high, color=col, lw=0.2, alpha=0.4)#, label=lab)
+        ax.plot(plpeak_qs, low, color='k', lw=0.1, alpha=0.1)#, label=lab)
+        ax.plot(plpeak_qs, high, color='k', lw=0.1, alpha=0.1)#, label=lab)
 
     return ax
 
-
-nknots = 40
-qknots = 15
-k = 4
-mmin = 5
+mmin = 6.5
 mmax = 100
 ms, m_pdfs, qs, q_pdfs = load_ppd()
-figx, figy = 16, 5
-fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(figx,figy))
+for jj in range(len(m_pdfs)):
+    m_pdfs[jj,:] /= np.trapz(m_pdfs[jj,:], ms)
+    q_pdfs[jj,:] /= np.trapz(q_pdfs[jj,:], qs)
 
-for ax, xs, ps, lab in zip(axs, [ms, qs], [m_pdfs, q_pdfs], ['m1', 'q']):
+figx, figy = 14, 5
+fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(figx,figy))
+
+for ax, xs, ps, lab in zip([axs], [ms], [m_pdfs], ['m1']):
     med = np.median(ps, axis=0)
     low = np.percentile(ps, 5, axis=0)
     high = np.percentile(ps, 95, axis=0)
-    ax.fill_between(xs, low, high, color='k', alpha=0.2)
-    ax.plot(xs, low, color='k', lw=0.25, alpha=0.3)#, label='MSpline')
-    ax.plot(xs, high, color='k', lw=0.25, alpha=0.3)#, label='MSpline')
+    for _ in range(1000):
+        idx = np.random.choice(ps.shape[0])
+        ax.plot(xs, ps[idx], color='k', lw=0.025, alpha=0.02)    
+    ax.plot(xs, low,color='k', lw=0.1, alpha=0.1)#, ls='--')#, label='MSpline')
+    ax.plot(xs, high, color='k', lw=0.1, alpha=0.1)#, ls='--')#, label='MSpline')
+    ax.plot(xs, med, color='tab:red', lw=5, alpha=0.75, label='MSpline')
+    ax.fill_between(xs, low, high, color='tab:red', alpha=0.15)
 
-    ax.plot(xs, med, color='k', lw=4, alpha=0.9, label='MSpline')
-    ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLPeak', col='tab:blue')
-    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLSpline', col='tab:orange')
+    #ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLPeak', col='tab:blue')
+    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLSpline', col='tab:blue')
 
     ax.legend(frameon=False, fontsize=14);
     if lab == 'm1':
@@ -85,17 +88,13 @@ for ax, xs, ps, lab in zip(axs, [ms, qs], [m_pdfs, q_pdfs], ['m1', 'q']):
     ax.tick_params(labelsize=14)
 
 logticks = np.array([5,10,50,100])
-axs[0].set_xticks(logticks)
-axs[0].grid(True, which="major", ls=":")
+axs.set_xticks(logticks)
+axs.grid(True, which="major", ls=":")
 
-axs[1].set_yscale('log')
-axs[0].set_yscale('log')
-axs[0].set_xscale('log')
-axs[0].set_xlim(mmin, mmax)
-axs[0].set_ylim(5e-5, 5e-1)
-axs[1].set_xlim(mmin/mmax, 1)
-axs[1].set_ylim(1e-2,1e1)
-
-plt.suptitle(f'GWTC-3: MSpline Primary({nknots} knots) MSpline Ratio ({qknots} knots)', fontsize=18);
+axs.set_yscale('log')
+axs.set_xscale('log')
+axs.set_xlim(mmin, mmax)
+axs.set_ylim(8e-5, 4e-1)
+plt.title(f'GWTC-3: MSpline Primary Mass Distribution', fontsize=18);
 fig.tight_layout()
 plt.savefig(paths.figures / 'mass_distribution_plot.pdf', dpi=300);
