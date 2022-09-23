@@ -34,21 +34,27 @@ def load_o3b_paper_run_masspdf(filename):
 def plot_o3b_res(ax, fi, m1=False, col='tab:blue', lab='PP'):
     plpeak_mpdfs, plpeak_qpdfs, plpeak_ms, plpeak_qs = load_o3b_paper_run_masspdf(paths.data / fi)
     if m1:
-        med = np.median(plpeak_mpdfs, axis=0)
         low = np.percentile(plpeak_mpdfs, 5, axis=0)
         high = np.percentile(plpeak_mpdfs, 95, axis=0)
-        ax.plot(plpeak_ms, med, color=col, lw=5, alpha=0.5, label=lab)
-        ax.fill_between(plpeak_ms, low, high, color=col, alpha=0.3)
-        ax.plot(plpeak_ms, low, color='k', lw=0.1, alpha=0.1)#, label=lab)
-        ax.plot(plpeak_ms, high, color='k', lw=0.1, alpha=0.1)
+        ax.fill_between(plpeak_ms, low, high, color=col, alpha=0.1)
+        ax.plot(plpeak_ms, low, color='k', lw=0.05, alpha=0.1)#, label=lab)
+        ax.plot(plpeak_ms, high, color='k', lw=0.05, alpha=0.1)
+        low = np.percentile(plpeak_mpdfs, 35, axis=0)
+        high = np.percentile(plpeak_mpdfs, 65, axis=0)
+        ax.fill_between(plpeak_ms, low, high, color=col, alpha=0.5, label=lab)
+        ax.plot(plpeak_ms, low, color='k', lw=0.25, alpha=0.1)#, label=lab)
+        ax.plot(plpeak_ms, high, color='k', lw=0.25, alpha=0.1)
     else:
-        med = np.median(plpeak_qpdfs, axis=0)
         low = np.percentile(plpeak_qpdfs, 5, axis=0)
         high = np.percentile(plpeak_qpdfs, 95, axis=0)
-        ax.plot(plpeak_qs, med, color=col, lw=5, alpha=0.5, label=lab)
-        ax.fill_between(plpeak_qs, low, high, color=col, alpha=0.3)
-        ax.plot(plpeak_qs, low, color='k', lw=0.1, alpha=0.1)#, label=lab)
-        ax.plot(plpeak_qs, high, color='k', lw=0.1, alpha=0.1)#, label=lab)
+        ax.fill_between(plpeak_qs, low, high, color=col, alpha=0.2)
+        ax.plot(plpeak_qs, low, color='k', lw=0.05, alpha=0.05)#, label=lab)
+        ax.plot(plpeak_qs, high, color='k', lw=0.05, alpha=0.05)#, label=lab)
+        low = np.percentile(plpeak_qpdfs, 35, axis=0)
+        high = np.percentile(plpeak_qpdfs, 65, axis=0)
+        ax.fill_between(plpeak_qs, low, high, color=col, alpha=0.5, label=lab)
+        ax.plot(plpeak_qs, low, color='k', lw=0.25, alpha=0.1)#, label=lab)
+        ax.plot(plpeak_qs, high, color='k', lw=0.25, alpha=0.1)#, label=lab)
 
     return ax
 
@@ -63,19 +69,20 @@ figx, figy = 14, 5
 fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(figx,figy))
 
 for ax, xs, ps, lab in zip([axs], [ms], [m_pdfs], ['m1']):
-    med = np.median(ps, axis=0)
+    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLSpline', col='tab:blue')
+    low = np.percentile(ps, 35, axis=0)
+    high = np.percentile(ps, 65, axis=0)  
+    ax.plot(xs, low,color='k', lw=0.25, alpha=0.2)
+    ax.plot(xs, high, color='k', lw=0.25, alpha=0.2)
+    ax.fill_between(xs, low, high, color='tab:red', alpha=0.6, label='MSPline')
     low = np.percentile(ps, 5, axis=0)
     high = np.percentile(ps, 95, axis=0)
-    for _ in range(1000):
-        idx = np.random.choice(ps.shape[0])
-        ax.plot(xs, ps[idx], color='k', lw=0.025, alpha=0.02)    
-    ax.plot(xs, low,color='k', lw=0.1, alpha=0.1)#, ls='--')#, label='MSpline')
-    ax.plot(xs, high, color='k', lw=0.1, alpha=0.1)#, ls='--')#, label='MSpline')
-    ax.plot(xs, med, color='tab:red', lw=5, alpha=0.75, label='MSpline')
-    ax.fill_between(xs, low, high, color='tab:red', alpha=0.15)
-
-    #ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLPeak', col='tab:blue')
-    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLSpline', col='tab:blue')
+    #for _ in range(1000):
+    #    idx = np.random.choice(ps.shape[0])
+    #    ax.plot(xs, ps[idx], color='k', lw=0.025, alpha=0.02)    
+    ax.plot(xs, low,color='k', lw=0.05, alpha=0.05)
+    ax.plot(xs, high, color='k', lw=0.05, alpha=0.05)
+    ax.fill_between(xs, low, high, color='tab:red', alpha=0.1)
 
     ax.legend(frameon=False, fontsize=14);
     if lab == 'm1':

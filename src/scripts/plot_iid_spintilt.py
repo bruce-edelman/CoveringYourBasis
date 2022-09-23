@@ -18,21 +18,27 @@ def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
         for ii in range(len(lines[key])):
             lines[key][ii] /= np.trapz(lines[key][ii], xs)
     if ct1:
-        med = np.median(lines['cos_tilt_1'], axis=0)
+        low = np.percentile(lines['cos_tilt_1'], 35, axis=0)
+        high = np.percentile(lines['cos_tilt_1'], 65, axis=0)
+        ax.fill_between(xs, low, high, color=col, alpha=0.5, label=lab)
+        ax.plot(xs, low, color='k', lw=0.25, alpha=0.1)#, label=lab)
+        ax.plot(xs, high, color='k', lw=0.25, alpha=0.1)#, label=lab)
         low = np.percentile(lines['cos_tilt_1'], 5, axis=0)
         high = np.percentile(lines['cos_tilt_1'], 95, axis=0)
-        ax.plot(xs, med, color=col, lw=5, alpha=0.5, label=lab)
-        ax.fill_between(xs, low, high, color=col, alpha=0.3)
-        ax.plot(xs, low, color='k', lw=0.1, alpha=0.1)#, label=lab)
-        ax.plot(xs, high, color='k', lw=0.1, alpha=0.1)#, label=lab)
+        ax.fill_between(xs, low, high, color=col, alpha=0.1)
+        ax.plot(xs, low, color='k', lw=0.05, alpha=0.05)#, label=lab)
+        ax.plot(xs, high, color='k', lw=0.05, alpha=0.05)#, label=lab)
     else:
-        med = np.median(lines['cos_tilt_2'], axis=0)
+        low = np.percentile(lines['cos_tilt_2'], 35, axis=0)
+        high = np.percentile(lines['cos_tilt_2'], 65, axis=0)
+        ax.fill_between(xs, low, high, color=col, alpha=0.5, label=lab)
+        ax.plot(xs, low, color='k', lw=0.25, alpha=0.1)#, label=lab)
+        ax.plot(xs, high, color='k', lw=0.25, alpha=0.1)
         low = np.percentile(lines['cos_tilt_2'], 5, axis=0)
         high = np.percentile(lines['cos_tilt_2'], 95, axis=0)
-        ax.plot(xs, med, color=col, lw=5, alpha=0.5, label=lab)
-        ax.fill_between(xs, low, high, color=col, alpha=0.3)
-        ax.plot(xs, low, color='k', lw=0.1, alpha=0.1)#, label=lab)
-        ax.plot(xs, high, color='k', lw=0.1, alpha=0.1)
+        ax.fill_between(xs, low, high, color=col, alpha=0.1)
+        ax.plot(xs, low, color='k', lw=0.05, alpha=0.05)#, label=lab)
+        ax.plot(xs, high, color='k', lw=0.05, alpha=0.05)
     return ax
 
 figx, figy = 7, 5
@@ -44,18 +50,21 @@ for jj in range(len(ct_pdfs)):
     ct_pdfs[jj,:] /= np.trapz(ct_pdfs[jj,:], xs)
 xmin=-1
 ax = axs
-med = np.median(ct_pdfs , axis=0)
+ax = plot_o3b_spintilt(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5', ct1=True, lab='Default', col='tab:blue')
+low = np.percentile(ct_pdfs , 35, axis=0)
+high = np.percentile(ct_pdfs , 65, axis=0)
+ax.plot(xs, color='k', lw=0.25, alpha=0.1)
+ax.plot(xs, color='k', lw=0.25, alpha=0.1)
+ax.fill_between(xs, low, high, color='tab:red', alpha=0.5, label='MSpline')#, label='90% CI')
 low = np.percentile(ct_pdfs , 5, axis=0)
 high = np.percentile(ct_pdfs , 95, axis=0)
-for _ in range(1000):
-    idx = np.random.choice(ct_pdfs.shape[0])
-    ax.plot(xs, ct_pdfs[idx], color='k', lw=0.025, alpha=0.025)   
-ax.plot(xs, med, color='tab:red', lw=5, alpha=0.75, label='MSpline')
-ax.plot(xs, color='k', lw=0.1, alpha=0.1)
-ax.plot(xs, color='k', lw=0.1, alpha=0.1)
-ax.fill_between(xs, low, high, color='tab:red', alpha=0.15)#, label='90% CI')
+#for _ in range(1000):
+#    idx = np.random.choice(ct_pdfs.shape[0])
+#    ax.plot(xs, ct_pdfs[idx], color='k', lw=0.025, alpha=0.025)   
+ax.plot(xs, color='k', lw=0.05, alpha=0.05)
+ax.plot(xs, color='k', lw=0.05, alpha=0.05)
+ax.fill_between(xs, low, high, color='tab:red', alpha=0.1)#, label='90% CI')
 
-ax = plot_o3b_spintilt(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5', ct1=True, lab='Default', col='tab:blue')
 
 ax.legend(frameon=False, fontsize=14);
 ax.set_xlabel(r'$\cos{\theta}$', fontsize=18)

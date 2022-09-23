@@ -56,8 +56,8 @@ leg_item = ndof + 2
 max_col = 6
 ncol = max([leg_item // max_col, 3])
 axs.legend(loc='upper center', fancybox=True, shadow=True, ncol=ncol, fontsize=16)
-axs.set_xlim(knots[0]-dx/2., knots[-1]+dx/2.)
-axs.set_ylim(0, 1.75)
+axs.set_xlim(0,1)
+axs.set_ylim(0, 1.5)
 axs.set_xlabel(xlab, fontsize=18)
 axs.grid(True, which="major", ls=":")
 axs.set_ylabel(f'p({xlab})', fontsize=18)
