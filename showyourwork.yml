@@ -7,6 +7,12 @@ dependencies:
     - src/tex/results.tex
     - src/tex/conclusion.tex
     - src/tex/appendicies.tex
+  src/scripts/plot_chieff.py:
+    - src/data/chi_eff_ppds.h5
+    - src/data/mspline_60m1_handpicked_27chieff_powerlaw_q_z_fitlamb_ppds.h5
+  src/scripts/create_chieff_from_compspin.py:
+    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
+    - src/data/mspline_60m1_14iid_compspins_powerlaw_q_z_posterior_samples.h5
   src/scripts/plot_iid_spinmag.py:
     - src/data/mspline_60m1_14iid_compspins_powerlaw_q_z_ppds.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
@@ -25,12 +31,6 @@ dependencies:
     - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
 
 datasets:
-  10.5072/zenodo.1097541:
-    contents:
-      o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
-      o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
-      o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
-      spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
   10.5072/zenodo.1107275:
     contents:
       mspline_60m1_10iid_compspins_dirchprior_powerlaw_q_z_posterior_samples.h5: src/data/mspline_60m1_10iid_compspins_dirchprior_powerlaw_q_z_posterior_samples.h5
@@ -61,15 +61,16 @@ datasets:
       mspline_60m1_16ind_compspins_dirchprior_powerlaw_q_z_ppds.h5: src/data/mspline_60m1_16ind_compspins_dirchprior_powerlaw_q_z_ppds.h5
       mspline_60m1_16ind_compspins_powerlaw_q_z_posterior_samples.h5: src/data/mspline_60m1_16ind_compspins_powerlaw_q_z_posterior_samples.h5 
       mspline_60m1_16ind_compspins_powerlaw_q_z_ppds.h5: src/data/mspline_60m1_16ind_compspins_powerlaw_q_z_ppds.h5
-  #10.5281/zenodo.5655785:
-  #    contents:
-  #      GWTC-3-population-data.tar.gz:
-  #        GWTC-3-population-data:
-  #          analyses:
-  #            PowerLawSpline:
-  #              o1o2o3:
-  #                spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
-  #            PowerLawPeak:
-  #              o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
-  #              o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
-  #              o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
+  10.5281/zenodo.5655785:
+      contents:
+        GWTC-3-population-data.tar.gz:
+          GWTC-3-population-data:
+            analyses:
+              PowerLawSpline:
+                o1o2o3:
+                  spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
+              PowerLawPeak:
+                o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
+                o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
+                o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
+                o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5

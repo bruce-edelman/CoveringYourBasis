@@ -10,3 +10,5 @@ dependencies:
       - numpyro
       - matplotlib
       - deepdish
+      - scipy
+      - gwpopulation
