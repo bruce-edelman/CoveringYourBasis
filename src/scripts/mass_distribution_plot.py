@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import deepdish as dd
 
 def load_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_60m1_14iid_compspins_powerlaw_q_z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
 

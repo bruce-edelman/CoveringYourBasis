@@ -34,7 +34,7 @@ plt.fill_between(
     alpha=0.15,
 )
 handpicked_ppds = dd.io.load(
-    paths.data / "mspline_60m1_handpicked_27chieff_powerlaw_q_z_fitlamb_ppds.h5"
+    paths.data / "mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5"
 )
 xs = handpicked_ppds["chieffs"]
 pchiefss = handpicked_ppds["dRdchieff"]

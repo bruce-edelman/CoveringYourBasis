@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import deepdish as dd
 
 def load_mag_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_60m1_12ind_compspins_powerlaw_q_z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
     return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
 
 def plot_o3b_spinmag(ax, fi, a1=False, col='tab:blue', lab='PP'):

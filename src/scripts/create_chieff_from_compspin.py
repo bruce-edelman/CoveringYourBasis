@@ -142,9 +142,9 @@ def main():
     DefaultSpinTiltModel = Model([iid_spin_orientation_gaussian_isotropic])
     DefaultSpinMagModel = Model([iid_spin_magnitude_beta])
     MassModel = Model([SinglePeakSmoothedMassDistribution(mmin=2.0, mmax=100.0)])
-    mspl_post = dd.io.load(paths.data / "mspline_60m1_12ind_compspins_powerlaw_q_z_posterior_samples.h5")
+    mspl_post = dd.io.load(paths.data / "mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5")
     chi_effs_mspl = draw_chieff_samples(mspl_post, MSplinePrimaryPowerlawRatio, MSplineIndependentSpinMagnitudes, MSplineIndependentSpinTilts, 
-                                        60, 12, 12)
+                                        50, 16, 16)
     pchieffs, chieffs = chi_eff_kde_ppd(chi_effs_mspl)
     o3b_default_spin_result = read_in_result(paths.data / "o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json")
     chi_effs_o3b_default = draw_chieff_samples_gwpop(o3b_default_spin_result, DefaultSpinMagModel, DefaultSpinTiltModel, MassModel)
