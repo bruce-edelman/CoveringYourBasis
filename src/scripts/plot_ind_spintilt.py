@@ -17,7 +17,7 @@ for i in range(len(ct1_pdfs)):
     ct2_pdfs[i] /= np.trapz(ct2_pdfs[i], xs)
 xmin=-1
 maxy=0
-for ps, lab, c in zip([ct1_pdfs, ct2_pdfs], ['cos_tilt_1', 'cos_tilt_2'],  ['tab:red', 'tab:olive']):
+for ps, lab, c in zip([ct1_pdfs, ct2_pdfs], ['cos_tilt_1', 'cos_tilt_2'],  ['tab:orange', 'tab:olive']):
     ax = plot_mean_and_90CI(ax, xs, ps, color=c, label=f'MSpline-{lab}')
     high = np.percentile(ps, 95, axis=0)
     if max(high) > maxy:
