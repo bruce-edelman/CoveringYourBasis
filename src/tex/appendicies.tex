@@ -90,7 +90,7 @@ each coeficient is normally distributed about its neighboring coeficients. We th
 , and a difference order of $r$ in our smoothing penalty (see \bruce{cite P-splines paper}) is defined as:
 
 \begin{eqnarray}
-\tau_\lambda \propto \Gamma(a, b) \\
+\tau_\lambda \sim \Gamma(a, b) \\
 p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{D_r} \bm{c}  \big] e^{-n\bm{c}}
 \end{eqnarray}
 
@@ -103,12 +103,12 @@ to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model 
 We now replace the prior on $\tau_\lambda$ with:
 
 \begin{align}
-    \bm{p} \propto \mathcal{D}(m) \\
-    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_m)
+    \bm{p} \sim \mathcal{D}(m) \\
+    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_i)
 \end{align}
 
 \noindent Where above $\mathcal{D}(m)$ is a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
-and $b_m$ is an array of $m$ different b shape parameters for the Gamma distribution.
+and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
 
 %Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
 %that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly

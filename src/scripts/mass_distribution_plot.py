@@ -4,11 +4,27 @@ import paths
 import numpy as np
 import matplotlib.pyplot as plt
 import deepdish as dd
+from utils import plot_mean_and_90CI
+from matplotlib.ticker import ScalarFormatter
+
 
 def load_ppd():
     datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
+
+def load_o3b_paper_run_m1ppd(filename):
+    mass_1 = np.linspace(2, 100, 1000)
+    mass_ratio = np.linspace(0.1, 1, 500)
+    # load in the traces. 
+    # Each entry in lines is p(m1 | Lambda_i) or p(q | Lambda_i)
+    # where Lambda_i is a single draw from the hyperposterior
+    # The ppd is a 2D object defined in m1 and q
+    with open(filename, 'r') as _data:
+        _data = dd.io.load(filename)
+        ppd = _data["ppd"]
+    m1ppd = np.trapz(ppd, x=mass_ratio, axis=0)
+    return mass_1, m1ppd / np.trapz(m1ppd, x=mass_1)
 
 def load_o3b_paper_run_masspdf(filename):
     """
@@ -30,32 +46,17 @@ def load_o3b_paper_run_masspdf(filename):
         marginals['mass_ratio'][ii] /= np.trapz(marginals['mass_ratio'][ii], mass_ratio)
     return marginals['mass_1'], marginals['mass_ratio'], mass_1, mass_ratio
 
+def plot_o3b_m1_ppd(ax, fi, col='tab:blue', lab='PLPeak'):
+    ms, ppd = load_o3b_paper_run_m1ppd(paths.data / fi)
+    ax.plot(ms, ppd, color=col, label=lab, alpha=0.75, lw=4)
+    return ax
 
-def plot_o3b_res(ax, fi, m1=False, col='tab:blue', lab='PP'):
+def plot_o3b_res(ax, fi, m1=True, col='tab:blue', lab='PP', bounds=False):
     plpeak_mpdfs, plpeak_qpdfs, plpeak_ms, plpeak_qs = load_o3b_paper_run_masspdf(paths.data / fi)
     if m1:
-        low = np.percentile(plpeak_mpdfs, 5, axis=0)
-        high = np.percentile(plpeak_mpdfs, 95, axis=0)
-        ax.fill_between(plpeak_ms, low, high, color=col, alpha=0.1)
-        ax.plot(plpeak_ms, low, color='k', lw=0.05, alpha=0.1)#, label=lab)
-        ax.plot(plpeak_ms, high, color='k', lw=0.05, alpha=0.1)
-        low = np.percentile(plpeak_mpdfs, 35, axis=0)
-        high = np.percentile(plpeak_mpdfs, 65, axis=0)
-        ax.fill_between(plpeak_ms, low, high, color=col, alpha=0.5, label=lab)
-        ax.plot(plpeak_ms, low, color='k', lw=0.25, alpha=0.1)#, label=lab)
-        ax.plot(plpeak_ms, high, color='k', lw=0.25, alpha=0.1)
+        plot_mean_and_90CI(ax, plpeak_ms, plpeak_mpdfs, color=col, label=lab, bounds=bounds)
     else:
-        low = np.percentile(plpeak_qpdfs, 5, axis=0)
-        high = np.percentile(plpeak_qpdfs, 95, axis=0)
-        ax.fill_between(plpeak_qs, low, high, color=col, alpha=0.2)
-        ax.plot(plpeak_qs, low, color='k', lw=0.05, alpha=0.05)#, label=lab)
-        ax.plot(plpeak_qs, high, color='k', lw=0.05, alpha=0.05)#, label=lab)
-        low = np.percentile(plpeak_qpdfs, 35, axis=0)
-        high = np.percentile(plpeak_qpdfs, 65, axis=0)
-        ax.fill_between(plpeak_qs, low, high, color=col, alpha=0.5, label=lab)
-        ax.plot(plpeak_qs, low, color='k', lw=0.25, alpha=0.1)#, label=lab)
-        ax.plot(plpeak_qs, high, color='k', lw=0.25, alpha=0.1)#, label=lab)
-
+        plot_mean_and_90CI(ax, plpeak_qs, plpeak_qpdfs, color=col, label=lab, bounds=bounds)
     return ax
 
 mmin = 6.5
@@ -69,39 +70,23 @@ figx, figy = 14, 5
 fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(figx,figy))
 
 for ax, xs, ps, lab in zip([axs], [ms], [m_pdfs], ['m1']):
-    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=lab=='m1', lab='PLSpline', col='tab:blue')
-    low = np.percentile(ps, 35, axis=0)
-    high = np.percentile(ps, 65, axis=0)  
-    ax.plot(xs, low,color='k', lw=0.25, alpha=0.2)
-    ax.plot(xs, high, color='k', lw=0.25, alpha=0.2)
-    ax.fill_between(xs, low, high, color='tab:red', alpha=0.6, label='MSPline')
-    low = np.percentile(ps, 5, axis=0)
-    high = np.percentile(ps, 95, axis=0)
-    #for _ in range(1000):
-    #    idx = np.random.choice(ps.shape[0])
-    #    ax.plot(xs, ps[idx], color='k', lw=0.025, alpha=0.02)    
-    ax.plot(xs, low,color='k', lw=0.05, alpha=0.05)
-    ax.plot(xs, high, color='k', lw=0.05, alpha=0.05)
-    ax.fill_between(xs, low, high, color='tab:red', alpha=0.1)
-
+    #ax = plot_o3b_m1_ppd(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PLSpline-PPD', col='tab:blue')
+    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PLSpline', col='tab:blue')
+    ax = plot_mean_and_90CI(ax, xs, ps, color='tab:red', label='MSpline')
     ax.legend(frameon=False, fontsize=14);
-    if lab == 'm1':
-        ax.set_xlabel(r'$m_1 \,\,[M_\odot]$', fontsize=18)
-        ax.set_ylabel(r'$p_{MS}(m_1) \,\,[M_\odot^{-1}]$', fontsize=18)
-    else:
-        ax.set_xlabel(r'$q$', fontsize=18)
-        ax.set_ylabel(r'$p_{MS}(q)$', fontsize=18)
+    ax.set_xlabel(r'$m_1 \,\,[M_\odot]$', fontsize=18)
+    ax.set_ylabel(r'$p_{MS}(m_1) \,\,[M_\odot^{-1}]$', fontsize=18)
     ax.grid(True, which="major", ls=":")
     ax.tick_params(labelsize=14)
-
-logticks = np.array([5,10,50,100])
-axs.set_xticks(logticks)
-axs.grid(True, which="major", ls=":")
 
 axs.set_yscale('log')
 axs.set_xscale('log')
 axs.set_xlim(mmin, mmax)
-axs.set_ylim(8e-5, 4e-1)
+axs.set_ylim(1e-4, 3.5e-1)
+logticks = np.array([6,8,10,20,40,70,100])
+axs.set_xticks(logticks)
+axs.get_xaxis().set_major_formatter(ScalarFormatter())
+axs.grid(True, which="major", ls=":")
 plt.title(f'GWTC-3: MSpline Primary Mass Distribution', fontsize=18);
 fig.tight_layout()
 plt.savefig(paths.figures / 'mass_distribution_plot.pdf', dpi=300);
