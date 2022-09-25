@@ -74,9 +74,6 @@ their respective hyper-parameters and prior distributions in the next section. T
 samples of the hyper parameters from the hierarchical posterior distribution shown in equation \ref{importance-posterior}, we use the 
 NUTS hamiltonian monte carlo sampler in \textsc{numpyro} and \textsc{jax} to calculate likelihoods \bruce{FIND citations for these}.
 
-
-\section{Validation Studies} \label{sec:validation}
-
 \section{Penalized Splines and Smoothing}\label{sec:psplines}
 
 A common issue when using splines as a flexible fitting method is their sensitivity to the chosen number of knots, and their locations. 
@@ -132,3 +129,7 @@ as is sometimes done. Figure shows examples of two different M-Spline bases with
 basis is shown on the left where the resulting (black) curve is flat with equal components, while the ``improper'' basis on the right has the 
 components squeezed up against the boundaries where multiple knots are located causing the sharp increases at the bounds even with all 10 coeficients equal.
 *\
+
+\section{Model specification} \label{sec:modelpriors}
+
+\section{Validation Studies} \label{sec:validation}

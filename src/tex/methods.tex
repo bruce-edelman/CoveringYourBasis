@@ -1,12 +1,12 @@
 \section{Constructing A Basis} \label{sec:basis_splines}
 
-A common non-parametric method in statistical applications is the use of basis splines. A spline function of order $k$, 
+A common non-parametric method in statistical applications is the use of basis splines \bruce{cite}. A spline function of order $k$, 
 is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
 They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
 Basis splines of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
 Given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
 every possible spline function with knots, $\mathbf{t}$. One can construct the B-Splines basis components for a given knot vector 
-using the Cox-de Boor recursion formula. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
+using the Cox-de Boor recursion formula \bruce{cite}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
 
 \begin{equation}
     B_{i,1}(x | \mathbf{t}) = 
@@ -33,6 +33,22 @@ using the Cox-de Boor recursion formula. Given knots $t_0$, $t_1$,...,$t_{i+k}$ 
 \end{cases}
 \end{equation}
 
+\noindent allowing one to build a basis of $i$ components that spans the vector space of order-$k$ spline functions interpolated 
+from this knot vector. This is known as the ``B-Spline'' basis after it's inventor de Boor \bruce{cite}. The power of basis splines
+comes from the fact that you only have to do a somewhat expensive interpolation once for each set of points you want to evaluate your
+spline functions at. This allows for much quicker evaluation time rather than having to re-do a \bruce{Is this right???} $\mathcal{O}(n^2)$
+operation one can do a simple dot product of 2d matrix and 1d vector which is easily  $\mathcal{O}(n)$. This means it is much more feasible 
+to use large numbers of knots and GPU calculations for expensive markov chain monte carlo (MCMC) based analyses.
+
+A similar basis, the M-Spline basis \bruce{cite}, has desirable properties when looking to model a probability density function, which is the 
+goal of population inference. Namely, $M_i \geq 0$ within $(t_i, t_i+k)$, zero elsewhere, and normalized to unity, $\int M_i(x)dx = 1$. We now have
+a useful basis that can represent all spline functions that are probability density functions given our array of knots. The M-Spline basis differs 
+from B-Splines by the normalization factor:
+
+\begin{equation}\label{eq:MB_SplineRelation}
+M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
+\end{equation}
+
 \begin{figure}[ht!]
     \script{spline_basis_plot.py}
         \includegraphics[width=0.45\textwidth]{figures/spline_basis_plot.pdf}
@@ -40,29 +56,28 @@ using the Cox-de Boor recursion formula. Given knots $t_0$, $t_1$,...,$t_{i+k}$ 
         \label{fig:spline_basis}
 \end{figure}
 
-\noindent allowing one to build a basis of $i$ components that spans the vector space of order-$k$ spline functions interpolated 
-from this knot vector. This is known as the ``B-Spline'' basis. 
-
-A similar basis, the M-Spline basis, has desirable properties when looking to model a probability density function. Namely, 
-$M_i \geq 0$ within $(t_i, t_i+k)$, zero elsewhere, and normalized to unity, $\int M_i(x)dx = 1$. The M-Spline basis only differs 
-from B-Splines by a normalization factor, namely:
-
-\begin{equation}\label{eq:MB_SplineRelation}
-M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
-\end{equation}
-
 \noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
+Figure \ref{fig:spline_basis} shows an example of a 3rd order M-Spline basis with 20 degrees of freedom and knots linearly spaced from 0 to 1.
+Another important feature of basis splines is that under appropiate prior conditions, one can alleviate sensitivities to arbitrarily 
+chosen prior specifications that splines commonly struggle with. We look to the use of penalized splines or P-Splines \bruce{cite P-splines}, 
+that adds a smoothing penalty (or prior) based on the difference of basis spline coeficients. This allows one to much more denseley populate
+the domain with knots without the worry of extra variance in the inferred spline functions. We discuss the details of this smoothing prior 
+in Appendix \ref{sec:psplines}.
 
 \section{Model Construction}
 
 \bruce{placeholder paragraph here to introduce our model constructions.}
-We use hierarchical Bayesian inference to simultaneosly infer the mass, spin and redshift distributions of binary black holes (BBHs) using 
-the 69 confident BBH detections reported in the recent LVK catalog of observations, GWTC-3. In particular we choose to parameterize the two
-masses with the primary (more massive component) mass and the mass ratio defined as $q=\frac{m_2}{m_1}$. We choose to model 4 of the 6 total 
-spin degrees of freedom of a binary merger with each component spin magnitude, and the cosine of the tilt angle which is defined as the angle 
-between each spin vector and the binaries orbital angular mommentum vector. We additionally will fit a population model on the redshift distribution
-of BBHs. We assume a $\Lambda\mathrm{CDM}$ cosmology defined by the Planck 2015 results, which defines an analytical mapping between each event's inferred
-luminosity distance and it's redshift. While we choose to use MSpline distibutions for the masses and spins, we use the canonical \textsc{PowrerlawRedshift}
-model describing the evolution of CBC merger rates as a power law in $(1+z)$ with a slope of $\lambda_z$. The corresponsing distribution is Thus
-desribed by $p(z|\lambda)\propto \frac{dV_c}{dz} \frac{T_\mathrm{obs}}{1+z} (1+z)^\lambda$. We model the spin magnitude and tilt distibutions to be 
-described by independent MSpline distributions for each component. 
+We use hierarchical Bayesian inference to simultaneosly infer the astrophysical mass, spin and redshift distributions of 
+a binary black holes (BBHs) given a catalog of gravitational wave observations. See Appendix \ref{sec:hierarchical_inference} for a detailed 
+description of the analysis framework. We choose to parameterize the binaries' masses with the primary (defined as the more massive component) mass 
+and the mass ratio -- defined as $q=\frac{m_2}{m_1}$, bounded in the range from 0 to 1. We choose to model 4 of the 6 total 
+spin degrees of freedom of a binary merger with each component spin magnitude $a_1$ and $a_2$, along with the cosine of the tilt angle of each component, 
+$\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binaries orbital angular mommentum vector. 
+We additionally will fit a population model on the redshift or luminosity distance distribution of BBHs. We assume a $\Lambda\mathrm{CDM}$ cosmology using the 
+parameters from the Planck 2015 results \bruce{cite here}, which defines an analytical mapping between each event's inferred
+luminosity distance and it's redshift. While we choose to use MSpline distibutions for the primary mass and spin distributions, we 
+model the mass ratio distribution with a power law , i.e. $p(q | m_1, m_\mathrm{min}, \beta_q) \propto q^{\beta_q} \Theta(qm_1 - m_\mathrm{min}) \Theta(m_1 - qm_1)$. 
+Where $\Theta$ is the Heaviside step function that ensures $m_2$ is within the range [$m_\mathrm{min}$, $m_1$].
+We model the evolution of the merger rate with redshift with the \textsc{PowrerlawRedshift} \bruce{cite mayas paper} model, which is desribed by 
+$p(z|\lambda_z)\propto \frac{dV_c}{dz} \frac{T_\mathrm{obs}}{1+z} (1+z)^\lambda_z$. We describe our specific prior choices on the hyper-parameters and each model 
+in more detail in Appendix \ref{sec:modelpriors}. 
