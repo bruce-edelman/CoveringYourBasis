@@ -12,9 +12,11 @@ rule draw_chieff_samples:
 
 rule update_macros:
     input:
-        "src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5"
+        "src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5", 
+        "src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5", 
     output:
-        "src/tex/macros.tex"
+        "src/tex/macros.tex", 
+        "src/data/macros.json"
     conda:
         "environment.yml"
     script:
