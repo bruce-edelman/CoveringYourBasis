@@ -90,11 +90,11 @@ each coeficient is normally distributed about its neighboring coeficients. We th
 , and a difference order of $r$ in our smoothing penalty (see \bruce{cite P-splines paper}) is defined as:
 
 \begin{eqnarray}
-\tau_\lambda \sim \Gamma(a, b), \\
+\tau_\lambda \propto \Gamma(a, b) \\
 p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{D_r} \bm{c}  \big] e^{-n\bm{c}}
 \end{eqnarray}
 
-\noindent Above $\bm{D_r}$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $a$, $b$, shape parameters for the Gamma distribution. 
+\noindent Above $\bm{D_r}$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $\Gamma(a,b)$ the Gamma distribution with shape parameters, $a$ and $b$. 
 This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. By adding in a very large number 
 of knots such that your domain is densly populated with basis coeficients, this allows the freedom for the model to find the smoothing 
 scale that the data prefers. One downside of this prior specification as noted by\ bruce{CITE BAYESIAN PSPLINES}, is a slight dependence on choice 
@@ -103,9 +103,12 @@ to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model 
 We now replace the prior on $\tau_\lambda$ with:
 
 \begin{align}
-    \bm{p} \sim \mathcal{D}(m), \\
-    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \mathcal{G}(1, b_m)
+    \bm{p} \propto \mathcal{D}(m) \\
+    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_m)
 \end{align}
+
+\noindent Where above $\mathcal{D}(m)$ is a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
+and $b_m$ is an array of $m$ different b shape parameters for the Gamma distribution.
 
 %Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
 %that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly
