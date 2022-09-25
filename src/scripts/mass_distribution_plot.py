@@ -70,8 +70,8 @@ figx, figy = 14, 5
 fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(figx,figy))
 
 for ax, xs, ps, lab in zip([axs], [ms], [m_pdfs], ['m1']):
-    #ax = plot_o3b_m1_ppd(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PLSpline-PPD', col='tab:blue')
-    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PLSpline', col='tab:blue')
+    ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PLPeak', col='tab:blue')
+    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PLSpline', col='tab:green')
     ax = plot_mean_and_90CI(ax, xs, ps, color='tab:red', label='MSpline')
     ax.legend(frameon=False, fontsize=14);
     ax.set_xlabel(r'$m_1 \,\,[M_\odot]$', fontsize=18)
