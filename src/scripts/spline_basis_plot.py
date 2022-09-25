@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from utils import MSpline
 
 ndof = 20
-k = 3
+k = 4
 xmin = 0
 xmax = 1
 xlab = 'x'
@@ -57,11 +57,11 @@ max_col = 6
 ncol = max([leg_item // max_col, 3])
 axs.legend(loc='upper center', fancybox=True, shadow=True, ncol=ncol, fontsize=16)
 axs.set_xlim(0,1)
-axs.set_ylim(0, 1.5)
+axs.set_ylim(0, 1.45)
 axs.set_xlabel(xlab, fontsize=18)
 axs.grid(True, which="major", ls=":")
 axs.set_ylabel(f'p({xlab})', fontsize=18)
 axs.tick_params(labelsize=14)
-plt.title(f'MSpline Basis: k={k-1}, n={ndof}, from {xlab}=[{xmin}, {xmax}]', fontsize=16)
+plt.title(f'MSpline Basis: k={k-1}, n={ndof}', fontsize=16)
 fig.tight_layout()
 plt.savefig(paths.figures / 'spline_basis_plot.pdf', dpi=300)
