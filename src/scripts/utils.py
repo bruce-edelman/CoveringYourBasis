@@ -5,6 +5,14 @@ import json
 import deepdish as dd
 
 
+def save_param_cred_intervals(param_data):
+    return  {'median': "{:.2f}".format(np.median(param_data)), 
+             'error plus': "{:.2f}".format(np.percentile(param_data, 95)-np.mean(param_data)), 
+             'error minus': "{:.2f}".format(np.median(param_data)-np.percentile(param_data, 5)),
+             '5th percentile': "{:.2f}".format(np.percentile(param_data, 5)), 
+             '95th percentile': "{:.2f}".format(np.percentile(param_data, 95))}
+
+
 def plot_mean_and_90CI(ax, xs, ar, color, label, bounds=True, CI=90, traces=None, tracecolor='k'):
 
     mean = np.mean(ar, axis=0)
