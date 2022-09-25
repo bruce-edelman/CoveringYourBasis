@@ -13,6 +13,7 @@ dependencies:
     - src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5
   src/scripts/create_chieff_from_compspin.py:
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
+    - src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
     - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
   src/scripts/plot_iid_spinmag.py:
     - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
@@ -32,6 +33,11 @@ dependencies:
   src/scripts/create_macros.py:
     - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
     - src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
+    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/chi_eff_ppds.h5
+    - src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_posterior_samples.h5
+    - src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5
 
 datasets:
   10.5072/zenodo.1107940:

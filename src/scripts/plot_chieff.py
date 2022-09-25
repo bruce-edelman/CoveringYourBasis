@@ -8,8 +8,11 @@ fig, ax = plt.subplots(1,1,figsize=(7,5))
 ppds = dd.io.load(paths.data / "chi_eff_ppds.h5")
 default = ppds["Default"]
 mspl = ppds["MSplineInd"]
+mspl2 = ppds['MSplineIID']
 ax = plot_mean_and_90CI(ax, default["chieffs"], default["pchieff"], color='tab:blue', label='Default', bounds=False)
-ax = plot_mean_and_90CI(ax, mspl["chieffs"], mspl["pchieff"], color='tab:purple', label='MSpline Ind Spin', bounds=False)
+ax = plot_mean_and_90CI(ax, mspl["chieffs"], mspl["pchieff"], color='tab:purple', label='MSpline-Ind Spin', bounds=False)
+ax = plot_mean_and_90CI(ax, mspl2["chieffs"], mspl2["pchieff"], color='tab:green', label='MSpline-IID Spin', bounds=False)
+
 handpicked_ppds = dd.io.load(
     paths.data / "mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5"
 )
@@ -27,4 +30,5 @@ ax.tick_params(labelsize=14)
 plt.xlabel(r"$\chi_\mathrm{eff}$", fontsize=18)
 plt.ylabel(r"$p(\chi_\mathrm{eff})$", fontsize=18)
 plt.title(f"GWTC-3: Effective Spin Distribution", fontsize=18)
+fig.tight_layout()
 plt.savefig(paths.figures / "chi_eff.pdf", dpi=300)

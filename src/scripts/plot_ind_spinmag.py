@@ -3,28 +3,7 @@
 import paths
 import numpy as np
 import matplotlib.pyplot as plt
-import deepdish as dd
-from utils import plot_mean_and_90CI
-
-
-def load_mag_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
-    return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
-
-
-def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
-    xs = np.linspace(0, 1, 1000)
-    _data = dd.io.load(paths.data / fi)
-    lines = dict()
-    for key in _data["lines"].keys():
-        lines[key] = _data["lines"][key][()]
-        for ii in range(len(lines[key])):
-            lines[key][ii] /= np.trapz(lines[key][ii], xs)
-    if a1:
-        ax = plot_mean_and_90CI(ax, xs, lines['a_1'], color=col, label=lab, bounds=False)
-    else:
-        ax = plot_mean_and_90CI(ax, xs, lines['a_2'], color=col, label=lab, bounds=False)
-    return ax
+from utils import plot_mean_and_90CI, plot_o3b_spinmag, load_ind_mag_ppd
 
 figx, figy = 7, 5
 fig, ax = plt.subplots(nrows=1, ncols=1, sharey='row', sharex='row', figsize=(figx,figy))
@@ -33,7 +12,7 @@ xmin, xmax = 0, 1
 lab='a1'
 ax = plot_o3b_spinmag(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5', a1=lab=='a1', lab='Default', col='tab:blue')
 
-a1_pdfs, a2_pdfs, a1s, a2s = load_mag_ppd()
+a1_pdfs, a2_pdfs, a1s, a2s = load_ind_mag_ppd()
 maxy=0
 for i in range(len(a1_pdfs)):
     a1_pdfs[i] /= np.trapz(a1_pdfs[i], a1s)

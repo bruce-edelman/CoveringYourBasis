@@ -3,16 +3,8 @@
 import json2latex
 import json
 import paths
-import deepdish as dd
 import numpy as np
-
-def load_tilt_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
-    return datadict['tilts'], datadict['dRdct']
-
-def load_ind_tilt_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
-    return datadict['tilts'], datadict['dRdct1'], datadict['dRdct2']
+from utils import load_iid_tilt_ppd, load_ind_tilt_ppd
 
 def save_param_cred_intervals(param_data):
     return  {'median': "{:.2f}".format(np.median(param_data)), 
@@ -23,7 +15,7 @@ def save_param_cred_intervals(param_data):
 
 macro_dict = {}
 print("Saving MSpline IID Component Spin macros...")
-xs, ct_pdfs = load_tilt_ppd()
+xs, ct_pdfs = load_iid_tilt_ppd()
 peak_tilts = []
 gamma_fracs = []
 frac_neg_cts = []

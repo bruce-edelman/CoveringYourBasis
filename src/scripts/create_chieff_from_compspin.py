@@ -8,7 +8,7 @@ from gwpopulation.models.spin import iid_spin_orientation_gaussian_isotropic, ii
 from bilby.core.result import read_in_result
 from bilby.hyper.model import Model
 from jax import jit
-from utils import MSplineIndependentSpinTilts, MSplineIndependentSpinMagnitudes, MSplinePrimaryPowerlawRatio
+from utils import MSplineIndependentSpinTilts, MSplineIndependentSpinMagnitudes, MSplinePrimaryPowerlawRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts
 import deepdish as dd
 from tqdm import trange
 import paths
@@ -61,7 +61,7 @@ def draw_chieff_samples_gwpop(result, magmodel, tiltmodel, massmodel, ndraws=500
 def chi_eff(samples):
     return (samples['a_1']*samples['cos_tilt_1'] + samples['mass_ratio']*samples['a_2']*samples['cos_tilt_2']) / (1.0 + samples['mass_ratio'])
 
-def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, magnknots, tiltnknots, k=4, ndraws=500, nsamples=2000):
+def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, magnknots, tiltnknots, k=4, ndraws=500, nsamples=2000, iid=False):
     mags = jnp.linspace(0,1,2000)
     a1s, a2s = jnp.meshgrid(mags, mags)
     m1s = jnp.linspace(2,100,200)
@@ -86,8 +86,12 @@ def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, m
     interior_knots = np.linspace(xmin, xmax, tiltnknots-k+2)
     dx = interior_knots[1] - interior_knots[0]
     tiltknots = np.concatenate([xmin-dx*np.arange(1,k)[::-1], interior_knots, xmax+dx*np.arange(1,k)])
-    mag_model = magmodel(magnknots, magnknots, a1s, a2s, mags, mags, knots1=magknots, knots2=magknots)
-    tilt_model = tiltmodel(tiltnknots, tiltnknots, ct1s, ct2s, ctilts, ctilts, knots1=tiltknots, knots2=tiltknots)
+    if iid:
+        mag_model = magmodel(magnknots, a1s, a2s, mags, mags, knots=magknots)
+        tilt_model = tiltmodel(tiltnknots, ct1s, ct2s, ctilts, ctilts, knots=tiltknots)
+    else:
+        mag_model = magmodel(magnknots, magnknots, a1s, a2s, mags, mags, knots1=magknots, knots2=magknots)
+        tilt_model = tiltmodel(tiltnknots, tiltnknots, ct1s, ct2s, ctilts, ctilts, knots1=tiltknots, knots2=tiltknots)
     
     samples = {'a_1': np.empty((ndraws, nsamples)), 'a_2': np.empty((ndraws, nsamples)), 'cos_tilt_1': np.empty((ndraws, nsamples)),
                'cos_tilt_2': np.empty((ndraws, nsamples)), 'mass_1': np.empty((ndraws, nsamples)), 'mass_ratio': np.empty((ndraws, nsamples))}
@@ -107,9 +111,14 @@ def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, m
     
     for i in trange(ndraws):
         idx = np.random.choice(len(posterior))
-        pm1, pq, pa1, pa2, pc1, pc2 = calc_pdfs(posterior['mass_cs'][idx], posterior['beta'][idx], 
-                                                posterior['mag_cs'][idx,:,0], posterior['mag_cs'][idx,:,1], 
-                                                posterior['tilt_cs'][idx,:,0], posterior['tilt_cs'][idx,:,1])
+        if iid:
+            pm1, pq, pa1, pa2, pc1, pc2 = calc_pdfs(posterior['mass_cs'][idx], posterior['beta'][idx], 
+                                                    posterior['mag_cs'][idx], posterior['mag_cs'][idx], 
+                                                    posterior['tilt_cs'][idx], posterior['tilt_cs'][idx])
+        else:
+            pm1, pq, pa1, pa2, pc1, pc2 = calc_pdfs(posterior['mass_cs'][idx], posterior['beta'][idx], 
+                                                    posterior['mag_cs'][idx,:,0], posterior['mag_cs'][idx,:,1], 
+                                                    posterior['tilt_cs'][idx,:,0], posterior['tilt_cs'][idx,:,1])
         pm1 = np.array(pm1)
         pq = np.array(pq)
         pa1 = np.array(pa1)
@@ -146,10 +155,15 @@ def main():
     chi_effs_mspl = draw_chieff_samples(mspl_post, MSplinePrimaryPowerlawRatio, MSplineIndependentSpinMagnitudes, MSplineIndependentSpinTilts, 
                                         50, 16, 16)
     pchieffs, chieffs = chi_eff_kde_ppd(chi_effs_mspl)
+    mspl_post_iid = dd.io.load(paths.data / "mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5")
+    chi_effs_mspl_iid = draw_chieff_samples(mspl_post_iid, MSplinePrimaryPowerlawRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts, 
+                                            50, 16, 16, iid=True)
+    pchieffs_iid, chieffs_iid = chi_eff_kde_ppd(chi_effs_mspl_iid)
     o3b_default_spin_result = read_in_result(paths.data / "o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json")
     chi_effs_o3b_default = draw_chieff_samples_gwpop(o3b_default_spin_result, DefaultSpinMagModel, DefaultSpinTiltModel, MassModel)
     pchieffs_def, chieffs_def = chi_eff_kde_ppd(chi_effs_o3b_default)
     datadict = {'MSplineInd': {'pchieff': pchieffs, 'chieffs': chieffs}, 
+                'MSplineIID': {'pchieff': pchieffs_iid, 'chieffs': chieffs_iid}, 
                 'Default': {'pchieff':pchieffs_def, 'chieffs':chieffs_def}}
     dd.io.save(paths.data / "chi_eff_ppds.h5", datadict)
 

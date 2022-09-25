@@ -2,6 +2,7 @@ import numpy as np
 import jax.numpy as jnp
 import paths
 import json
+import deepdish as dd
 
 
 def plot_mean_and_90CI(ax, xs, ar, color, label, bounds=True, CI=90, traces=None, tracecolor='k'):
@@ -429,3 +430,49 @@ class MSplinePrimaryPowerlawRatio(object):
         p_m1 = self.primary_model(len(m1.shape), coefs)
         p_q = powerlaw_pdf(q, beta, mmin / m1, 1)
         return p_m1 * p_q
+    
+def load_iid_tilt_ppd():
+    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    xs = datadict['tilts']
+    dRdct = datadict['dRdct']
+    return xs, dRdct
+
+def load_ind_tilt_ppd():
+    datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    return datadict['tilts'], datadict['dRdct1'], datadict['dRdct2']
+
+def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
+    xs = np.linspace(-1, 1, 1000)
+    _data = dd.io.load(paths.data / fi)
+    lines = dict()
+    for key in _data["lines"].keys():
+        lines[key] = _data["lines"][key][()]
+        for ii in range(len(lines[key])):
+            lines[key][ii] /= np.trapz(lines[key][ii], xs)
+    if ct1:
+        ax = plot_mean_and_90CI(ax, xs, lines['cos_tilt_1'], color=col, label=lab, bounds=False)
+    else:
+        ax = plot_mean_and_90CI(ax, xs, lines['cos_tilt_2'], color=col, label=lab, bounds=False)
+    return ax
+
+def load_iid_mag_ppd():
+    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    return datadict['mags'], datadict['dRda']
+
+def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
+    xs = np.linspace(0, 1, 1000)
+    _data = dd.io.load(paths.data / fi)
+    lines = dict()
+    for key in _data["lines"].keys():
+        lines[key] = _data["lines"][key][()]
+        for ii in range(len(lines[key])):
+            lines[key][ii] /= np.trapz(lines[key][ii], xs)
+    if a1:
+        ax = plot_mean_and_90CI(ax, xs, lines['a_1'], color=col, label=lab, bounds=False)
+    else:
+        ax = plot_mean_and_90CI(ax, xs, lines['a_2'], color=col, label=lab, bounds=False)
+    return ax
+
+def load_ind_mag_ppd():
+    datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
