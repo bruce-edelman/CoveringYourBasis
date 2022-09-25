@@ -5,6 +5,11 @@
 \newcommand{\bruce}[1]{\textcolor{blue}{BE: #1}}
 \newcommand{\NewChange}[1]{\textcolor{green}{#1}}
 
+\newcommand{\CIPlusMinus}[1]{{#1[median]^{+#1[error plus]}_{-#1[error minus]}}}
+\newcommand{\CIBoundsBracket}[1]{{[#1[5th percentile], #1[95th percentile]]}}
+\newcommand{\CIBoundsDash}[1]{{#1[5th percentile]\textendash#1[95th percentile]}}
+
+
 \graphicspath{{./}{figures/}}
 
 \usepackage{showyourwork}
@@ -14,6 +19,8 @@
 \usepackage{bm}
 \usepackage{amsmath}
 \usepackage{appendix}
+\input{macros}
+
 \definecolor{Gray}{gray}{0.9}
 \linenumbers
 
@@ -32,6 +39,12 @@
 \affiliation{Center for Interdisciplinary Exploration and Research in Astrophysics (CIERA), Department of Physics and Astronomy, Northwestern
 University, Evanston, IL 60201, USA}
 
+\author{Jaxen Godfrey}
+\affiliation{Institute  for  Fundamental  Science, Department of Physics, University of Oregon, Eugene, OR 97403, USA}
+
+\author{Alexis Vives}
+\affiliation{Institute  for  Fundamental  Science, Department of Physics, University of Oregon, Eugene, OR 97403, USA}
+
 \author{Jon Hornung}
 \affiliation{Institute  for  Fundamental  Science, Department of Physics, University of Oregon, Eugene, OR 97403, USA}
 \affiliation{Thurston High School, Springfield, OR 9747, USA}
@@ -45,7 +58,8 @@ the spin magnitude distribution seems to be quite consistently IID, with XX\% of
 slight evidence of tilt distributions that do not peak at $\cos(\theta_i) = 1$ as previous models assumed, and slight evidence that 
 the components are distributed differently, in contrast to the spin magnitude distribution. While we do not find signs of a significant
 zero spinning sub population we do find that the data prefer not to force the support for exactly zero spinning black holes to 0 as 
-the non-singular Beta distribution and \textsc{Default} model assumes. 
+the non-singular Beta distribution and \textsc{Default} model assumes. \result{$\CIPlusMinus{\macros[MSPlineIIDCompSpins][peakCosTilt]}$}
+\result{$\CIPlusMinus{\macros[MSPlineIndependentCompSpins][peakCosTilt1]}$}, \result{$\CIPlusMinus{\macros[MSPlineIndependentCompSpins][peakCosTilt2]}$}
 \end{abstract}
 
 
@@ -55,7 +69,7 @@ the non-singular Beta distribution and \textsc{Default} model assumes.
 \input{conclusion.tex}
 
 \section{Acknowledgements}\label{sec:acknowledments}
-We thank Will Farr, Tom Callister, Amanda Farah and Maya Fishbach for useful and discussions during the preparation this manuscript, 
+We thank Will Farr, Tom Callister, Amanda Farah and Maya Fishbach for useful discussions during the preparation this manuscript, 
 along with helpful comments on an early draft by Tom Callister.
 This research has made use of data, software and/or web tools obtained from the Gravitational Wave Open Science Center 
 (\url{https://www.gw-openscience.org/}), a service of LIGO Laboratory, the LIGO Scientific Collaboration and the Virgo Collaboration. 

@@ -8,3 +8,14 @@ rule draw_chieff_samples:
         "environment.yml"
     script:
         "src/scripts/create_chieff_from_compspin.py"
+
+
+rule update_macros:
+    input:
+        "src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5"
+    output:
+        "src/tex/macros.tex"
+    conda:
+        "environment.yml"
+    script:
+        "src/scripts/create_macros.py"

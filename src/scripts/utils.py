@@ -1,5 +1,16 @@
 import numpy as np
 import jax.numpy as jnp
+import paths
+import json
+
+
+def save_macro(subdict):
+    with open(paths.data / "macros.json", 'r') as f:
+        old_macro = json.load(f)
+    new_macro = old_macro.copy()
+    new_macro.update(subdict)
+    with open(paths.data / "macros.json", 'w') as f:
+        json.dump(new_macro, f)
 
 
 def powerlaw_pdf(xx, alpha, low, high):

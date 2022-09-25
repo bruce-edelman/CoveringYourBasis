@@ -43,11 +43,11 @@ def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
 
 figx, figy = 7, 5
 fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(figx,figy))
-
 xmin, xmax = -1, 1
 xs, ct_pdfs = load_tilt_ppd()
 for jj in range(len(ct_pdfs)):
     ct_pdfs[jj,:] /= np.trapz(ct_pdfs[jj,:], xs)
+
 xmin=-1
 ax = axs
 ax = plot_o3b_spintilt(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5', ct1=True, lab='Default', col='tab:blue')

@@ -12,3 +12,4 @@ dependencies:
       - deepdish
       - scipy
       - gwpopulation
+      - json2latex
