@@ -11,7 +11,7 @@ lab='cos_tilt_1'
 ax = plot_o3b_spintilt(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5', ct1=lab=='cos_tilt_1', lab='Default', col='tab:blue')
 
 xmin, xmax = -1, 1
-ct1_pdfs, ct2_pdfs, xs, xs = load_ind_tilt_ppd()
+xs, ct1_pdfs, ct2_pdfs = load_ind_tilt_ppd()
 for i in range(len(ct1_pdfs)):
     ct1_pdfs[i] /= np.trapz(ct1_pdfs[i], xs)
     ct2_pdfs[i] /= np.trapz(ct2_pdfs[i], xs)
