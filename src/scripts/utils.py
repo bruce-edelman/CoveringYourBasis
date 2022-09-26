@@ -478,10 +478,10 @@ def load_ind_mag_ppd():
 
 
 def load_ind_posterior():
-    return dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    return dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5')
 
 def load_iid_posterior():
-    return dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    return dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5')
 
 def load_o3b_posterior(filename):
     return read_in_result(paths.data / filename).posterior
