@@ -28,7 +28,7 @@ GW190814 \cite{190814disc}, as it was concluded to be an outlier of the rest of 
 This leaves us with a catalog of 69 BBH mergers observerd oveer a period of about 2 years, from which we want to infer its population properties. 
 We start by looking towards the mass distribution.
 
-\subsection{BBH Mass Distibution} \label{sec:mass_dist}
+\subsection{Binary Black Hole Masses} \label{sec:mass_dist}
 
 We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
 Figure \ref{fig:mass_distribution} shows how the MSpline model (red) found consistent features in the mass disribution with 
@@ -54,7 +54,7 @@ the pileup at $\sim35\,\msun$, which is expected if such a pileup was due to pul
 along with the peak at 35\msun, significantly lower than expected, may pose challenges for conventional stellar evolution theory and could be a sign of 
 the significant presence of sub-populations that may avoid PISN as the binary forms. 
 
-\subsection{BBH Component Spin Distributions} \label{sec:spin_dist}
+\subsection{Binary Black Hole Spins} \label{sec:spin_dist}
 
 \begin{figure}
     \script{plot_iid_spinmag.py}
@@ -118,8 +118,8 @@ purely isotropic, less than one when negative (anti-aligned) values are favored,
 We find a $\log_{10}Y=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][log10gammaFrac]}$}. 
 
 Now we model each of the components' orientation distributions with independent \textsc{MSpline} models as done above, and show the inferred 
-distributions in figure \ref{fig:ind_spintilt_dist}. The primary and secondary orientation distibutions do not agree as well as the magnitude 
-distibutions did in figure \ref{fig:ind_spinmag_dist}, and the PPDs look to peak at different values, but the wide uncertainties still are 
+primary (orange), and secondary (olive) distributions in figure \ref{fig:ind_spintilt_dist}. The orientation distibutions do not agree quite as well as 
+the magnitude distibutions did in figure \ref{fig:ind_spinmag_dist}, and the PPDs look to peak at different values, but the wide uncertainties still are 
 consistent with both each other and the \textsc{Default} model's PPD. We find the two distributions to peak at: $\cos{\theta_1}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt1]}$} 
 and $\cos{\theta_2}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt2]}$}, showing that the primary distribution peak is inferred further away 
 from the assumed $\cos{\theta}=1$ with the \textsc{Default} model. There is also significant (albeit uncertain) evidence of spin mis-alignments in each distribution, finding 
@@ -143,26 +143,16 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10g
     \label{fig:chieff_dist}
 \end{figure}
 
-
-
-
-Transform comp spin results to effective dims to see how strong changes in mag/tilt dont significantly affect our best constrained/measured
-effective spins
-
-Default: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelowNeg0p3]}$} 
-    $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} 
-    $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} 
-
-MSplineIID: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelowNeg0p3]}$}
-   $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$} 
-   $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$} 
-
-MSplineIND: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][FracBelowNeg0p3]}$}
-   $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][FracBelow0]}$} 
-   $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][PeakChiEff]}$} 
-
-MSplineChiEff: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelowNeg0p3]}$}
-    $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$} 
-    $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$} 
-
-Present results fitting chi eff dist with MSpline I am making a change. 
+While the component spin magnitude and tilts are more easily interpretable in context of the astrophysics, they are parameters that 
+are not measured well during individual event parameter estimation. The best measured spin parameter, that enters the waveform at XXPN, is 
+called the effective spin defined as: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. As an alternative check 
+on the spin distributions we also try modeling an MSpline distribution of effective spins instead of component spin magnitude and tilts 
+as done above. Figure \ref{fig:chieff_dist} shows the inferred effective spin distribution with the MSpline model (red) along with the 
+inferred effective spin distribution transformed from the PPDs of the component spin models shown previously. We find considerable agreement 
+among the component spin distributions, highlighting that wildy different component spin distributions can imply very similar effective spin 
+distributions which is the better constrained parameter. When modeling the effective spin with the \textsc{MSpline} model we see very similar 
+shape, but with a slightly sharper peak centered at $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$}, compared to 
+$\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} with the \textsc{Default} model. As for the misaligned spin question, 
+we can investigate the fraction of systems with effective spins that are mis-aligned (i.e. $\chi_\mathrm{eff}<0$) and find for the \textsc{MSpline} 
+model $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$}, compared to $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} 
+with the \textsc{Default} model.
