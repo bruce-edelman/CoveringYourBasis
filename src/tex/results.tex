@@ -54,9 +54,35 @@ compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc
 
 \subsection{BBH Component Spin Distributions} \label{sec:spin_dist}
 
+\begin{figure}
+    \script{plot_iid_spinmag.py}
+    \includegraphics[width=0.45\textwidth]{figures/iid_spinmag.pdf}
+    \caption{Caption.}
+    \label{fig:iid_spinmag_dist}
+\end{figure}
+\begin{figure}
+    \script{plot_ind_spinmag.py}
+    \includegraphics[width=0.45\textwidth]{figures/ind_spinmag.pdf}
+    \caption{Caption.}
+    \label{fig:ind_spinmag_dist}
+\end{figure}
+
 \subsubsection{Spin Magnitude}
 
 \subsubsection{Spin Orientation}
+
+\begin{figure}
+    \script{plot_iid_spintilt.py}
+    \includegraphics[width=0.45\textwidth]{figures/iid_spintilt.pdf}
+    \caption{Caption.}
+    \label{fig:iid_spintilt_dist}
+\end{figure}
+\begin{figure}
+    \script{plot_ind_spintilt.py}
+        \includegraphics[width=0.45\textwidth]{figures/ind_spintilt.pdf}
+        \caption{Caption.}
+        \label{fig:ind_spintilt_dist}
+\end{figure}
 
 MSpline IID:
 $\cos{\theta}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][peakCosTilt]}$}
@@ -67,37 +93,29 @@ $\cos{\theta_1}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIndependent
 $\gamma_1 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac1]}$} and $\gamma_2 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac2]}$} 
 $f_{1,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac1]}$} andand $f_{2,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac2]}$}
 
-
 The spins distribution of merging combact binaries provides a very useful insight into the formation history of the binary. In particular the two main subcategories, 
 the isolated and dynamical formation channels, would produce distinct signatures in the spin distribution when looking at a population of observations. Isolated formation
 is where the only interactions with the binary are between each other. As the binary evolves and mass transfer happens between the two components, we expect the orientation
 of each components spin vector to be preferentially aligned with the orbital angular mommentumof the system. Some misalignment is epected to occur due to the kicks from 
 each star exploding in supernovae leaving behind the compact objects. Conversely, the dynamical channel     
-\begin{figure}
-    \script{plot_iid_spinmag.py}
-    \includegraphics[width=0.45\textwidth]{figures/iid_spinmag.pdf}
-    \caption{Caption.}
-    \label{fig:iid_spinmag_dist}
-\end{figure}
-
-\begin{figure}
-    \script{plot_iid_spintilt.py}
-    \includegraphics[width=0.45\textwidth]{figures/iid_spintilt.pdf}
-    \caption{Caption.}
-    \label{fig:iid_spintilt_dist}
-\end{figure}
 
 Comment here are the inferences of iid model vs Default and then iid vs independent test pointing out possible reasons for why spin tilt 
 does not peak at cos theta = 1 i.e. salvo's paper
 
 \subsection{The Effective Spin Dimension}
+\begin{figure}
+    \script{plot_chieff.py}
+    \includegraphics[width=0.45\textwidth]{figures/chi_eff.pdf}
+    \caption{Caption.}
+    \label{fig:chieff_dist}
+\end{figure}
 
 Transform comp spin results to effective dims to see how strong changes in mag/tilt dont significantly affect our best constrained/measured
 effective spins
 
 Default: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelowNeg0p3]}$} 
-$f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} 
-$\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} 
+    $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} 
+    $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} 
 
 MSplineIID: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelowNeg0p3]}$}
    $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$} 
@@ -108,31 +126,7 @@ MSplineIND: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffe
    $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][PeakChiEff]}$} 
 
 MSplineChiEff: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelowNeg0p3]}$}
-      $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$} 
-      $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$} 
-
-
+    $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$} 
+    $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$} 
 
 Present results fitting chi eff dist with MSpline I am making a change. 
-
-\begin{figure}
-    \script{plot_ind_spinmag.py}
-    \includegraphics[width=0.45\textwidth]{figures/ind_spinmag.pdf}
-    \caption{Caption.}
-    \label{fig:ind_spinmag_dist}
-\end{figure}
-
-\begin{figure}
-    \script{plot_ind_spintilt.py}
-        \includegraphics[width=0.45\textwidth]{figures/ind_spintilt.pdf}
-        \caption{Caption.}
-        \label{fig:ind_spintilt_dist}
-\end{figure}
-
-
-\begin{figure}
-    \script{plot_chieff.py}
-    \includegraphics[width=0.45\textwidth]{figures/chi_eff.pdf}
-    \caption{Caption.}
-    \label{fig:chieff_dist}
-\end{figure}
