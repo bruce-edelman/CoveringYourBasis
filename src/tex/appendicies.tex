@@ -1,18 +1,18 @@
 \appendix
 \section{Penalized Splines and Smoothing}\label{sec:psplines}
 
-Spline functions have been shown to be sensitivite to the chosen number of knots, and their locations or spacing. 
+Spline functions have been shown to be sensitivite to the chosen number of knots, and their locations or spacing \citep{deBoor78}. 
 Adding more knots knots increases the a-priori variance in the spline function, while the space between knots can limit the 
 resolution of features in the data the spline is capable of resolving. To ensure your spline based model is flexible enough 
 one would want to add as many knots as densely as possible, but this comes with the inherit larger variance as mentioned above. 
 To overcome this we resort to the frequentist penalized spline (P-Spline) in which one applies a penalty or regularization term 
-to the likelihood based on the difference of adjacent knot coeficients. The linear combination of spline basis components is 
-is flat when the basis coeficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as the differences between adjacent
-knot coeficients get larger, one gets a smoothing of the spline function inferences. Since we are using hierarchical Bayesian inferece as our 
-statistical framework, we formulate this penalized likelihood with its Bayesian analog. The difference penalty is equivalent to applying a stochastic 
-differnece prior among the knots, as described in \bruce{CITE THIS PAPER}. This is also sometimes referred to as a Gaussian random walk prior, since
-each coeficient is normally distributed about its neighboring coeficients. For a spline basis with $n$ degree's of freedom, 
-and a difference penalty of order of $r$ (see \bruce{cite P-splines paper}), our prior is defined as:
+to the likelihood based on the difference of adjacent knot coeficients \citep{eilers2021practical}. The linear combination of spline basis components 
+or the resulting spline function is flat when the basis coeficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as 
+the differences between adjacent knot coeficients get larger, one gets a smoothing of the spline function inferences \citep{eilers2021practical}. 
+Since we are using hierarchical Bayesian inferece as our statistical framework, we formulate this penalized likelihood with its Bayesian analog. 
+The difference penalty is equivalent to applying a stochastic differnece prior among the knots, as described in  \\citet{BayesianPSplines,Jullion2007RobustSO}. 
+This is also sometimes referred to as a Gaussian random walk prior, since each coeficient is normally distributed about its neighboring coeficients. 
+For a spline basis with $n$ degree's of freedom, and a difference penalty of order of $r$ (see \citet{eilers2021practical}), the smoothing prior is defined as:
 
 \begin{eqnarray}
 \tau_\lambda \sim \Gamma(a, b) \\
@@ -22,8 +22,8 @@ p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\m
 \noindent Above $\bm{D}_r$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $\Gamma(a,b)$ the Gamma distribution with shape parameters, $a$ and $b$. 
 This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. By adding in a very large number 
 of knots such that your domain is densly populated with basis coeficients, this allows the freedom for the model to find the smoothing 
-scale that the data prefers. One downside of this prior specification as noted by\ bruce{CITE BAYESIAN PSPLINES}, is a slight dependence on choice 
-of the b hyper-parameter for Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method introduced in \bruce{CITE BAYESIAN PSPLINES} 
+scale that the data prefers. One downside of this prior specification as noted in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}, is a slight dependence on choice 
+of the b hyper-parameter for Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method introduced in \citet{Jullion2007RobustSO}
 to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model on gamma distributions with varying b hyper-parameters. 
 We now replace the prior on $\tau_\lambda$ with:
 
@@ -53,9 +53,9 @@ and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
 
 This prior is imparting a natural attraction of the coeficients closer to each other in order to smooth the spline function, so one 
 must ensure that the spline function is in fact flat given all equal coeficients. Since one needs to define n+k knots to construct an order-k basis with 
-n degrees of freedom, people often will place knots on top of each other at hard parameter boundaries \bruce{cite msplines / o-splines}. 
+n degrees of freedom, people often will place knots on top of each other at hard parameter boundaries \cite{deBoor78,monotone_regression_splines}. 
 This may seemed motivated, especially if there is no reality in the parameter beyond the boundary, but this violates the above condition. 
-We follow the distinction from \bruce{CITE psplines} that the difference penalty or smooothing prior is only valid with ``proper'' spline bases. 
+We follow the distinction from \citet{eilers2021practical} that the difference penalty or smooothing prior is only valid with ``proper'' spline bases. 
 A proper basis is where all n+k knots are evenly spaced, see Figure \ref{fig:spline_basis}, as opposed to stacking them at the bounds.
 
 \section{Hierarchical Bayesian Inference} \label{sec:hierarchical_inference}
@@ -131,7 +131,7 @@ The total hyper-posterior marginalized over the merger rate and the uncertainty 
 We explicitly enumerate each of the models used in this work for $p(\theta|\Lambda)$, along with 
 their respective hyper-parameters and prior distributions in the next section. To calculate draw 
 samples of the hyper parameters from the hierarchical posterior distribution shown in equation \ref{importance-posterior}, we use the 
-NUTS hamiltonian monte carlo sampler in \textsc{numpyro} and \textsc{jax} to calculate likelihoods \bruce{FIND citations for these}.
+NUTS hamiltonian monte carlo sampler in \textsc{NumPyro} and \textsc{Jax} to calculate likelihoods \citep{jax,pyro,numpyro}.
 
 \section{Model specification} \label{sec:modelpriors}
 
