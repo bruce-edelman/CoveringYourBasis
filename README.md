@@ -17,12 +17,28 @@
 
 # Covering Your Basis: Model Agnostic Probes of the Binary Black Hole Population
 
-## [Latest Paper Build](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/ms.pdf)
+## [Download Paper PDF](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/ms.pdf) -- [Download Paper Source](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/arxiv.tar.gz)
 
-## Instructions
+## Instructions to Build Paper
 
 This is an open source scientific article created using the [showyourwork](https://github.com/showyourwork/showyourwork) workflow.
-To re-generate the figures macros and paper pdf, clone this repository and run `showyourwork`
+To re-generate the figures macros and paper pdf, clone this repository and run `showyourwork build`
+
+```bash
+git clone https://github.com/bruce-edelman/CoveringYourBasis.git
+cd CoveringYourBasis
+showyouwork build
+```
+
+The first build will take a long time as it needs to download some static dataset files from zenodo but this will be cached after the first build.
+
+## Data
+
+The data is all either hosted on zenodo and will be downloaded or programatically created in the build process, stored in `src/data/` folder. 
+
+## Scripts
+
+Scripts that run the intermediate pipeline steps and read/plot the data to create all figures and macros used in the paper are stored in `src/scripts/`
 
 ## Outline
 
