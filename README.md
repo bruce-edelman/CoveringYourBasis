@@ -34,7 +34,7 @@ The first build will take a long time as it needs to download some static datase
 
 ## Data
 
-The data is all either hosted on zenodo and will be downloaded or programatically created in the build process, stored in `src/data/` folder. 
+The data is all either hosted on zenodo and will be downloaded or programatically created in the build process, stored in `src/data/` folder.
 
 ## Scripts
 
@@ -48,16 +48,16 @@ Main manuscript file: `src/tex/ms.tex`
 - Intro (`src/tex/intro.tex`)
 - Constructing a Basis (`src/tex/methods.tex`)
 - Binary Black Hole Population Inference with GWTC-3 (`src/tex/results.tex`)
-    - Binary Black Hole Masses
-    - Binary Black Hole Spins
-        - Spin Magnitude
-        - Spin Orientation
-        - The Effective Spin Dimension
+  - Binary Black Hole Masses
+  - Binary Black Hole Spins
+    - Spin Magnitude
+    - Spin Orientation
+    - The Effective Spin Dimension
 - Astrophysical Implications (`src/tex/conclusion.tex`)
 - Conclusion (`src/tex/conclusion.tex`)
 - Acknowledgements  (`src/tex/ms.tex`)
 - Appendices (`src/tex/appendicies.tex`)
-    - Penalized Splines and Smoothing
-    - Hierarchical Bayesian Inference
-    - Model specification
-    - Validation Studies
+  - Penalized Splines and Smoothing
+  - Hierarchical Bayesian Inference
+  - Model specification
+  - Validation Studies

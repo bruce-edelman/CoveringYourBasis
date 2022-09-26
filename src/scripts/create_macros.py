@@ -133,6 +133,8 @@ def chi_eff():
         v['FracBelowNeg0p3'] = save_param_cred_intervals(np.array(below_m0p3[k]))
         v['FracBelow0'] = save_param_cred_intervals(np.array(below_0[k]))
         v['PeakChiEff'] = save_param_cred_intervals(np.array(maxchis[k]))
+        v['frac_dyn'] = save_param_cred_intervals(2.0*np.array(below_0[k]))
+        v['frac_hm'] = save_param_cred_intervals(6.25*np.array(below_m0p3[k]))
     return macdict
 
 
