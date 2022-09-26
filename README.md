@@ -53,7 +53,7 @@ Main manuscript file: `src/tex/ms.tex`
         - Spin Magnitude
         - Spin Orientation
         - The Effective Spin Dimension
-- Discussion (`src/tex/conclusion.tex`)
+- Astrophysical Implications (`src/tex/conclusion.tex`)
 - Conclusion (`src/tex/conclusion.tex`)
 - Acknowledgements  (`src/tex/ms.tex`)
 - Appendices (`src/tex/appendicies.tex`)
