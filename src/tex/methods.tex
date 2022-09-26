@@ -1,5 +1,13 @@
 \section{Constructing A Basis} \label{sec:basis_splines}
 
+\begin{figure}[ht!]
+    \script{spline_basis_plot.py}
+        \includegraphics[width=0.45\textwidth]{figures/spline_basis_plot.pdf}
+        \caption{Plot showing a ``proper'' MSpline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
+        In black we show the resulting spline function with given equal weights and denote the location of the knots with grey x's.}
+        \label{fig:spline_basis}
+\end{figure}
+
 A common non-parametric method in used in many statistical applications is basis splines. A spline function of order $k$, 
 is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
 They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
@@ -50,13 +58,6 @@ from B-Splines by the normalization factor:
 \begin{equation}\label{eq:MB_SplineRelation}
 M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
 \end{equation}
-
-\begin{figure}[ht!]
-    \script{spline_basis_plot.py}
-        \includegraphics[width=0.45\textwidth]{figures/spline_basis_plot.pdf}
-        \caption{Plot showing proper MSpline bases with 20 degrees of freedom and equal weights for each component.}
-        \label{fig:spline_basis}
-\end{figure}
 
 \noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
 Figure \ref{fig:spline_basis} shows an example of a 3rd order M-Spline basis with 20 degrees of freedom and knots linearly spaced from 0 to 1.
