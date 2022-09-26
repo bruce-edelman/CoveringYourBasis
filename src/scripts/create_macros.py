@@ -6,7 +6,7 @@ import paths
 import numpy as np
 import deepdish as dd
 from scipy.integrate import cumtrapz
-from utils import load_iid_tilt_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd, load_iid_posterior, load_ind_posterior, load_o3b_posterior
+from utils import load_iid_mag_ppd, load_iid_tilt_ppd, load_ind_mag_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd, load_iid_posterior, load_ind_posterior, load_o3b_posterior
 
 
 def get_percentile(pdfs, xs, perc):
@@ -60,8 +60,9 @@ def MSplineIIDSpinMacros():
     gamma_fracs = np.array(gamma_fracs)
     frac_neg_cts = np.array(frac_neg_cts)
     posts = load_iid_posterior()
-
+    mags, a_pdfs = load_iid_mag_ppd()
     return {'beta': save_param_cred_intervals(posts['beta']),
+            'a_90percentile': save_param_cred_intervals(get_percentile(a_pdfs, mags, 90)),
             'lamb': save_param_cred_intervals(posts['lamb']),
             'peakCosTilt': save_param_cred_intervals(peak_tilts), 
             'log10gammaFrac': save_param_cred_intervals(np.log10(gamma_fracs)), 
@@ -97,9 +98,11 @@ def MSplineIndSpinMacros():
     frac_neg_cts1 = np.array(frac_neg_cts1)
     frac_neg_cts2 = np.array(frac_neg_cts2)
     posts = load_ind_posterior()
-
+    a1_pdfs, a2_pdfs, mags, mags = load_ind_mag_ppd()
     return {'beta': save_param_cred_intervals(posts['beta']),
             'lamb': save_param_cred_intervals(posts['lamb']),
+            'a1_90percentile': save_param_cred_intervals(get_percentile(a1_pdfs, mags, 90)),
+            'a2_90percentile': save_param_cred_intervals(get_percentile(a2_pdfs, mags, 90)),
             'peakCosTilt1': save_param_cred_intervals(peak_tilts1), 'peakCosTilt2': save_param_cred_intervals(peak_tilts2), 
             'log10gammaFrac1': save_param_cred_intervals(np.log10(gamma_fracs1)), 'log10gammaFrac2': save_param_cred_intervals(np.log10(gamma_fracs2)), 
             'negFrac1': save_param_cred_intervals(frac_neg_cts1), 'negFrac2': save_param_cred_intervals(frac_neg_cts2)}

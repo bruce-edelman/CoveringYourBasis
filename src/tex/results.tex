@@ -30,27 +30,29 @@ We start by looking towards the mass distribution.
 
 \subsection{BBH Mass Distibution} \label{sec:mass_dist}
 
-%PLPeak: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_99percentile]}$}
-%PLSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_99percentile]}$}
-%MSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_99percentile]}$}
-
 We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
 Figure \ref{fig:mass_distribution} shows how the MSpline model (red) found consistent features in the mass disribution with 
 what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \cite{Talbot_2019,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
 In particular our MSpline model finds a peak in merger rate density at both 10 and 35 soloar masses, agreeing with those reported using the same dataset in \citet{o3b_astro_dist}. 
 We also find a significantly less declining mass distribution that has considerably larger support for higher mass mergers when 
-compared to the other power-law based models. Another interesting consequence of this is that we no longer find an confidently
-evolving merger rate with redshift, as inferred with power-law based models. There is a strong correlation between the primary mass 
-power law index, $\alpha$, and the redshift power-law index, $\lambda_z$. When one infers a steeper mass distribution -- the inferred 
-rate must drastically increase with resdshift to explain the highest mass events in the catalog. However, when one infers a 
+compared to the other power-law based models, finding that 75\% percent of primary masses below \result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_75percentile]}$}, 
+at 90\% credibility, compared to \result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_75percentile]}$}, found with the similar \textsc{PowerlawSpline} model. 
+An interesting consequence of this is that we do not find a confidently evolving merger rate with redshift, as inferred with power-law based mass models in \citet{o3b_astro_dist}. 
+There is a strong correlation between the primary mass power law index, $\alpha$, and the redshift power-law index, $\lambda_z$. When one infers a steeper mass distribution -- 
+the inferred rate must drastically increase with resdshift to explain the highest mass events in the catalog. However, when one infers a 
 flatter distribution like, as the MSPline did in figure \ref{fig:mass_distribution}, the higher mass mergers are consistent with 
-the local merger rate denstiy as a function of mass. With the more flexible mass population model, we find that the merger rate 
-is consistent with being unifom with co-moving volume with $\lambda_z = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][lamb]}$}, compared 
-to $\lambda_z = $\result{$\CIPlusMinus{\macros[PLPeak][lamb]}$} found with the \textsc{PowerlawPeak} model.
+the local merger rate denstiy as a function of mass given the selection effects. With our more flexible mass model, we find that the merger rate 
+is consistent with being unifom with co-moving volume, with $\lambda_z = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][lamb]}$}, compared with 
+\citet{o3b_astro_dist}'s reported value -- $\lambda_z = $\result{$\CIPlusMinus{\macros[PLPeak][lamb]}$} with the \textsc{PowerlawPeak} mass model.
 
 We find a similar mass ratio distribution to what was found with the found with the \textsc{PowerlawPeak} model in \citet{o3b_astro_dist}. 
 With the MSpline model on primary mass the mass ratio power law index is $\beta = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][beta]}$}, 
-compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc{PowerlawPeak}.
+compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc{PowerlawPeak}. We find that BBH mergers favor more equal mass mergers
+as would be expected of both main formation channels due to binary mass transfer in isolated formation and three-body interactions that preferentially eject
+the lightest of the three compact objects, in dynamical formation \bruce{cite these}. We also find no evidence for a sharp fall off in merger rate following 
+the pileup at $\sim35\,\msun$, which is expected if such a pileup was due to pulsational pair instability supernovae (PPISNe). The lack of any high mass truncation 
+along with the peak at 35\msun, significantly lower than expected, may pose challenges for conventional stellar evolution theory and could be a sign of 
+the significant presence of sub-populations that may avoid PISN as the binary forms. 
 
 \subsection{BBH Component Spin Distributions} \label{sec:spin_dist}
 
@@ -60,6 +62,15 @@ compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc
     \caption{Caption.}
     \label{fig:iid_spinmag_dist}
 \end{figure}
+
+\subsubsection{Spin Magnitude}
+
+The \textsc{Default} spin model models the spin magnitude of both components as identical and indendendently distributed (IID) non-singular Beta distributions. The
+Beta distribution provides a simple 2-parameter model that can produce a wide range of functional forms on the unit interval. However, the constraint that keeps 
+the Beta distribution non-singluar (i.e. $\alpha>1$ and $\beta>1$) enforces a spin magnitude that always has $p(a_i=0) = 0$. While in reality, it is expected that 
+all physical bodies must have at least some non-zero angular mommentum, studies have proposed the existence of a distinct sub-population of non-spinning or 
+negliglby spinning black holes that can elude discovery with such a model. 
+
 \begin{figure}
     \script{plot_ind_spinmag.py}
     \includegraphics[width=0.45\textwidth]{figures/ind_spinmag.pdf}
@@ -67,9 +78,26 @@ compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc
     \label{fig:ind_spinmag_dist}
 \end{figure}
 
-\subsubsection{Spin Magnitude}
+We model the spin magnitude distibutions as IID MSpline distibutions as a flexible check
+to the assumptions of the \textsc{Default} model. Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the \textsc{MSpline} model, 
+compared with the \textsc{Default} model from \citet{o3b_astro_dist}. The MSpline model finds broad agreement with the beta distribution, both peaking near ~0.2, with 90\% 
+of BBH spins below \result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][a_90percentile]}$} at 90\% credibility. The regions of parameter space where they don't agree as well are the bounds. 
+The MSpline model has no enforcment for vanishing support at the extremal values like the Beta distribution, 
+allowing it to probe the zero-spin question. We find broad support, with large variance, for non-zero probabilities at $a_i=0$, but cannot confidently determine the presence of 
+a significant non-spinning subpopulation, corroborating the conclusions of \citet{BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin}. 
+We now repeat the same analysis as above but with independent MSpline distibutions for each spin magnitude component. In figure \ref{fig:ind_spinmag_dist} 
+we show the inferred primary (orange), and secondary (olive) spin magnitude distributions inferred when relaxing the IID assumption. We find both 
+distributions to be remarkably similar, showing no signs that each component spin magnitude are distributed differently from each other.
 
 \subsubsection{Spin Orientation}
+
+The \textsc{Default} spin model models the spin orientation of both components as identical and indendendently distributed (IID) mixture models over an
+aligned and an isotropic component. The aligned component is modeled with a truncated Gaussian distribution with mean at $\cos{\theta}=1$ and variance a free 
+hyper-parameter to be fit. This provides a simple 2-parameter model motivated by simple distributions expected from the two main formation scenario families, allowing 
+for a straightforward interpretation of results. One possible limitation however, is that by construction this distribution is forced to peak at perfecty aligned spins, 
+i.e. $\cos{\theta}=1$. While this may be a reasonable assumption recently \citet{spinitasyoulike} recently extended the model space of parameteric descriptions 
+used to model the spin orientation distribution and found considerably evidence that the distibution peaks away from $\cos{\theta}=1$. Again, this provides a clear 
+use-case where data-driven models can help in our understanding and possibly resolve disputes among differing parametric approaches.
 
 \begin{figure}
     \script{plot_iid_spintilt.py}
@@ -77,6 +105,28 @@ compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc
     \caption{Caption.}
     \label{fig:iid_spintilt_dist}
 \end{figure}
+
+We repeat the tests done above on the the spin magnitude distibutions now with the spin orientation distributions. Figure \ref{fig:iid_spintilt_dist} 
+shows the inferred spin magnitude distribution with the \textsc{MSpline} model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
+The MSpline inferences have large uncertainties but start to show the same features as found and discussed in \citet{spinitasyoulike}. 
+We find a distribution that instead of intrinsicly peaking at $\cos{\theta}=1$, is found to peak at: $\cos{\theta}=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][peakCosTilt]}$}, at 
+90\% credibility. We find less, but still considerable, support for misaligned spins (i.e. $\cos{\theta}<0$) as the \textsc{Default} model. Specifically we 
+find that the fraction of misaligned systems is $f_{<0}=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][negFrac]}$}. This implies 
+the presence of an isotropic component as expected by dynamical formation channels, albeit less than with the \textsc{Default} model. To quantify the 
+amount of isotropy in the tilt distibution we calculate Y, the ratio defined in Eq. 4 of \citet{spinitasyoulike} which is 1 when the distribution is 
+purely isotropic, less than one when negative (anti-aligned) values are favored, and greater than one when positive (aligned) values are favored.
+We find a $\log_{10}Y=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][log10gammaFrac]}$}. 
+
+Now we model each of the components' orientation distributions with independent \textsc{MSpline} models as done above, and show the inferred 
+distributions in figure \ref{fig:ind_spintilt_dist}. The primary and secondary orientation distibutions do not agree as well as the magnitude 
+distibutions did in figure \ref{fig:ind_spinmag_dist}, and the PPDs look to peak at different values, but the wide uncertainties still are 
+consistent with both each other and the \textsc{Default} model's PPD. We find the two distributions to peak at: $\cos{\theta_1}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt1]}$} 
+and $\cos{\theta_2}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt2]}$}, showing that the primary distribution peak is inferred further away 
+from the assumed $\cos{\theta}=1$ with the \textsc{Default} model. There is also significant (albeit uncertain) evidence of spin mis-alignments in each distribution, finding 
+the fraction of mis-aligned primary and secondary components as: $f_{1,<0}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac1]}$} andand $f_{2,<0}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac2]}$}.
+We again calculate the isotropy ratio, Y, for each and find: $\log_{10}Y_1=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac1]}$} and 
+$\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac2]}$}.
+
 \begin{figure}
     \script{plot_ind_spintilt.py}
         \includegraphics[width=0.45\textwidth]{figures/ind_spintilt.pdf}
@@ -84,31 +134,17 @@ compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc
         \label{fig:ind_spintilt_dist}
 \end{figure}
 
-MSpline IID:
-$\cos{\theta}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][peakCosTilt]}$}
-$\gamma = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][log10gammaFrac]}$}
-$f_{<0} = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][negFrac]}$}
-MSpline Independent:
-$\cos{\theta_1}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt1]}$} and $\cos{\theta_2}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt2]}$}
-$\gamma_1 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac1]}$} and $\gamma_2 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac2]}$} 
-$f_{1,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac1]}$} andand $f_{2,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac2]}$}
-
-The spins distribution of merging combact binaries provides a very useful insight into the formation history of the binary. In particular the two main subcategories, 
-the isolated and dynamical formation channels, would produce distinct signatures in the spin distribution when looking at a population of observations. Isolated formation
-is where the only interactions with the binary are between each other. As the binary evolves and mass transfer happens between the two components, we expect the orientation
-of each components spin vector to be preferentially aligned with the orbital angular mommentumof the system. Some misalignment is epected to occur due to the kicks from 
-each star exploding in supernovae leaving behind the compact objects. Conversely, the dynamical channel     
-
-Comment here are the inferences of iid model vs Default and then iid vs independent test pointing out possible reasons for why spin tilt 
-does not peak at cos theta = 1 i.e. salvo's paper
-
 \subsection{The Effective Spin Dimension}
+
 \begin{figure}
     \script{plot_chieff.py}
     \includegraphics[width=0.45\textwidth]{figures/chi_eff.pdf}
     \caption{Caption.}
     \label{fig:chieff_dist}
 \end{figure}
+
+
+
 
 Transform comp spin results to effective dims to see how strong changes in mag/tilt dont significantly affect our best constrained/measured
 effective spins
