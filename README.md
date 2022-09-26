@@ -26,20 +26,20 @@ To re-generate the figures macros and paper pdf, clone this repository and run `
 
 Main manuscript file: `src/tex/ms.tex`
 
-[ ] - Abstract (`src/tex/ms.tex`)
-[ ] - Intro (`src/tex/intro.tex`)
-[ ] - Constructing a Basis (`src/tex/methods.tex`)
-[ ] - Binary Black Hole Population Inference with GWTC-3 (`src/tex/results.tex`)
-    [ ] - Binary Black Hole Masses
-    [ ] - Binary Black Hole Spins
-        [ ] - Spin Magnitude
-        [ ] - Spin Orientation
-        [ ] - The Effective Spin Dimension
-[ ] - Discussion (`src/tex/conclusion.tex`)
-[ ] - Conclusion (`src/tex/conclusion.tex`)
-[ ] - Acknowledgements  (`src/tex/ms.tex`)
-[ ] - Appendices (`src/tex/appendicies.tex`)
-    [ ] - Penalized Splines and Smoothing
-    [ ] - Hierarchical Bayesian Inference
-    [ ] - Model specification
-    [ ] - Validation Studies
+- Abstract (`src/tex/ms.tex`)
+- Intro (`src/tex/intro.tex`)
+- Constructing a Basis (`src/tex/methods.tex`)
+- Binary Black Hole Population Inference with GWTC-3 (`src/tex/results.tex`)
+    - Binary Black Hole Masses
+    - Binary Black Hole Spins
+        - Spin Magnitude
+        - Spin Orientation
+        - The Effective Spin Dimension
+- Discussion (`src/tex/conclusion.tex`)
+- Conclusion (`src/tex/conclusion.tex`)
+- Acknowledgements  (`src/tex/ms.tex`)
+- Appendices (`src/tex/appendicies.tex`)
+    - Penalized Splines and Smoothing
+    - Hierarchical Bayesian Inference
+    - Model specification
+    - Validation Studies
