@@ -9,45 +9,39 @@ from scipy.integrate import cumtrapz
 from utils import load_iid_tilt_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd, load_iid_posterior, load_ind_posterior, load_o3b_posterior
 
 
-def get_m1_m99(pdfs, ms):
-    m99 = []
-    m1 = []
+def get_percentile(pdfs, xs, perc):
+    x = []
     for m in pdfs:                                                                                                                                                                        
         i = len(m)
-        cumulative_prob = cumtrapz(m, ms, initial = 0)
+        cumulative_prob = cumtrapz(m, xs, initial = 0)
         init_prob = cumulative_prob[-1]
         prob = init_prob
-        final_prob = init_prob*0.99                                                                                                                                              
+        final_prob = init_prob * perc / 100.0                                                                                                                                              
         while prob > (final_prob):
             i -= 1
             prob = cumulative_prob[i]                                                                                                                                                         
-        m99.append(ms[i])
-    m99 = np.array(m99)
-    for m in pdfs:
-        i = 0
-        cumulative_prob = cumtrapz(m, ms, initial = 0)
-        init_prob = cumulative_prob[-1]
-        prob = 0
-        final_prob = init_prob*0.01
-        while prob < (final_prob):
-            i += 1
-            prob = cumulative_prob[i]
-        m1.append(ms[i])
-    m1 = np.array(m1)
-    return m1, m99
+        x.append(xs[i])
+    return np.array(x)
 
 
 def MSplineMassMacros():
     print("Saving Mass Distribution Macros...")
     ms, m_pdfs, _, _ = load_mass_ppd()
-    m1s, m99s = get_m1_m99(m_pdfs, ms)
+    m1s = get_percentile(m_pdfs, ms, 1)
+    m99s = get_percentile(m_pdfs, ms, 99)
+    m75s = get_percentile(m_pdfs, ms, 75)
     plpeak_mpdfs, _, plpeak_ms, _ = load_o3b_paper_run_masspdf(paths.data / 'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5')
-    plpeak_m1s, plpeak_m99s = get_m1_m99(plpeak_mpdfs, plpeak_ms)
+    plpeak_m1s = get_percentile(plpeak_mpdfs, plpeak_ms, 1) 
+    plpeak_m99s = get_percentile(plpeak_mpdfs, plpeak_ms, 99)
+    plpeak_m75s = get_percentile(plpeak_mpdfs, plpeak_ms, 75)  
     ps_mpdfs, _, ps_ms, _ = load_o3b_paper_run_masspdf(paths.data / 'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5')
-    ps_m1s, ps_m99s = get_m1_m99(ps_mpdfs, ps_ms)
-    return {'PLPeak': {'m_1percentile': save_param_cred_intervals(plpeak_m1s), 'm_99percentile': save_param_cred_intervals(plpeak_m99s)}, 
-            'MSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_99percentile': save_param_cred_intervals(m99s)}, 
-            'PLSpline': {'m_1percentile': save_param_cred_intervals(ps_m1s), 'm_99percentile': save_param_cred_intervals(ps_m99s)}}
+    ps_m1s = get_percentile(plpeak_mpdfs, plpeak_ms, 1) 
+    ps_m99s = get_percentile(ps_mpdfs, ps_ms, 99)
+    ps_m75s = get_percentile(ps_mpdfs, ps_ms, 75)  
+    return {'PLPeak': {'m_1percentile': save_param_cred_intervals(plpeak_m1s), 'm_75percentile': save_param_cred_intervals(plpeak_m75s), 'm_99percentile': save_param_cred_intervals(plpeak_m99s)}, 
+            'MSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_75percentile': save_param_cred_intervals(m75s), 'm_99percentile': save_param_cred_intervals(m99s)}, 
+            'PLSpline': {'m_1percentile': save_param_cred_intervals(ps_m1s), 'm_75percentile': save_param_cred_intervals(ps_m75s), 'm_99percentile': save_param_cred_intervals(ps_m99s)}}
+
 
 def MSplineIIDSpinMacros():
     print("Saving MSpline IID Component Spin macros...")
@@ -138,10 +132,12 @@ def chi_eff():
         v['PeakChiEff'] = save_param_cred_intervals(np.array(maxchis[k]))
     return macdict
 
+
 def PLPeakMacros():
     posterior = load_o3b_posterior('o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json')
     return {'beta': save_param_cred_intervals(posterior['beta']), 
             'lamb': save_param_cred_intervals(posterior['lamb'])}
+
 
 def main():
     macro_dict = {}
@@ -157,6 +153,7 @@ def main():
     print("Updating macros in src/tex/macros.tex from data in src/data/macros.json...")
     with open("src/tex/macros.tex", 'w') as ff:
         json2latex.dump('macros', macro_dict, ff)
+
 
 if __name__ == '__main__':
     main()
