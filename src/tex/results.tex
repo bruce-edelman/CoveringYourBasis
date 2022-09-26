@@ -4,8 +4,9 @@
     \script{mass_distribution_plot.py}
     \begin{centering}
         \includegraphics[width=\textwidth]{figures/mass_distribution_plot.pdf}
-        \caption{Plot showing the primary mass distribution inferred with the \textsc{MSpline} model with 40 knots for $m_1$. We show the results for the 
-        \textsc{PowerlawSpline} (blue) model from the LVK's GWTC-3 population analyses.}
+        \caption{Plot showing the primary mass distribution inferred with the \textsc{MSpline} model (red), with 50 knots spaced lineary in $\log m_1$, from the 
+        minimum observed value to 100\msun. The solid line shows the population predictive distribution (PPD) and the shaded region, 
+        the 90\% credible interval. We show the inferred PPD from the \textsc{PowerlawSpline} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:mass_distribution}
     \end{centering}
 \end{figure*}
@@ -59,7 +60,9 @@ the significant presence of sub-populations that may avoid PISN as the binary fo
 \begin{figure}
     \script{plot_iid_spinmag.py}
     \includegraphics[width=0.45\textwidth]{figures/iid_spinmag.pdf}
-    \caption{Caption.}
+    \caption{Plot showing the spin magnitude distribution inferred with the \textsc{MSpline} model (red), with 16 knots spaced linearly from 0 to 1, and 
+    assuming the components are IID. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
+    We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
     \label{fig:iid_spinmag_dist}
 \end{figure}
 
@@ -74,7 +77,9 @@ negliglby spinning black holes that can elude discovery with such a model.
 \begin{figure}
     \script{plot_ind_spinmag.py}
     \includegraphics[width=0.45\textwidth]{figures/ind_spinmag.pdf}
-    \caption{Caption.}
+    \caption{Plot showing the primary (orange) and secondary (olive) spin magnitude distributions inferred with the \textsc{MSpline} model, 
+    with 16 knots spaced linearly from 0 to 1. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
+    We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
     \label{fig:ind_spinmag_dist}
 \end{figure}
 
@@ -102,7 +107,9 @@ use-case where data-driven models can help in our understanding and possibly res
 \begin{figure}
     \script{plot_iid_spintilt.py}
     \includegraphics[width=0.45\textwidth]{figures/iid_spintilt.pdf}
-    \caption{Caption.}
+    \caption{Plot showing the spin orientation distribution inferred with the \textsc{MSpline} model (red), with 16 knots spaced linearly from -1 to 1, and 
+    assuming the components are IID. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
+    We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
     \label{fig:iid_spintilt_dist}
 \end{figure}
 
@@ -130,7 +137,9 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10g
 \begin{figure}
     \script{plot_ind_spintilt.py}
         \includegraphics[width=0.45\textwidth]{figures/ind_spintilt.pdf}
-        \caption{Caption.}
+        \caption{Plot showing the primary (orange) and secondary (olive) spin orientation distributions inferred with the \textsc{MSpline} model, 
+        with 16 knots spaced linearly from -1 to 1. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
+        We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:ind_spintilt_dist}
 \end{figure}
 
@@ -139,7 +148,10 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10g
 \begin{figure}
     \script{plot_chieff.py}
     \includegraphics[width=0.45\textwidth]{figures/chi_eff.pdf}
-    \caption{Caption.}
+    \caption{Plot showing the effective spin distribution inferred with the \textsc{MSpline} model (red), with 24 knots spaced linearly from -1 to 1. 
+    The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. We show the inferred $\chi_\mathrm{eff}$ 
+    PPD from the IID component spin \textsc{MSpline} model (green), the independent component spin \textsc{MSpline} model (purple), 
+    and the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
     \label{fig:chieff_dist}
 \end{figure}
 
