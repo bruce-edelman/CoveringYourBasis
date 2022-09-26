@@ -58,6 +58,16 @@ compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc
 
 \subsubsection{Spin Orientation}
 
+MSpline IID:
+$\cos{\theta}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][peakCosTilt]}$}
+$\gamma = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][log10gammaFrac]}$}
+$f_{<0} = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][negFrac]}$}
+MSpline Independent:
+$\cos{\theta_1}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt1]}$} and $\cos{\theta_2}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt2]}$}
+$\gamma_1 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac1]}$} and $\gamma_2 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac2]}$} 
+$f_{1,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac1]}$} andand $f_{2,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac2]}$}
+
+
 The spins distribution of merging combact binaries provides a very useful insight into the formation history of the binary. In particular the two main subcategories, 
 the isolated and dynamical formation channels, would produce distinct signatures in the spin distribution when looking at a population of observations. Isolated formation
 is where the only interactions with the binary are between each other. As the binary evolves and mass transfer happens between the two components, we expect the orientation
@@ -84,6 +94,24 @@ does not peak at cos theta = 1 i.e. salvo's paper
 
 Transform comp spin results to effective dims to see how strong changes in mag/tilt dont significantly affect our best constrained/measured
 effective spins
+
+Default: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelowNeg0p3]}$} 
+$f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} 
+$\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} 
+
+MSplineIID: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelowNeg0p3]}$}
+   $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$} 
+   $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$} 
+
+MSplineIND: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][FracBelowNeg0p3]}$}
+   $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][FracBelow0]}$} 
+   $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][PeakChiEff]}$} 
+
+MSplineChiEff: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelowNeg0p3]}$}
+      $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$} 
+      $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$} 
+
+
 
 Present results fitting chi eff dist with MSpline I am making a change. 
 

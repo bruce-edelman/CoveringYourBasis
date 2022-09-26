@@ -49,26 +49,7 @@ University, Evanston, IL 60201, USA}
 \affiliation{Institute  for  Fundamental  Science, Department of Physics, University of Oregon, Eugene, OR 97403, USA}
 \affiliation{Thurston High School, Springfield, OR 9747, USA}
 
-\begin{abstract}
-
-    Default: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelowNeg0p3]}$} 
-             $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} 
-             $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} 
-
-    MSplineIID: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelowNeg0p3]}$}
-                $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$} 
-                $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$} 
-
-    MSplineIND: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][FracBelowNeg0p3]}$}
-                $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][FracBelow0]}$} 
-                $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][ind][PeakChiEff]}$} 
-
-    MSplineChiEff: $f_{\chi_\mathrm{eff}<-0.3} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelowNeg0p3]}$}
-                   $f_{\chi_\mathrm{eff}<0} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$} 
-                   $\chi_\mathrm{eff, peak} = $\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$} 
-
-                   
-
+\begin{abstract}                 
 We introduce a non-parametric model built from basis splines, and apply it to infer the astrophysical distribution of 
 binary black hole masses and spins using the 69 confident observations in GWTC-3. We find the same features previously recovered 
 with similarly flexible models in the mass distribution, namely the peaks in merger rates at \~10\msun and \~35\msun. 
@@ -77,16 +58,8 @@ the spin magnitude distribution seems to be quite consistently IID, with XX\% of
 slight evidence of tilt distributions that do not peak at $\cos(\theta_i) = 1$ as previous models assumed, and slight evidence that 
 the components are distributed differently, in contrast to the spin magnitude distribution. While we do not find signs of a significant
 zero spinning sub population we do find that the data prefer not to force the support for exactly zero spinning black holes to 0 as 
-the non-singular Beta distribution and \textsc{Default} model assumes. MSpline IID:
-$\cos{\theta}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][peakCosTilt]}$}
-$\gamma = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][log10gammaFrac]}$}
-$f_{<0} = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][negFrac]}$}
-MSpline Independent:
-$\cos{\theta_1}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt1]}$} and $\cos{\theta_2}_\mathrm{max} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt2]}$}
-$\gamma_1 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac1]}$} and $\gamma_2 = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac2]}$} 
-$f_{1,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac1]}$} andand $f_{2,<0} = $\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac2]}$}
+the non-singular Beta distribution and \textsc{Default} model assumes. 
 \end{abstract}
-
 
 \input{intro.tex}
 \input{methods.tex}
