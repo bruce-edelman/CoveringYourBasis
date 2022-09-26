@@ -20,7 +20,7 @@ We additionally will fit a population model on the redshift or luminosity distan
 parameters from the Planck 2015 results \cite{Planck2015}, which defines an analytical mapping between each event's inferred
 luminosity distance and it's redshift. While we choose to use MSpline distibutions to model the primary mass and spin distributions, we 
 model the mass ratio distribution with a power law, i.e. $p(q | m_1, m_\mathrm{min}, \beta) \propto q^{\beta} \Theta(qm_1 - m_\mathrm{min}) \Theta(m_1 - qm_1)$. 
-Where $\beta$ is the power law index and $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$] \cite{Talbot_2019,o1o2_pop,o3a_pop}.
+Where $\beta$ is the power law index and $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$] \cite{Talbot_2018,o1o2_pop,o3a_pop}.
 We model the evolution of the merger rate with redshift with the \textsc{PowerlawRedshift} model \cite{Fishbach_2018redshift}, which is desribed by 
 $p(z|\lambda_z)\propto \frac{dV_c}{dz}(1+z)^{\lambda_z-1}$. We describe our specific prior choices on the hyper-parameters and each model 
 in more detail in Appendix \ref{sec:modelpriors}. We use the same cut on the recent GWTC-3 catalog as was done in the LVK's accompanying population analysis, 
@@ -33,7 +33,7 @@ We start by looking towards the mass distribution.
 
 We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
 Figure \ref{fig:mass_distribution} shows how the MSpline model (red) found consistent features in the mass disribution with 
-what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \cite{Talbot_2019,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
+what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \cite{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
 In particular our MSpline model finds a peak in merger rate density at both 10 and 35 soloar masses, agreeing with those reported using the same dataset in \citet{o3b_astro_dist}. 
 We also find a significantly less declining mass distribution that has considerably larger support for higher mass mergers when 
 compared to the other power-law based models, finding that 75\% percent of primary masses below \result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_75percentile]}$}, 
