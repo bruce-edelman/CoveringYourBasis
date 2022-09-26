@@ -17,6 +17,8 @@
 
 # Covering Your Basis: Model Agnostic Probes of the Binary Black Hole Population
 
+## [Latest Paper Build](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/ms.pdf)
+
 ## Instructions
 
 This is an open source scientific article created using the [showyourwork](https://github.com/showyourwork/showyourwork) workflow.
