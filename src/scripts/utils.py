@@ -1,7 +1,7 @@
 import numpy as np
 import jax.numpy as jnp
 import paths
-import json
+from bilby.core.result import read_in_result
 import deepdish as dd
 
 
@@ -31,15 +31,6 @@ def plot_mean_and_90CI(ax, xs, ar, color, label, bounds=True, CI=90, traces=None
             ax.plot(xs, ar[idx], color=tracecolor, lw=0.025, alpha=0.02)  
     
     return ax
-
-
-def save_macro(subdict):
-    with open(paths.data / "macros.json", 'r') as f:
-        old_macro = json.load(f)
-    new_macro = old_macro.copy()
-    new_macro.update(subdict)
-    with open(paths.data / "macros.json", 'w') as f:
-        json.dump(new_macro, f)
 
 
 def powerlaw_pdf(xx, alpha, low, high):
@@ -485,6 +476,15 @@ def load_ind_mag_ppd():
     datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
     return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
 
+
+def load_ind_posterior():
+    return dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+
+def load_iid_posterior():
+    return dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+
+def load_o3b_posterior(filename):
+    return read_in_result(paths.data / filename).posterior
 
 def load_o3b_paper_run_masspdf(filename):
     """

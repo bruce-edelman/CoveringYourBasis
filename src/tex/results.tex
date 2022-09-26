@@ -1,45 +1,5 @@
 \section{Binary Black Hole Population Inference with GWTC-3} \label{sec:results}
 
-We use hierarchical Bayesian inference (see Appendix \ref{sec:hierarchical_inference}) to simultaneosly infer the astrophysical mass, spin and redshift distributions of 
-a binary black holes (BBHs) given a catalog of gravitational wave observations. We choose to parameterize the binaries' masses with the primary (defined as the more massive component) mass 
-and the mass ratio -- defined as $q=\frac{m_2}{m_1}$, bounded in the range from 0 to 1. We choose to model 4 of the 6 total 
-spin degrees of freedom of a binary merger with each component spin magnitude $a_1$ and $a_2$, along with the cosine of the tilt angle of each component, 
-$\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binaries orbital angular mommentum vector. 
-We additionally will fit a population model on the redshift or luminosity distance distribution of BBHs. We assume a $\Lambda\mathrm{CDM}$ cosmology using the 
-parameters from the Planck 2015 results \cite{Planck2015}, which defines an analytical mapping between each event's inferred
-luminosity distance and it's redshift. While we choose to use MSpline distibutions to model the primary mass and spin distributions, we 
-model the mass ratio distribution with a power law, i.e. $p(q | m_1, m_\mathrm{min}, \beta_q) \propto q^{\beta_q} \Theta(qm_1 - m_\mathrm{min}) \Theta(m_1 - qm_1)$. 
-Where the $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$].
-We model the evolution of the merger rate with redshift with the \textsc{PowrerlawRedshift} model \cite{Fishbach_2018redshift}, which is desribed by 
-$p(z|\lambda_z)\propto \frac{dV_c}{dz} \frac{T_\mathrm{obs}}{1+z} (1+z)^\lambda_z$. We describe our specific prior choices on the hyper-parameters and each model 
-in more detail in Appendix \ref{sec:modelpriors}. We choose the same cut on the recent GWTC-3 catalog as was done in the LVK's accompanying population analysis, \bruce{cite}.
-Keeping all possible BBH mergers with false alarm rates less than 1 per year, we have 70 oservations. We choose to emit the currently not well understood event, GW190814 \cite{190814disc},
-as it was concluded to be an outlier of the rest of the BBH population in both GWTC-2 and GWTC-3 \cite{o3a_pop}. This leaves us with a catlog of 69 BBH mergers observerd oveer a period of about 2 years, from
-which we want to infer the population properties of. We start by looking towards the mass distribution.
-
-\subsection{BBH Mass Distibution} \label{sec:mass_dist}
-
-PLPeak: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_99percentile]}$}
-
-
-PLSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_99percentile]}$}
-
-
-MSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_99percentile]}$}
-
-We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
-We find consistent features in the mass disribution with what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} 
-mass models. In particular our MSpline model finds a peak in merger rate density at both 10 and 35 soloar masses, agreeing with those reported
-in \bruce{CITE o3b paper}. We also find a significantly less declining mass distribution that has considerably larger support for higher mass 
-mergers when compared to the other power-law based models. Another interesting consequence of this is that we thus infer a much less steeply
-evolving merger rate with redshift. It is known that there is a strong correlation between the primary mass power law index, $alpha$, and the 
-redshift power-law index, $\lambda_z$. When one infers a steeper mass distribution -- the inferred rate must drastically increase 
-with resdshift to explain the few higher mass events in our catalog, but when one infers a flatter distribution like the MSPline inferred
-distribition in plot \ref{fig:mass_distribution}, the higher mass mergers are consistent with the local merger rate denstiy as a function of mass, 
-and thus the model does not need to have as steep of power-law in redshift. With this more flexible mass population model, we now 
-find that the merger rate is fully consistent with being unifom with co-moving volume, rather than the confidently evolving merger rate 
-conclusion from \bruce{cite O3b}. 
-
 \begin{figure*}[ht!]
     \script{mass_distribution_plot.py}
     \begin{centering}
@@ -50,11 +10,49 @@ conclusion from \bruce{cite O3b}.
     \end{centering}
 \end{figure*}
 
+We use hierarchical Bayesian inference (see Appendix \ref{sec:hierarchical_inference}) to simultaneosly infer the astrophysical mass, spin and redshift distributions of 
+a binary black holes (BBHs) given a catalog of gravitational wave observations. We parameterize the binaries' masses with the primary (defined as the more massive component) mass 
+and the mass ratio -- defined as $q=\frac{m_2}{m_1}$, bounded in the range from 0 to 1. We model 4 of the 6 total 
+spin degrees of freedom of a binary merger with each component spin magnitude $a_1$ and $a_2$, along with the cosine of the tilt angle of each component, 
+$\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binaries orbital angular mommentum vector. 
+We additionally will fit a population model on the redshift or luminosity distance distribution of BBHs. We assume a $\Lambda\mathrm{CDM}$ cosmology using the 
+parameters from the Planck 2015 results \cite{Planck2015}, which defines an analytical mapping between each event's inferred
+luminosity distance and it's redshift. While we choose to use MSpline distibutions to model the primary mass and spin distributions, we 
+model the mass ratio distribution with a power law, i.e. $p(q | m_1, m_\mathrm{min}, \beta) \propto q^{\beta} \Theta(qm_1 - m_\mathrm{min}) \Theta(m_1 - qm_1)$. 
+Where $\beta$ is the power law index and $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$] \cite{Talbot_2019,o1o2_pop,o3a_pop}.
+We model the evolution of the merger rate with redshift with the \textsc{PowerlawRedshift} model \cite{Fishbach_2018redshift}, which is desribed by 
+$p(z|\lambda_z)\propto \frac{dV_c}{dz}(1+z)^{\lambda_z-1}$. We describe our specific prior choices on the hyper-parameters and each model 
+in more detail in Appendix \ref{sec:modelpriors}. We use the same cut on the recent GWTC-3 catalog as was done in the LVK's accompanying population analysis, 
+keeping all 70 possibly BBH mergers with false alarm rates less than 1 per year \cite{GWTC3,o3b_astro_dist}. We choose to emit the currently not well understood event, 
+GW190814 \cite{190814disc}, as it was concluded to be an outlier of the rest of the BBH population in both GWTC-2 and GWTC-3 \cite{o3a_pop,o3b_astro_dist,Essick_2022}. 
+This leaves us with a catalog of 69 BBH mergers observerd oveer a period of about 2 years, from which we want to infer its population properties. 
+We start by looking towards the mass distribution.
 
-In addition to the primary mass distirbution there is some mild evidence for a mass ratio distibution that is not well described by a power law, 
-which is how the mass ratio distribution is commonly modeled. In particular our smoothed MSpline model finds a decrease in the merger rate at $q\sim1$, 
-while agreeing well with the power-law on the decline in rate from $q \in [0.4, 0.8]$, and a much larger tail extending to more asymmetric
-mass ratios. 
+\subsection{BBH Mass Distibution} \label{sec:mass_dist}
+
+%PLPeak: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_99percentile]}$}
+%PLSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_99percentile]}$}
+%MSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_99percentile]}$}
+
+We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
+Figure \ref{fig:mass_distribution} shows how the MSpline model (red) found consistent features in the mass disribution with 
+what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \cite{Talbot_2019,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
+In particular our MSpline model finds a peak in merger rate density at both 10 and 35 soloar masses, agreeing with those reported using the same dataset in \citet{o3b_astro_dist}. 
+We also find a significantly less declining mass distribution that has considerably larger support for higher mass mergers when 
+compared to the other power-law based models. Another interesting consequence of this is that we no longer find an confidently
+evolving merger rate with redshift, as inferred with power-law based models. There is a strong correlation between the primary mass 
+power law index, $\alpha$, and the redshift power-law index, $\lambda_z$. When one infers a steeper mass distribution -- the inferred 
+rate must drastically increase with resdshift to explain the highest mass events in the catalog. However, when one infers a 
+flatter distribution like, as the MSPline did in figure \ref{fig:mass_distribution}, the higher mass mergers are consistent with 
+the local merger rate denstiy as a function of mass. With the more flexible mass population model, we find that the merger rate 
+is consistent with being unifom with co-moving volume with $\lambda_z = $\resut{$\CIPlusMinus{\macros[MSplineIIDCompSpins][lamb]}$}, compared 
+to $\lambda_z = $\resut{$\CIPlusMinus{\macros[PLPeak][lamb]}$} found with the \textsc{PowerlawPeak} model.
+
+We also find a mass ratio distribution with more support for unequal mass ratios, with power law index 
+$\beta = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][beta]}$}, compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} 
+found with the \textsc{PowerlawPeak} model. This can also be in part related with the harder mass distribution 
+as mentioned above. More support for higher mass primaries  -- since total mass is measured better -- increases support for more unequal 
+mass ratio binaries. 
 
 \subsection{BBH Component Spin Distributions} \label{sec:spin_dist}
 

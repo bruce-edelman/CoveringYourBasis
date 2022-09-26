@@ -6,7 +6,7 @@ import paths
 import numpy as np
 import deepdish as dd
 from scipy.integrate import cumtrapz
-from utils import load_iid_tilt_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd
+from utils import load_iid_tilt_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd, load_iid_posterior, load_ind_posterior, load_o3b_posterior
 
 
 def get_m1_m99(pdfs, ms):
@@ -65,7 +65,11 @@ def MSplineIIDSpinMacros():
     peak_tilts = np.array(peak_tilts)
     gamma_fracs = np.array(gamma_fracs)
     frac_neg_cts = np.array(frac_neg_cts)
-    return {'peakCosTilt': save_param_cred_intervals(peak_tilts), 
+    posts = load_iid_posterior()
+
+    return {'beta': save_param_cred_intervals(posts['beta']),
+            'lamb': save_param_cred_intervals(posts['lamb']),
+            'peakCosTilt': save_param_cred_intervals(peak_tilts), 
             'log10gammaFrac': save_param_cred_intervals(np.log10(gamma_fracs)), 
             'negFrac': save_param_cred_intervals(frac_neg_cts)}
 
@@ -98,8 +102,11 @@ def MSplineIndSpinMacros():
     gamma_fracs2 = np.array(gamma_fracs2)
     frac_neg_cts1 = np.array(frac_neg_cts1)
     frac_neg_cts2 = np.array(frac_neg_cts2)
+    posts = load_ind_posterior()
 
-    return {'peakCosTilt1': save_param_cred_intervals(peak_tilts1), 'peakCosTilt2': save_param_cred_intervals(peak_tilts2), 
+    return {'beta': save_param_cred_intervals(posts['beta']),
+            'lamb': save_param_cred_intervals(posts['lamb']),
+            'peakCosTilt1': save_param_cred_intervals(peak_tilts1), 'peakCosTilt2': save_param_cred_intervals(peak_tilts2), 
             'log10gammaFrac1': save_param_cred_intervals(np.log10(gamma_fracs1)), 'log10gammaFrac2': save_param_cred_intervals(np.log10(gamma_fracs2)), 
             'negFrac1': save_param_cred_intervals(frac_neg_cts1), 'negFrac2': save_param_cred_intervals(frac_neg_cts2)}
     
@@ -131,8 +138,14 @@ def chi_eff():
         v['PeakChiEff'] = save_param_cred_intervals(np.array(maxchis[k]))
     return macdict
 
+def PLPeakMacros():
+    posterior = load_o3b_posterior('o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json')
+    return {'beta': save_param_cred_intervals(posterior['beta']), 
+            'lamb': save_param_cred_intervals(posterior['lamb'])}
+
 def main():
     macro_dict = {}
+    macro_dict["PLPeak"] = PLPeakMacros()
     macro_dict["MSplineIndependentCompSpins"] = MSplineIndSpinMacros()
     macro_dict["MSplineIIDCompSpins"] = MSplineIIDSpinMacros()
     macro_dict["ChiEffective"] = chi_eff()
