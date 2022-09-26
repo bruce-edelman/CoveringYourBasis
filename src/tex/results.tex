@@ -1,9 +1,31 @@
 \section{Binary Black Hole Population Inference with GWTC-3} \label{sec:results}
 
-\bruce{intro paragraph here to describe GWTC3 catalog and the selection we made for our analyses}
-
+We use hierarchical Bayesian inference (see Appendix \ref{sec:hierarchical_inference}) to simultaneosly infer the astrophysical mass, spin and redshift distributions of 
+a binary black holes (BBHs) given a catalog of gravitational wave observations. We choose to parameterize the binaries' masses with the primary (defined as the more massive component) mass 
+and the mass ratio -- defined as $q=\frac{m_2}{m_1}$, bounded in the range from 0 to 1. We choose to model 4 of the 6 total 
+spin degrees of freedom of a binary merger with each component spin magnitude $a_1$ and $a_2$, along with the cosine of the tilt angle of each component, 
+$\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binaries orbital angular mommentum vector. 
+We additionally will fit a population model on the redshift or luminosity distance distribution of BBHs. We assume a $\Lambda\mathrm{CDM}$ cosmology using the 
+parameters from the Planck 2015 results \cite{Planck2015}, which defines an analytical mapping between each event's inferred
+luminosity distance and it's redshift. While we choose to use MSpline distibutions to model the primary mass and spin distributions, we 
+model the mass ratio distribution with a power law, i.e. $p(q | m_1, m_\mathrm{min}, \beta_q) \propto q^{\beta_q} \Theta(qm_1 - m_\mathrm{min}) \Theta(m_1 - qm_1)$. 
+Where the $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$].
+We model the evolution of the merger rate with redshift with the \textsc{PowrerlawRedshift} model \cite{Fishbach_2018redshift}, which is desribed by 
+$p(z|\lambda_z)\propto \frac{dV_c}{dz} \frac{T_\mathrm{obs}}{1+z} (1+z)^\lambda_z$. We describe our specific prior choices on the hyper-parameters and each model 
+in more detail in Appendix \ref{sec:modelpriors}. We choose the same cut on the recent GWTC-3 catalog as was done in the LVK's accompanying population analysis, \bruce{cite}.
+Keeping all possible BBH mergers with false alarm rates less than 1 per year, we have 70 oservations. We choose to emit the currently not well understood event, GW190814 \cite{190814disc},
+as it was concluded to be an outlier of the rest of the BBH population in both GWTC-2 and GWTC-3 \cite{o3a_pop}. This leaves us with a catlog of 69 BBH mergers observerd oveer a period of about 2 years, from
+which we want to infer the population properties of. We start by looking towards the mass distribution.
 
 \subsection{BBH Mass Distibution} \label{sec:mass_dist}
+
+PLPeak: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLPeak][m_99percentile]}$}
+
+
+PLSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_99percentile]}$}
+
+
+MSpline: $m_{1\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_1percentile]}$}, $m_{99\%} = $\result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_99percentile]}$}
 
 We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
 We find consistent features in the mass disribution with what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} 

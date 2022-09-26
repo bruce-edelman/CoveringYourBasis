@@ -5,7 +5,49 @@ import json
 import paths
 import numpy as np
 import deepdish as dd
-from utils import load_iid_tilt_ppd, load_ind_tilt_ppd, save_param_cred_intervals
+from scipy.integrate import cumtrapz
+from utils import load_iid_tilt_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd
+
+
+def get_m1_m99(pdfs, ms):
+    m99 = []
+    m1 = []
+    for m in pdfs:                                                                                                                                                                        
+        i = len(m)
+        cumulative_prob = cumtrapz(m, ms, initial = 0)
+        init_prob = cumulative_prob[-1]
+        prob = init_prob
+        final_prob = init_prob*0.99                                                                                                                                              
+        while prob > (final_prob):
+            i -= 1
+            prob = cumulative_prob[i]                                                                                                                                                         
+        m99.append(ms[i])
+    m99 = np.array(m99)
+    for m in pdfs:
+        i = 0
+        cumulative_prob = cumtrapz(m, ms, initial = 0)
+        init_prob = cumulative_prob[-1]
+        prob = 0
+        final_prob = init_prob*0.01
+        while prob < (final_prob):
+            i += 1
+            prob = cumulative_prob[i]
+        m1.append(ms[i])
+    m1 = np.array(m1)
+    return m1, m99
+
+
+def MSplineMassMacros():
+    print("Saving Mass Distribution Macros...")
+    ms, m_pdfs, _, _ = load_mass_ppd()
+    m1s, m99s = get_m1_m99(m_pdfs, ms)
+    plpeak_mpdfs, _, plpeak_ms, _ = load_o3b_paper_run_masspdf(paths.data / 'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5')
+    plpeak_m1s, plpeak_m99s = get_m1_m99(plpeak_mpdfs, plpeak_ms)
+    ps_mpdfs, _, ps_ms, _ = load_o3b_paper_run_masspdf(paths.data / 'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5')
+    ps_m1s, ps_m99s = get_m1_m99(ps_mpdfs, ps_ms)
+    return {'PLPeak': {'m_1percentile': save_param_cred_intervals(plpeak_m1s), 'm_99percentile': save_param_cred_intervals(plpeak_m99s)}, 
+            'MSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_99percentile': save_param_cred_intervals(m99s)}, 
+            'PLSpline': {'m_1percentile': save_param_cred_intervals(ps_m1s), 'm_99percentile': save_param_cred_intervals(ps_m99s)}}
 
 def MSplineIIDSpinMacros():
     print("Saving MSpline IID Component Spin macros...")
@@ -94,6 +136,7 @@ def main():
     macro_dict["MSplineIndependentCompSpins"] = MSplineIndSpinMacros()
     macro_dict["MSplineIIDCompSpins"] = MSplineIIDSpinMacros()
     macro_dict["ChiEffective"] = chi_eff()
+    macro_dict['MassDistribution'] = MSplineMassMacros()
     
     print("Saving macros to src/data/macros.json...")
     with open(paths.data / "macros.json", 'w') as f:

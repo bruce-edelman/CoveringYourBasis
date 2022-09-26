@@ -3,53 +3,9 @@
 import paths
 import numpy as np
 import matplotlib.pyplot as plt
-import deepdish as dd
-from utils import plot_mean_and_90CI
+from utils import plot_mean_and_90CI, load_mass_ppd, load_o3b_paper_run_masspdf
 from matplotlib.ticker import ScalarFormatter
 
-
-def load_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
-    return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
-
-
-def load_o3b_paper_run_m1ppd(filename):
-    mass_1 = np.linspace(2, 100, 1000)
-    mass_ratio = np.linspace(0.1, 1, 500)
-    # load in the traces. 
-    # Each entry in lines is p(m1 | Lambda_i) or p(q | Lambda_i)
-    # where Lambda_i is a single draw from the hyperposterior
-    # The ppd is a 2D object defined in m1 and q
-    with open(filename, 'r') as _data:
-        _data = dd.io.load(filename)
-        ppd = _data["ppd"]
-    m1ppd = np.trapz(ppd, x=mass_ratio, axis=0)
-    return mass_1, m1ppd / np.trapz(m1ppd, x=mass_1)
-
-def load_o3b_paper_run_masspdf(filename):
-    """
-    Generates a plot of the PPD and X% credible region for the mass distribution,
-    where X=limits[1]-limits[0]
-    """
-    mass_1 = np.linspace(2, 100, 1000)
-    mass_ratio = np.linspace(0.1, 1, 500)
-        
-    # load in the traces. 
-    # Each entry in lines is p(m1 | Lambda_i) or p(q | Lambda_i)
-    # where Lambda_i is a single draw from the hyperposterior
-    # The ppd is a 2D object defined in m1 and q
-    with open(filename, 'r') as _data:
-        _data = dd.io.load(filename)
-        marginals = _data["lines"]
-    for ii in range(len(marginals['mass_1'])):
-        marginals['mass_1'][ii] /= np.trapz(marginals['mass_1'][ii], mass_1)
-        marginals['mass_ratio'][ii] /= np.trapz(marginals['mass_ratio'][ii], mass_ratio)
-    return marginals['mass_1'], marginals['mass_ratio'], mass_1, mass_ratio
-
-def plot_o3b_m1_ppd(ax, fi, col='tab:blue', lab='PLPeak'):
-    ms, ppd = load_o3b_paper_run_m1ppd(paths.data / fi)
-    ax.plot(ms, ppd, color=col, label=lab, alpha=0.75, lw=4)
-    return ax
 
 def plot_o3b_res(ax, fi, m1=True, col='tab:blue', lab='PP', bounds=False):
     plpeak_mpdfs, plpeak_qpdfs, plpeak_ms, plpeak_qs = load_o3b_paper_run_masspdf(paths.data / fi)
@@ -59,9 +15,10 @@ def plot_o3b_res(ax, fi, m1=True, col='tab:blue', lab='PP', bounds=False):
         plot_mean_and_90CI(ax, plpeak_qs, plpeak_qpdfs, color=col, label=lab, bounds=bounds)
     return ax
 
+
 mmin = 6.5
 mmax = 100
-ms, m_pdfs, qs, q_pdfs = load_ppd()
+ms, m_pdfs, qs, q_pdfs = load_mass_ppd()
 for jj in range(len(m_pdfs)):
     m_pdfs[jj,:] /= np.trapz(m_pdfs[jj,:], ms)
     q_pdfs[jj,:] /= np.trapz(q_pdfs[jj,:], qs)

@@ -484,3 +484,28 @@ def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
 def load_ind_mag_ppd():
     datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
     return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
+
+
+def load_o3b_paper_run_masspdf(filename):
+    """
+    Generates a plot of the PPD and X% credible region for the mass distribution,
+    where X=limits[1]-limits[0]
+    """
+    mass_1 = np.linspace(2, 100, 1000)
+    mass_ratio = np.linspace(0.1, 1, 500)
+        
+    # load in the traces. 
+    # Each entry in lines is p(m1 | Lambda_i) or p(q | Lambda_i)
+    # where Lambda_i is a single draw from the hyperposterior
+    # The ppd is a 2D object defined in m1 and q
+    with open(filename, 'r') as _data:
+        _data = dd.io.load(filename)
+        marginals = _data["lines"]
+    for ii in range(len(marginals['mass_1'])):
+        marginals['mass_1'][ii] /= np.trapz(marginals['mass_1'][ii], mass_1)
+        marginals['mass_ratio'][ii] /= np.trapz(marginals['mass_ratio'][ii], mass_ratio)
+    return marginals['mass_1'], marginals['mass_ratio'], mass_1, mass_ratio
+
+def load_mass_ppd():
+    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']

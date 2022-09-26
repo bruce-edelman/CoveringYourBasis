@@ -1,4 +1,63 @@
 \appendix
+\section{Penalized Splines and Smoothing}\label{sec:psplines}
+
+Spline functions have been shown to be sensitivite to the chosen number of knots, and their locations or spacing. 
+Adding more knots knots increases the a-priori variance in the spline function, while the space between knots can limit the 
+resolution of features in the data the spline is capable of resolving. To ensure your spline based model is flexible enough 
+one would want to add as many knots as densely as possible, but this comes with the inherit larger variance as mentioned above. 
+To overcome this we resort to the frequentist penalized spline (P-Spline) in which one applies a penalty or regularization term 
+to the likelihood based on the difference of adjacent knot coeficients. The linear combination of spline basis components is 
+is flat when the basis coeficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as the differences between adjacent
+knot coeficients get larger, one gets a smoothing of the spline function inferences. Since we are using hierarchical Bayesian inferece as our 
+statistical framework, we formulate this penalized likelihood with its Bayesian analog. The difference penalty is equivalent to applying a stochastic 
+differnece prior among the knots, as described in \bruce{CITE THIS PAPER}. This is also sometimes referred to as a Gaussian random walk prior, since
+each coeficient is normally distributed about its neighboring coeficients. For a spline basis with $n$ degree's of freedom, 
+and a difference penalty of order of $r$ (see \bruce{cite P-splines paper}), our prior is defined as:
+
+\begin{eqnarray}
+\tau_\lambda \sim \Gamma(a, b) \\
+p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D}_{r}^{\mathrm{T}} \bm{D}_r \bm{c}  \big] e^{-n\bm{c}}
+\end{eqnarray}
+
+\noindent Above $\bm{D}_r$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $\Gamma(a,b)$ the Gamma distribution with shape parameters, $a$ and $b$. 
+This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. By adding in a very large number 
+of knots such that your domain is densly populated with basis coeficients, this allows the freedom for the model to find the smoothing 
+scale that the data prefers. One downside of this prior specification as noted by\ bruce{CITE BAYESIAN PSPLINES}, is a slight dependence on choice 
+of the b hyper-parameter for Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method introduced in \bruce{CITE BAYESIAN PSPLINES} 
+to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model on gamma distributions with varying b hyper-parameters. 
+We now replace the prior on $\tau_\lambda$ with:
+
+\begin{align}
+    \bm{p} \sim \mathcal{D}(m) \\
+    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_i)
+\end{align}
+
+\noindent Where above $\mathcal{D}(m)$ is a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
+and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
+
+%Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
+%that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly
+%across the knots. \bruce{CITE BAYESIAN PSPLINES}, formulates a spatially adaptive prior in this way by adding in $n-r-1$ additional parameters that
+%effectively modulate the $\tau_\lambda$ across each difference. We now replace our prior on the coeficients with:
+
+%\begin{eqnarray}
+%\bm{\lambda} \sim \mathcal{G}(\omega, \omega), \\
+%\bm{\Lambda} \equiv \mathrm{diag}\big(1, \lambda_0,...,\lambda_{n-r-1}\big), \\
+%p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{\Lambda} \bm{D_r} \bm{c} \big] e^{-n\bm{c}}
+%\end{eqnarray}
+
+%Where above the matrix $\bm{\Lambda}$ a diagonal matrix of shape $(n-r \times n-r)$, and $\omega$ an arbitrarily small value such that the Gamma distribution 
+%prior on $\bm{\lambda}$ has a mean of 1 and an arbitrarily large variance. This enforces a smooth evolution of the smoothing penalty 
+%across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
+%the power-law like mass distributions that are commonly used. 
+
+This prior is imparting a natural attraction of the coeficients closer to each other in order to smooth the spline function, so one 
+must ensure that the spline function is in fact flat given all equal coeficients. Since one needs to define n+k knots to construct an order-k basis with 
+n degrees of freedom, people often will place knots on top of each other at hard parameter boundaries \bruce{cite msplines / o-splines}. 
+This may seemed motivated, especially if there is no reality in the parameter beyond the boundary, but this violates the above condition. 
+We follow the distinction from \bruce{CITE psplines} that the difference penalty or smooothing prior is only valid with ``proper'' spline bases. 
+A proper basis is where all n+k knots are evenly spaced, see Figure \ref{fig:spline_basis}, as opposed to stacking them at the bounds.
+
 \section{Hierarchical Bayesian Inference} \label{sec:hierarchical_inference}
 
 % This appendix goes over in detail the hierarchical bayeisan inference framework
@@ -15,7 +74,7 @@ merger rate density, $\mathcal{R}_0$, we write the overall number density of BBH
 Where up above, we denote the co-moving volume element as $dV_c$ \citep{hogg_cosmo}, and $T_\mathrm{obs}$ as the observing time period that produced the 
 catalog with the related factor of $1+z$ converting this detector-frame time to source-frame. We assume a LambdaCDM cosmology using 
 the cosmological parameters from \citet{Planck2015}. We model the merger rate evolving with redshift following a power law distribution: 
-$p(z|\lambda) \propto \frac{dV_c}{dz}\frac{1}{1+z}(1+z)^\lambda$. When integrating equation \ref{number_density} across all $\theta$
+$p(z|\lambda) \propto \frac{dV_c}{dz}\frac{1}{1+z}(1+z)^\lambda$ \cite{Fishbach_2018redshift}. When integrating equation \ref{number_density} across all $\theta$
 and out to some maximum redshift, $z_\mathrm{max}$, we get the total number of CBCs in the universe out to that redshift. We follow previous notations, \
 letting $\{d_i\}$ represent the set of data from $N_\mathrm{obs}$ CBCs observed with gravitational waves. The merger rate is then described as an inhomogenous 
 Poisson process and after imposing the usual log-uniform prior on the merger rate, we marginalize out merger rate and arrive at the posterior
@@ -28,9 +87,9 @@ distribution of our hyper-parameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}
 \noindent
 where, we replaced the integrals over each event's likelihood with ensemble averages over $K_i$ posterior samples. Above, $j$
 indexes the $K_i$ posterior samples from each event and $\pi(\theta, z)$ is the default prior used by parameter estimations that 
-produced the posterior samples for each event. In the analyses of GWTC-2 the default prior used is uniform in detector frame masses, 
-component spins and Euclidean volume. The corresponding prior evaluated in source frame primary mass, mass ratio, component spins 
-and redshift is:
+produced the posterior samples for each event. In the analyses of GWTC-3, either the default prior used was uniform in detector frame masses, 
+component spins and Euclidean volume or the posterior samples were re-weighted to such a prior before using them in our analysis. 
+The corresponding prior evaluated in the parameters we hierarchicaly model, i.e. source frame primary mass, mass ratio, component spins and redshift is:
 
 \begin{equation}
     \pi(m_1, q, a_1, a_2, \cos{\theta_1}, \cos{\theta_2}, z) \propto \frac{1}{4} m_1 (1+z)^2 D_L^2(z) \frac{dD_L}{dz}
@@ -74,63 +133,8 @@ their respective hyper-parameters and prior distributions in the next section. T
 samples of the hyper parameters from the hierarchical posterior distribution shown in equation \ref{importance-posterior}, we use the 
 NUTS hamiltonian monte carlo sampler in \textsc{numpyro} and \textsc{jax} to calculate likelihoods \bruce{FIND citations for these}.
 
-\section{Penalized Splines and Smoothing}\label{sec:psplines}
-
-Spline functions have been shown to be sensitivite to the chosen number of knots, and their locations or spacing. 
-Adding more knots knots increases the a-priori variance in the spline function, while the space between knots can limit the 
-resolution of features in the data the spline is capable of resolving. To ensure your spline based model is flexible enough 
-one would want to add as many knots as densely as possible, but this comes with the inherit larger variance as mentioned above. 
-To overcome this we resort to the frequentist penalized spline (P-Spline) in which one applies a penalty or regularization term 
-to the likelihood based on the difference of adjacent knot coeficients. The linear combination of spline basis components is 
-is flat when the basis coeficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as the differences between adjacent
-knot coeficients get larger, one gets a smoothing of the spline function inferences. Since we are using hierarchical Bayesian inferece as our 
-statistical framework, we formulate this penalized likelihood with its Bayesian analog. The difference penalty is equivalent to applying a stochastic 
-differnece prior among the knots, as described in \bruce{CITE THIS PAPER}. This is also sometimes referred to as a Gaussian random walk prior, since
-each coeficient is normally distributed about its neighboring coeficients. We then use as our smoothing prior, for a spline basis with $n$ degree's of freedom
-, and a difference order of $r$ in our smoothing penalty (see \bruce{cite P-splines paper}) is defined as:
-
-\begin{eqnarray}
-\tau_\lambda \sim \Gamma(a, b) \\
-p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{D_r} \bm{c}  \big] e^{-n\bm{c}}
-\end{eqnarray}
-
-\noindent Above $\bm{D_r}$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $\Gamma(a,b)$ the Gamma distribution with shape parameters, $a$ and $b$. 
-This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. By adding in a very large number 
-of knots such that your domain is densly populated with basis coeficients, this allows the freedom for the model to find the smoothing 
-scale that the data prefers. One downside of this prior specification as noted by\ bruce{CITE BAYESIAN PSPLINES}, is a slight dependence on choice 
-of the b hyper-parameter for Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method introduced in \bruce{CITE BAYESIAN PSPLINES} 
-to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model on gamma distributions with varying b hyper-parameters. 
-We now replace the prior on $\tau_\lambda$ with:
-
-\begin{align}
-    \bm{p} \sim \mathcal{D}(m) \\
-    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_i)
-\end{align}
-
-\noindent Where above $\mathcal{D}(m)$ is a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
-and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
-
-%Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
-%that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly
-%across the knots. \bruce{CITE BAYESIAN PSPLINES}, formulates a spatially adaptive prior in this way by adding in $n-r-1$ additional parameters that
-%effectively modulate the $\tau_\lambda$ across each difference. We now replace our prior on the coeficients with:
-
-%\begin{eqnarray}
-%\bm{\lambda} \sim \mathcal{G}(\omega, \omega), \\
-%\bm{\Lambda} \equiv \mathrm{diag}\big(1, \lambda_0,...,\lambda_{n-r-1}\big), \\
-%p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{\Lambda} \bm{D_r} \bm{c} \big] e^{-n\bm{c}}
-%\end{eqnarray}
-
-%Where above the matrix $\bm{\Lambda}$ a diagonal matrix of shape $(n-r \times n-r)$, and $\omega$ an arbitrarily small value such that the Gamma distribution 
-%prior on $\bm{\lambda}$ has a mean of 1 and an arbitrarily large variance. This enforces a smooth evolution of the smoothing penalty 
-%across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
-%the power-law like mass distributions that are commonly used. 
-
-Since the smoothing prior is really wanting to pull the coeficients closer to each other to smooth the distribution, 
-we must ensure that the spline function is in fact flat or smooth with all equal coeficients. Often times one would stack knots at the same values 
-at hard parameter boundaries but this removes the feature that with equal weights the spline function is flat. We follow the distinction from \bruce{CITE psplines} 
-that the difference penalty or prior is only valid with ``proper'' spline bases. A proper basis is where all of the knots are evenly spaced, see Figure \ref{fig:spline_basis}.
-
 \section{Model specification} \label{sec:modelpriors}
 
-\section{Validation Studies} \label{sec:validation}
+\bruce{Need to fill this section in and put tables with specific hyper-parameter/prior settings made}
+
+%\section{Validation Studies} \label{sec:validation}
