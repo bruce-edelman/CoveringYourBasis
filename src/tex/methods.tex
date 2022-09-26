@@ -1,13 +1,5 @@
 \section{Constructing A Basis} \label{sec:basis_splines}
 
-\begin{figure}[ht!]
-    \script{spline_basis_plot.py}
-        \includegraphics[width=0.45\textwidth]{figures/spline_basis_plot.pdf}
-        \caption{Plot showing a ``proper'' MSpline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
-        In black we show the resulting spline function with given equal weights and denote the location of the knots with grey x's.}
-        \label{fig:spline_basis}
-\end{figure}
-
 A common non-parametric method in used in many statistical applications is basis splines. A spline function of order $k$, 
 is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
 They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
@@ -15,6 +7,14 @@ Basis splines of order $k$ are a set of order $k$ polynomials that form a comple
 Given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
 every possible spline function with knots, $\mathbf{t}$. One can construct the B-Splines basis components for a given knot vector 
 using the Cox-de Boor recursion formula \cite{deBoor78}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
+
+\begin{figure}[ht!]
+    \script{spline_basis_plot.py}
+        \includegraphics[width=0.45\textwidth]{figures/spline_basis_plot.pdf}
+        \caption{Plot showing a ``proper'' MSpline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
+        In black we show the resulting spline function with given equal weights and denote the location of the knots with grey x's.}
+        \label{fig:spline_basis}
+\end{figure}
 
 \begin{equation}
     B_{i,1}(x | \mathbf{t}) = 
