@@ -8,7 +8,6 @@ import deepdish as dd
 from scipy.integrate import cumtrapz
 from utils import load_iid_mag_ppd, load_iid_tilt_ppd, load_ind_mag_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd, load_iid_posterior, load_ind_posterior, load_o3b_posterior
 
-
 def get_percentile(pdfs, xs, perc):
     x = []
     for m in pdfs:                                                                                                                                                                        
@@ -22,7 +21,6 @@ def get_percentile(pdfs, xs, perc):
             prob = cumulative_prob[i]                                                                                                                                                         
         x.append(xs[i])
     return np.array(x)
-
 
 def MSplineMassMacros():
     print("Saving Mass Distribution Macros...")
@@ -41,7 +39,6 @@ def MSplineMassMacros():
     return {'PLPeak': {'m_1percentile': save_param_cred_intervals(plpeak_m1s), 'm_75percentile': save_param_cred_intervals(plpeak_m75s), 'm_99percentile': save_param_cred_intervals(plpeak_m99s)}, 
             'MSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_75percentile': save_param_cred_intervals(m75s), 'm_99percentile': save_param_cred_intervals(m99s)}, 
             'PLSpline': {'m_1percentile': save_param_cred_intervals(ps_m1s), 'm_75percentile': save_param_cred_intervals(ps_m75s), 'm_99percentile': save_param_cred_intervals(ps_m99s)}}
-
 
 def MSplineIIDSpinMacros():
     print("Saving MSpline IID Component Spin macros...")
@@ -67,7 +64,6 @@ def MSplineIIDSpinMacros():
             'peakCosTilt': save_param_cred_intervals(peak_tilts), 
             'log10gammaFrac': save_param_cred_intervals(np.log10(gamma_fracs)), 
             'negFrac': save_param_cred_intervals(frac_neg_cts)}
-
 
 def MSplineIndSpinMacros():
     print("Saving MSpline Independent Component Spin macros...")
@@ -107,7 +103,6 @@ def MSplineIndSpinMacros():
             'log10gammaFrac1': save_param_cred_intervals(np.log10(gamma_fracs1)), 'log10gammaFrac2': save_param_cred_intervals(np.log10(gamma_fracs2)), 
             'negFrac1': save_param_cred_intervals(frac_neg_cts1), 'negFrac2': save_param_cred_intervals(frac_neg_cts2)}
     
-    
 def chi_eff():
     print("Saving ChiEffective macros...")
     ppds = dd.io.load(paths.data / "chi_eff_ppds.h5")
@@ -137,12 +132,10 @@ def chi_eff():
         v['frac_hm'] = save_param_cred_intervals(6.25*np.array(below_m0p3[k]))
     return macdict
 
-
 def PLPeakMacros():
     posterior = load_o3b_posterior('o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json')
     return {'beta': save_param_cred_intervals(posterior['beta']), 
             'lamb': save_param_cred_intervals(posterior['lamb'])}
-
 
 def main():
     macro_dict = {}
@@ -158,7 +151,6 @@ def main():
     print("Updating macros in src/tex/macros.tex from data in src/data/macros.json...")
     with open("src/tex/macros.tex", 'w') as ff:
         json2latex.dump('macros', macro_dict, ff)
-
 
 if __name__ == '__main__':
     main()

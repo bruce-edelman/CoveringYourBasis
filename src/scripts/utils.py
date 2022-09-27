@@ -5,7 +5,7 @@ from bilby.core.result import read_in_result
 import deepdish as dd
 
 
-def round_sig(f, sig=2):
+def round_sig(f, sig=3):
     max10exp = np.floor(np.log10(abs(f))) + 1
     if max10exp < float(sig):
         return float(('%.' + str(sig) + 'g') % f)
