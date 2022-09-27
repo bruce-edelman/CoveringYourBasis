@@ -9,11 +9,13 @@ every possible spline function with knots, $\mathbf{t}$. One can construct the B
 using the Cox-de Boor recursion formula \cite{deBoor78}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
 
 \begin{figure}[ht!]
-    \script{spline_basis_plot.py}
-        \includegraphics[width=0.4\textwidth]{figures/spline_basis_plot.pdf}
+    \begin{centering}
+        \includegraphics[width=\linewidth]{figures/spline_basis_plot.pdf}
         \caption{Plot showing a ``proper'' MSpline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
         In black we show the resulting spline function with given equal weights and denote the location of the knots with grey x's.}
         \label{fig:spline_basis}
+    \end{centering}
+    \script{spline_basis_plot.py}
 \end{figure}
 
 \begin{equation}
