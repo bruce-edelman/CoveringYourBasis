@@ -72,7 +72,7 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
   - [ ] Decide on Author List 
   - [ ] Final title?
 - Low Priority
-  - [ ] Make showyourwork widget buttons not overlap figure captions
+  - [x] Make showyourwork widget buttons not overlap figure captions
   - [ ] Add validation study Appendix
     - [ ] Simulaton script
     - [ ] Figures
