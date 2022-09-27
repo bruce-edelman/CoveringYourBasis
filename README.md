@@ -69,6 +69,8 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
     - [ ] Any other places where I missed something? -- do quick readthrough
   - [ ] Make Table for Model appendix
 - Medium Priority
+  - [ ] Decide on Author List 
+  - [ ] Final title?
 - Low Priority
   - [ ] Make showyourwork widget buttons not overlap figure captions
   - [ ] Add validation study Appendix
