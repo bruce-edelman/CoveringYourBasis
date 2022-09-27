@@ -42,22 +42,35 @@ Scripts that run the intermediate pipeline steps and read/plot the data to creat
 
 ## Outline
 
-Main manuscript file: `src/tex/ms.tex`
+Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writing status is given current comments:
 
-- Abstract (`src/tex/ms.tex`)
-- Intro (`src/tex/intro.tex`)
-- Constructing a Basis (`src/tex/methods.tex`)
-- Binary Black Hole Population Inference with GWTC-3 (`src/tex/results.tex`)
-  - Binary Black Hole Masses
-  - Binary Black Hole Spins
-    - Spin Magnitude
-    - Spin Orientation
-    - The Effective Spin Dimension
-- Astrophysical Implications (`src/tex/conclusion.tex`)
-- Conclusion (`src/tex/conclusion.tex`)
-- Acknowledgements  (`src/tex/ms.tex`)
-- Appendices (`src/tex/appendicies.tex`)
-  - Penalized Splines and Smoothing
-  - Hierarchical Bayesian Inference
-  - Model specification
-  - Validation Studies
+- [x] Abstract (`src/tex/ms.tex`)
+- [x] Intro (`src/tex/intro.tex`)
+- [x] Constructing a Basis (`src/tex/methods.tex`)
+- [x] Binary Black Hole Population Inference with GWTC-3 (`src/tex/results.tex`)
+  - [x] Binary Black Hole Masses
+  - [x] Binary Black Hole Spins
+    - [x] Spin Magnitude
+    - [x] Spin Orientation
+    - [x] The Effective Spin Dimension
+- [x] Astrophysical Implications (`src/tex/conclusion.tex`)
+- [ ] Conclusion (`src/tex/conclusion.tex`)
+- [x] Acknowledgements  (`src/tex/ms.tex`)
+- [ ] Appendices (`src/tex/appendicies.tex`)
+  - [x] Penalized Splines and Smoothing
+  - [x] Hierarchical Bayesian Inference
+  - [ ] Model specification
+  - [ ] Validation Studies
+
+## Non-Writing Paper TODO's
+- High Priority
+  - [ ] Finish adding citations 
+    - [ ] formation channel predictions from dyn/iso literature -- In intro / astro / spin results
+    - [ ] Any other places where I missed something? -- do quick readthrough
+  - [ ] Make Table for Model appendix
+- Medium Priority
+- Low Priority
+  - [ ] Make showyourwork widget buttons not overlap figure captions
+  - [ ] Add validation study Appendix
+    - [ ] Simulaton script
+    - [ ] Figures

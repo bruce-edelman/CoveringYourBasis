@@ -10,7 +10,7 @@ to the likelihood based on the difference of adjacent knot coeficients \citep{ei
 or the resulting spline function is flat when the basis coeficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as 
 the differences between adjacent knot coeficients get larger, one gets a smoothing of the spline function inferences \citep{eilers2021practical}. 
 Since we are using hierarchical Bayesian inferece as our statistical framework, we formulate this penalized likelihood with its Bayesian analog. 
-The difference penalty is equivalent to applying a stochastic differnece prior among the knots, as described in  \\citet{BayesianPSplines,Jullion2007RobustSO}. 
+The difference penalty is equivalent to applying a stochastic differnece prior among the knots, as described in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}. 
 This is also sometimes referred to as a Gaussian random walk prior, since each coeficient is normally distributed about its neighboring coeficients. 
 For a spline basis with $n$ degree's of freedom, and a difference penalty of order of $r$ (see \citet{eilers2021practical}), the smoothing prior is defined as:
 
@@ -137,6 +137,6 @@ NUTS hamiltonian monte carlo sampler in \textsc{NumPyro} and \textsc{Jax} to cal
 
 \bruce{Need to fill this section in and put tables with specific hyper-parameter/prior settings made}
 
-\section{Validation Studies} \label{sec:validation}
+%\section{Validation Studies} \label{sec:validation}
 
-\bruce{Need to fill this section}
+%bruce{Need to fill this section}
