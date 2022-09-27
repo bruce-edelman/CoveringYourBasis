@@ -1,14 +1,13 @@
 \section{Binary Black Hole Population Inference with GWTC-3} \label{sec:results}
 
-\begin{figure*}[ht!]
-    \script{mass_distribution_plot.py}
+\begin{figure*}[ht!] \label{fig:mass_distribution}
     \begin{centering}
         \includegraphics[width=0.8\textwidth]{figures/mass_distribution_plot.pdf}
         \caption{The primary mass distribution inferred with the \textsc{MSpline} model (red), with 50 knots spaced lineary in $\log m_1$, from the 
         minimum observed value to 100\msun. The solid line shows the population predictive distribution (PPD) and the shaded region, 
         the 90\% credible interval. We show the inferred PPD from the \textsc{PowerlawSpline} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
-        \label{fig:mass_distribution}
     \end{centering}
+    \script{mass_distribution_plot.py}
 \end{figure*}
 
 We use hierarchical Bayesian inference (see Appendix \ref{sec:hierarchical_inference}) to simultaneosly infer the astrophysical mass, spin and redshift distributions of 
@@ -57,13 +56,12 @@ the significant presence of sub-populations that may avoid PISN as the binary fo
 
 \subsection{Binary Black Hole Spins} \label{sec:spin_dist}
 
-\begin{figure}
-    \script{plot_iid_spinmag.py}
+\begin{figure} \label{fig:iid_spinmag_dist}
     \includegraphics[width=0.4\textwidth]{figures/iid_spinmag.pdf}
     \caption{The spin magnitude distribution inferred with the \textsc{MSpline} model (red), with 16 knots spaced linearly from 0 to 1, and 
     assuming the components are IID. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
     We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
-    \label{fig:iid_spinmag_dist}
+    \script{plot_iid_spinmag.py}
 \end{figure}
 
 \subsubsection{Spin Magnitude}
@@ -74,13 +72,12 @@ the Beta distribution non-singluar (i.e. $\alpha>1$ and $\beta>1$) enforces a sp
 all physical bodies must have at least some non-zero angular mommentum, studies have proposed the existence of a distinct sub-population of non-spinning or 
 negliglby spinning black holes that can elude discovery with such a model. 
 
-\begin{figure}
-    \script{plot_ind_spinmag.py}
+\begin{figure} \label{fig:ind_spinmag_dist}
     \includegraphics[width=0.4\textwidth]{figures/ind_spinmag.pdf}
     \caption{The primary (orange) and secondary (olive) spin magnitude distributions inferred with the \textsc{MSpline} model, 
     with 16 knots spaced linearly from 0 to 1. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
     We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
-    \label{fig:ind_spinmag_dist}
+    \script{plot_ind_spinmag.py}
 \end{figure}
 
 We model the spin magnitude distibutions as IID MSpline distibutions as a flexible check
@@ -104,13 +101,12 @@ i.e. $\cos{\theta}=1$. While this may be a reasonable assumption recently \citet
 used to model the spin orientation distribution and found considerably evidence that the distibution peaks away from $\cos{\theta}=1$. Again, this provides a clear 
 use-case where data-driven models can help in our understanding and possibly resolve disputes among differing parametric approaches.
 
-\begin{figure}
-    \script{plot_iid_spintilt.py}
+\begin{figure} \label{fig:iid_spintilt_dist}
     \includegraphics[width=0.4\textwidth]{figures/iid_spintilt.pdf}
     \caption{The spin orientation distribution inferred with the \textsc{MSpline} model (red), with 16 knots spaced linearly from -1 to 1, and 
     assuming the components are IID. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
     We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
-    \label{fig:iid_spintilt_dist}
+    \script{plot_iid_spintilt.py}
 \end{figure}
 
 We repeat the tests done above on the the spin magnitude distibutions now with the spin orientation distributions. Figure \ref{fig:iid_spintilt_dist} 
