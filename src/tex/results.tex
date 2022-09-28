@@ -160,7 +160,7 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10g
         \caption{The effective spin distribution inferred with the M-Spline model (red), with 24 knots spaced linearly from -1 to 1. 
         The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. We show the inferred $\chi_\mathrm{eff}$ 
         PPD from the IID component spin M-Spline model (green), the independent component spin M-Spline model (purple), 
-        and the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+        and both the \textsc{Default} (blue) model and the Gaussian $\chi_\mathrm{eff}$ (olive) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:chieff_dist}
     \end{centering}
     \script{plot_chieff.py}
@@ -175,7 +175,9 @@ inferred effective spin distribution transformed from the PPDs of the component 
 among the component spin distributions, highlighting that different component spin distributions can imply very similar effective spin 
 distributions which is the better constrained parameter. When modeling the effective spin with the M-Spline model we see very similar 
 shape, but with a slightly sharper peak centered at $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$}, compared to 
-$\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} with the \textsc{Default} model. As for the misaligned spin question, 
-we can investigate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and find for the M-Spline 
-model $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$}, compared to 
-$f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} with the \textsc{Default} model.
+$\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} with the \textsc{Default} model and 
+$\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$} with the Gaussian $\chi_\mathrm{eff}$ model. 
+As for the misaligned spin question, we calculate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and 
+find for the M-Spline model $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$}, compared to 
+$f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} with the \textsc{Default} model and 
+$f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$} with the Gaussian $\chi_\mathrm{eff}$ model.

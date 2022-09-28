@@ -52,6 +52,7 @@ dependencies:
     - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
+    - src/data/gaussian-spin-xeff-xp-ppd-data.json
 datasets:
   10.5072/zenodo.1107940:
     contents:

@@ -110,9 +110,15 @@ def chi_eff():
     msplind = ppds["MSplineInd"]
     mspliid = ppds['MSplineIID']
     msplchieff = dd.io.load(paths.data / "mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5")
-    below_0 = {'default': [], 'iid': [], 'ind': [], 'chieff': []}
-    below_m0p3 = {'default': [], 'iid': [], 'ind': [], 'chieff': []}
-    maxchis = {'default': [], 'iid': [], 'ind': [], 'chieff': []}
+    below_0 = {'default': [], 'iid': [], 'ind': [], 'chieff': [], 'gaussian': []}
+    below_m0p3 = {'default': [], 'iid': [], 'ind': [], 'chieff': [], 'gaussian': []}
+    maxchis = {'default': [], 'iid': [], 'ind': [], 'chieff': [], 'gaussian': []}
+    with open(paths.data / "gaussian-spin-xeff-xp-ppd-data.json",'r') as jf:
+        gaussian_data = json.load(jf)
+    for k in range(500):
+        below_m0p3['gaussian'].append(np.trapz(gaussian_data['chi_eff_pdfs'][k,gaussian_data['chi_eff_grid']<-0.3], x=gaussian_data['chi_eff_grid'][gaussian_data['chi_eff_grid']<-0.3]))
+        below_0['gaussian'].append(np.trapz(gaussian_data['chi_eff_pdfs'][k,gaussian_data['chi_eff_grid']<0.0], x=gaussian_data['chi_eff_grid'][gaussian_data['chi_eff_grid']<0.0]))
+        maxchis['gaussian'].append(gaussian_data['chi_eff_grid'][np.argmax(gaussian_data['chi_eff_pdfs'][k])])
     for i in range(1500):
         norm = np.trapz(msplchieff['dRdchieff'][i, :], x=msplchieff['chieffs'])
         below_m0p3['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<-0.3], x=msplchieff['chieffs'][msplchieff['chieffs']<-0.3]))
