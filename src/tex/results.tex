@@ -3,7 +3,7 @@
 \begin{figure*}[ht!]
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/mass_distribution_plot.pdf}
-        \caption{The primary mass distribution inferred with the \textsc{M-Spline} model (red), with 50 knots spaced linearly in $\log m_1$, from the 
+        \caption{The primary mass distribution inferred with the M-Spline model (red), with 50 knots spaced linearly in $\log m_1$, from the 
         minimum observed value to 100\msun. The solid line shows the population predictive distribution (PPD) and the shaded region, 
         the 90\% credible interval. We show the inferred PPD from the \textsc{PowerlawSpline} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:mass_distribution}
@@ -16,28 +16,28 @@ a binary black holes (BBHs) given a catalog of gravitational wave observations. 
 and the mass ratio -- defined as $q=\frac{m_2}{m_1}$, bounded in the range from 0 to 1. Furthermore, we model 4 of the 6 total 
 spin degrees of freedom of a binary merger with each component spin magnitude $a_1$ and $a_2$, along with the cosine of the tilt angle of each component, 
 $\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binaries orbital angular momentum vector. 
-We additionally will fit a population model on the redshift or luminosity distance distribution of BBHs. We assume a $\Lambda\mathrm{CDM}$ cosmology using the 
-parameters from the Planck 2015 results \cite{Planck2015}, which defines an analytical mapping between each event's inferred
-luminosity distance, and it's redshift. While we choose to use M-Spline distributions to model the primary mass and spin distributions, we 
+We assume the polar spin angles are uniformly distributed in the orbital plane. While we choose to use M-Spline distributions to model the primary mass and spin distributions, we 
 model the mass ratio distribution with a power law, i.e. $p(q | m_1, m_\mathrm{min}, \beta) \propto q^{\beta} \Theta(qm_1 - m_\mathrm{min}) \Theta(m_1 - qm_1)$. 
-Where $\beta$ is the power law index and $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$] \cite{Talbot_2018,o1o2_pop,o3a_pop}.
-We model the evolution of the merger rate with redshift with the \textsc{PowerlawRedshift} model \cite{Fishbach_2018redshift}, which is described by 
-$p(z|\lambda_z)\propto \frac{dV_c}{dz}(1+z)^{\lambda_z-1}$. We describe our specific prior choices on the hyperparameters and each model 
-in more detail in Appendix \ref{sec:modelpriors}. We use the same cut on the recent GWTC-3 catalog as was done in the LVK's accompanying population analysis, 
-keeping all 70 possibly BBH mergers with false alarm rates less than 1 per year \cite{GWTC3,o3b_astro_dist}. We choose to emit the currently not well understood event, 
-GW190814 \cite{190814disc}, as it was concluded to be an outlier of the rest of the BBH population in both GWTC-2 and GWTC-3 \cite{o3a_pop,o3b_astro_dist,Essick_2022}. 
-This leaves us with a catalog of 69 BBH mergers observed over a period of about 2 years, from which we want to infer its population properties. 
-We start by looking towards the mass distribution.
+Where $\beta$ is the power law index and $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$] \citep{Talbot_2018,o1o2_pop,o3a_pop}.
+Additionally, we fit a population model on the redshift or luminosity distance distribution of BBHs, assuming a $\Lambda\mathrm{CDM}$ cosmology defined by the parameters 
+from the Planck 2015 results \citep{Planck2015}. This defines an analytical mapping between each event's inferred luminosity distance, and it's redshift, which we now use interchangeably. 
+We model the evolution of the merger rate with redshift with the \textsc{PowerlawRedshift} model, described by $p(z|\lambda_z)\propto \frac{dV_c}{dz}(1+z)^{\lambda_z-1}$ \citep{Fishbach_2018redshift}. 
+We describe our specific prior choices on the hyperparameters and each model in more detail in Appendix \ref{sec:modelpriors}. Following the same cut on the recent GWTC-3 catalog done in the LVK's 
+accompanying BBH population analysis, we have 70 possible BBH mergers with false alarm rates less than 1 per year \citep{GWTC3,o3b_astro_dist}. Since it was concluded to be an outlier of the rest of 
+the BBH population in both GWTC-2 and GWTC-3, we choose to omit the poorly understood event, GW190814 \citep{190814disc,o3a_pop,o3b_astro_dist,Essick_2022}. This leaves us with 
+a catalog of 69 confident BBH mergers observed over a period of about 2 years, from which we want to infer its population properties. Our study provides the first comprehensive 
+data-driven investigation of the BBH mass and spin distributions, uncovering new insights and corroborating those found with other methods. 
+We start by looking towards our model's inferences of the mass distribution.
 
 \subsection{Binary Black Hole Masses} \label{sec:mass_dist}
 
 We apply our newly constructed models to the BBH analysis that was done in the astrophysical population companion paper to GWTC-3. 
 Figure \ref{fig:mass_distribution} shows how the M-Spline model (red) found consistent features in the mass distribution with 
-what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \cite{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
-In particular our M-Spline model finds a peak in merger rate density at both 10 and 35 solar masses, agreeing with those reported using the same dataset in \citet{o3b_astro_dist}. 
-We also find a significantly less declining mass distribution that has considerably larger support for higher mass mergers when 
-compared to the other power-law based models, finding that 75\% percent of primary masses below \result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_75percentile]}$}, 
-at 90\% credibility, compared to \result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_75percentile]}$}, found with the similar \textsc{PowerlawSpline} model. 
+what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \citep{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
+In particular our M-Spline model finds a peak in merger rate density as a function of primary mass, at both $\sim10\msun$ and $\sim35\msun$ agreeing with those 
+reported using the same dataset in \citet{o3b_astro_dist}. We also find a shallow mass distribution that has considerably larger support for higher mass mergers when 
+compared to power-law based models. The M-Spline model finds that 75\% percent of primary masses are below \result{$\CIPlusMinus{\macros[MassDistribution][MSpline][m_75percentile]}$}, 
+compared to \result{$\CIPlusMinus{\macros[MassDistribution][PLSpline][m_75percentile]}$}, found with the similar \textsc{PowerlawSpline} model. 
 An interesting consequence of this is that we do not find a confidently evolving merger rate with redshift, as inferred with power-law based mass models in \citet{o3b_astro_dist}. 
 There is a strong correlation between the primary mass power law index, $\alpha$, and the redshift power-law index, $\lambda_z$. When one infers a steeper mass distribution -- 
 the inferred rate must drastically increase with redshift to explain the highest mass events in the catalog. However, when one infers a 
@@ -46,7 +46,7 @@ the local merger rate density as a function of mass given the selection effects.
 is consistent with being uniform with co-moving volume, with $\lambda_z = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][lamb]}$}, compared with 
 \citet{o3b_astro_dist}'s reported value -- $\lambda_z = $\result{$\CIPlusMinus{\macros[PLPeak][lamb]}$} with the \textsc{PowerlawPeak} mass model.
 
-We find a similar mass ratio distribution to what was found with the found with the \textsc{PowerlawPeak} model in \citet{o3b_astro_dist}. 
+We find a similar mass ratio distribution to what was found with the \textsc{PowerlawPeak} model in \citet{o3b_astro_dist}. 
 With the M-Spline model on primary mass the mass ratio power law index is $\beta = $\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][beta]}$}, 
 compared to $\beta = $\result{$\CIPlusMinus{\macros[PLPeak][beta]}$} for \textsc{PowerlawPeak}. We find that BBH mergers favor more equal mass mergers
 as would be expected of both main formation channels due to binary mass transfer in isolated formation and three-body interactions that preferentially eject
@@ -60,7 +60,7 @@ the significant presence of subpopulations that may avoid PISN as the binary for
 \begin{figure}
     \begin{centering}    
         \includegraphics[width=\linewidth]{figures/iid_spinmag.pdf}
-        \caption{The spin magnitude distribution inferred with the \textsc{M-Spline} model (red), with 16 knots spaced linearly from 0 to 1, and 
+        \caption{The spin magnitude distribution inferred with the M-Spline model (red), with 16 knots spaced linearly from 0 to 1, and 
         assuming the components are IID. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
         We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:iid_spinmag_dist}
@@ -79,7 +79,7 @@ negligibly spinning black holes that can elude discovery with such a model.
 \begin{figure} 
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/ind_spinmag.pdf}
-        \caption{The primary (orange) and secondary (olive) spin magnitude distributions inferred with the \textsc{M-Spline} model, 
+        \caption{The primary (orange) and secondary (olive) spin magnitude distributions inferred with the M-Spline model, 
         with 16 knots spaced linearly from 0 to 1. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
         We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:ind_spinmag_dist}
@@ -88,7 +88,7 @@ negligibly spinning black holes that can elude discovery with such a model.
 \end{figure}
 
 We model the spin magnitude distributions as IID M-Spline distributions as a flexible check
-to the assumptions of the \textsc{Default} model. Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the \textsc{M-Spline} model, 
+to the assumptions of the \textsc{Default} model. Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the M-Spline model, 
 compared with the \textsc{Default} model from \citet{o3b_astro_dist}. The M-Spline model finds broad agreement with the beta distribution, both peaking near ~0.2, with 90\% 
 of BBH spins below \result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][a_90percentile]}$} at 90\% credibility. The regions of parameter space where they don't agree as well are the bounds. 
 The M-Spline model has no enforcement for vanishing support at the extremal values like the Beta distribution, 
@@ -111,7 +111,7 @@ use-case where data-driven models can help in our understanding and possibly res
 \begin{figure}
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/iid_spintilt.pdf}
-        \caption{The spin orientation distribution inferred with the \textsc{M-Spline} model (red), with 16 knots spaced linearly from -1 to 1, and 
+        \caption{The spin orientation distribution inferred with the M-Spline model (red), with 16 knots spaced linearly from -1 to 1, and 
         assuming the components are IID. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
         We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:iid_spintilt_dist}
@@ -120,30 +120,31 @@ use-case where data-driven models can help in our understanding and possibly res
 \end{figure}
 
 We repeat the tests done above on the spin magnitude distributions now with the spin orientation distributions. Figure \ref{fig:iid_spintilt_dist} 
-shows the inferred spin magnitude distribution with the \textsc{M-Spline} model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
+shows the inferred spin magnitude distribution with the M-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
 The M-Spline inferences have large uncertainties but start to show the same features as found and discussed in \citet{spinitasyoulike}. 
 We find a distribution that instead of intrinsically peaking at $\cos{\theta}=1$, is found to peak at: $\cos{\theta}=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][peakCosTilt]}$}, at 
 90\% credibility. We find less, but still considerable, support for misaligned spins (i.e. $\cos{\theta}<0$) as the \textsc{Default} model. Specifically we 
-find that the fraction of misaligned systems is $f_{<0}=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][negFrac]}$}. This implies 
+find that the fraction of misaligned systems is $f_{\cos{\theta}<0}=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][negFrac]}$}. This implies 
 the presence of an isotropic component as expected by dynamical formation channels, albeit less than with the \textsc{Default} model. To quantify the 
 amount of isotropy in the tilt distribution we calculate Y, the ratio defined in equation 4 of \citet{spinitasyoulike} which is 1 when the distribution is 
 purely isotropic, less than one when negative (anti-aligned) values are favored, and greater than one when positive (aligned) values are favored.
 We find a $\log_{10}Y=$\result{$\CIPlusMinus{\macros[MSplineIIDCompSpins][log10gammaFrac]}$}. 
 
-Now we model each of the components' orientation distributions with independent \textsc{M-Spline} models as done above, and show the inferred 
+Now we model each of the components' orientation distributions with independent M-Spline models as done above, and show the inferred 
 primary (orange), and secondary (olive) distributions in figure \ref{fig:ind_spintilt_dist}. The orientation distributions do not agree quite as well as 
 the magnitude distributions did in figure \ref{fig:ind_spinmag_dist}, and the PPDs look to peak at different values, but the wide uncertainties still are 
 consistent with both each other and the \textsc{Default} model's PPD. We find the two distributions to peak at: $\cos{\theta_1}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt1]}$} 
 and $\cos{\theta_2}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][peakCosTilt2]}$}, showing that the primary distribution peak is inferred further away 
 from the assumed $\cos{\theta}=1$ with the \textsc{Default} model. There is also significant (albeit uncertain) evidence of spin misalignment in each distribution, finding 
-the fraction of misaligned primary and secondary components as: $f_{1,<0}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac1]}$} and $f_{2,<0}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac2]}$}.
-We again calculate the isotropy ratio, Y, for each and find: $\log_{10}Y_1=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac1]}$} and 
+the fraction of misaligned primary and secondary components as: $f_{\cos{\theta_1}<0}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac1]}$} and 
+$f_{\cos{\theta_2}<0}=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][negFrac2]}$}. We again calculate the isotropy ratio, Y, 
+for each and find: $\log_{10}Y_1=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac1]}$} and 
 $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10gammaFrac2]}$}.
 
 \begin{figure}
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/ind_spintilt.pdf}
-        \caption{The primary (orange) and secondary (olive) spin orientation distributions inferred with the \textsc{M-Spline} model, 
+        \caption{The primary (orange) and secondary (olive) spin orientation distributions inferred with the M-Spline model, 
         with 16 knots spaced linearly from -1 to 1. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
         We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:ind_spintilt_dist}
@@ -156,9 +157,9 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[MSplineIndependentCompSpins][log10g
 \begin{figure} 
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/chi_eff.pdf}
-        \caption{The effective spin distribution inferred with the \textsc{M-Spline} model (red), with 24 knots spaced linearly from -1 to 1. 
+        \caption{The effective spin distribution inferred with the M-Spline model (red), with 24 knots spaced linearly from -1 to 1. 
         The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. We show the inferred $\chi_\mathrm{eff}$ 
-        PPD from the IID component spin \textsc{M-Spline} model (green), the independent component spin \textsc{M-Spline} model (purple), 
+        PPD from the IID component spin M-Spline model (green), the independent component spin M-Spline model (purple), 
         and the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:chieff_dist}
     \end{centering}
@@ -172,9 +173,9 @@ on the spin distributions we also try modeling an M-Spline distribution of effec
 as done above. Figure \ref{fig:chieff_dist} shows the inferred effective spin distribution with the M-Spline model (red) along with the 
 inferred effective spin distribution transformed from the PPDs of the component spin models shown previously. We find considerable agreement 
 among the component spin distributions, highlighting that different component spin distributions can imply very similar effective spin 
-distributions which is the better constrained parameter. When modeling the effective spin with the \textsc{M-Spline} model we see very similar 
+distributions which is the better constrained parameter. When modeling the effective spin with the M-Spline model we see very similar 
 shape, but with a slightly sharper peak centered at $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][chieff][PeakChiEff]}$}, compared to 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} with the \textsc{Default} model. As for the misaligned spin question, 
-we can investigate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and find for the \textsc{M-Spline} 
+we can investigate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and find for the M-Spline 
 model $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][chieff][FracBelow0]}$}, compared to 
 $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} with the \textsc{Default} model.
