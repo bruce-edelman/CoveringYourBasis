@@ -5,3 +5,4 @@
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_ind_spinmag.py\\E$"}
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_ind_spintilt.py\\E$"}
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_chieff.py\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_iid_spintilt.py\\E$"}

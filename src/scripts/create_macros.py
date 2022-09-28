@@ -115,17 +115,14 @@ def chi_eff():
     maxchis = {'default': [], 'iid': [], 'ind': [], 'chieff': [], 'gaussian': []}
     with open(paths.data / "gaussian-spin-xeff-xp-ppd-data.json",'r') as jf:
         gaussian_data = json.load(jf)
-    for k in range(500):
-        below_m0p3['gaussian'].append(np.trapz(gaussian_data['chi_eff_pdfs'][k,gaussian_data['chi_eff_grid']<-0.3], x=gaussian_data['chi_eff_grid'][gaussian_data['chi_eff_grid']<-0.3]))
-        below_0['gaussian'].append(np.trapz(gaussian_data['chi_eff_pdfs'][k,gaussian_data['chi_eff_grid']<0.0], x=gaussian_data['chi_eff_grid'][gaussian_data['chi_eff_grid']<0.0]))
-        maxchis['gaussian'].append(gaussian_data['chi_eff_grid'][np.argmax(gaussian_data['chi_eff_pdfs'][k])])
+        gauschieff = {'pchieff': np.array(gaussian_data['chi_eff_pdfs']), 'chieffs': np.array(gaussian_data['chi_eff_grid'])}
     for i in range(1500):
         norm = np.trapz(msplchieff['dRdchieff'][i, :], x=msplchieff['chieffs'])
         below_m0p3['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<-0.3], x=msplchieff['chieffs'][msplchieff['chieffs']<-0.3]))
         below_0['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<0.0], x=msplchieff['chieffs'][msplchieff['chieffs']<0.0]))
         maxchis['chieff'].append(msplchieff['chieffs'][np.argmax(msplchieff['dRdchieff'][i])])
     for j in range(500):
-        for k,v in zip(['default', 'ind', 'iid'], [default, msplind, mspliid]):
+        for k,v in zip(['default', 'ind', 'iid', 'gaussian'], [default, msplind, mspliid, gauschieff]):
             below_m0p3[k].append(np.trapz(v['pchieff'][j,v['chieffs']<-0.3], x=v['chieffs'][v['chieffs']<-0.3]))
             below_0[k].append(np.trapz(v['pchieff'][j,v['chieffs']<0.0], x=v['chieffs'][v['chieffs']<0.0]))
             maxchis[k].append(v['chieffs'][np.argmax(v['pchieff'][j])])
