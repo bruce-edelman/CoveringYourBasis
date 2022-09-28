@@ -5,24 +5,6 @@ from bilby.core.result import read_in_result
 import deepdish as dd
 
 
-def round_sig(f, sig=3):
-    max10exp = np.floor(np.log10(abs(f))) + 1
-    if max10exp < float(sig):
-        return float(('%.' + str(sig) + 'g') % f)
-    else:
-        return int(float(('%.' + str(sig) + 'g') % f))
-
-
-def save_param_cred_intervals(param_data):
-    return  {'median': round_sig(np.median(param_data)), 
-             'error plus':round_sig(np.percentile(param_data, 95)-np.mean(param_data)), 
-             'error minus': round_sig(np.median(param_data)-np.percentile(param_data, 5)),
-             '5th percentile': round_sig(np.percentile(param_data, 5)), 
-             '95th percentile': round_sig(np.percentile(param_data, 95)), 
-             '10th percentile': round_sig(np.percentile(param_data, 10)),
-             '90th percentile': round_sig(np.percentile(param_data, 90))}
-
-
 def plot_mean_and_90CI(ax, xs, ar, color, label, bounds=True, CI=90, traces=None, tracecolor='k'):
 
     mean = np.mean(ar, axis=0)

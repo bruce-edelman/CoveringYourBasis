@@ -6,7 +6,23 @@ import paths
 import numpy as np
 import deepdish as dd
 from scipy.integrate import cumtrapz
-from utils import load_iid_mag_ppd, load_iid_tilt_ppd, load_ind_mag_ppd, load_ind_tilt_ppd, save_param_cred_intervals, load_o3b_paper_run_masspdf, load_mass_ppd, load_iid_posterior, load_ind_posterior, load_o3b_posterior
+from utils import load_iid_mag_ppd, load_iid_tilt_ppd, load_ind_mag_ppd, load_ind_tilt_ppd, load_o3b_paper_run_masspdf, load_mass_ppd, load_iid_posterior, load_ind_posterior, load_o3b_posterior
+
+def round_sig(f, sig=2):
+    max10exp = np.floor(np.log10(abs(f))) + 1
+    if max10exp < float(sig):
+        return float(('%.' + str(sig) + 'g') % f)
+    else:
+        return int(float(('%.' + str(sig) + 'g') % f))
+
+def save_param_cred_intervals(param_data):
+    return  {'median': round_sig(np.median(param_data)), 
+             'error plus':round_sig(np.percentile(param_data, 95)-np.mean(param_data)), 
+             'error minus': round_sig(np.median(param_data)-np.percentile(param_data, 5)),
+             '5th percentile': round_sig(np.percentile(param_data, 5)), 
+             '95th percentile': round_sig(np.percentile(param_data, 95)), 
+             '10th percentile': round_sig(np.percentile(param_data, 10)),
+             '90th percentile': round_sig(np.percentile(param_data, 90))}
 
 def get_percentile(pdfs, xs, perc):
     x = []
