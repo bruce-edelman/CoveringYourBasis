@@ -1,18 +1,18 @@
 \section{Constructing A Basis} \label{sec:basis_splines}
 
-A common non-parametric method in used in many statistical applications is basis splines. A spline function of order $k$, 
+A common non-parametric method used in many statistical applications is basis splines. A spline function of order $k$, 
 is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
 They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
-Basis splines of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
-Given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
-every possible spline function with knots, $\mathbf{t}$. One can construct the B-Splines basis components for a given knot vector 
-using the Cox-de Boor recursion formula \cite{deBoor78}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
+\it{Basis splines} (or ``B-Splines'') of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
+Therefore, given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
+every possible spline function interpolated by knots, $\mathbf{t}$. The basis components for a given knot vector are constructed  
+using the Cox-de Boor recursion formula \citep{deBoor78}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
 
 \begin{figure}[ht!]
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/spline_basis_plot.pdf}
-        \caption{Plot showing a ``proper'' MSpline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
-        In black we show the resulting spline function with given equal weights and denote the location of the knots with grey x's.}
+        \caption{Plot showing a ``proper'' (see appendix \ref{sec:psplines}) M-Spline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
+        In black, we show the resulting spline function with given equal weights and denote the location of the knots with gray x's.}
         \label{fig:spline_basis}
     \end{centering}
     \script{spline_basis_plot.py}
@@ -33,7 +33,7 @@ using the Cox-de Boor recursion formula \cite{deBoor78}. Given knots $t_0$, $t_1
                                 + \big[1-\omega_{i+1,k}(x | \mathbf{t})\big] B_{i+1,k}(x | \mathbf{t})
 \end{multline*}
 
-\noindent where $\omega_{i,k}$ is defined as:
+\noindent where above $\omega_{i,k}$ is defined as:
 
 \begin{equation}
 \omega_{i,k}(x | \mathbf{t}) =
@@ -43,28 +43,27 @@ using the Cox-de Boor recursion formula \cite{deBoor78}. Given knots $t_0$, $t_1
 \end{cases}
 \end{equation}
 
-\noindent allowing one to build a basis of $i$ components that spans the vector space of order-$k$ spline functions interpolated 
-from this knot vector. This is known as the ``B-Spline'' basis after it's inventor de Boor \cite{deBoor78}. The power of basis splines
-comes from the fact that you only have to do the, somewhat expensive, interpolation once for each set of points you want to evaluate your
-spline functions at. This allows for much quicker speeds since each evaluation of the spline function becomes a simpler operation that is just
-a dot product of 2d matrix and 1d vector. This straightforward operation is also ideal for optimizations from the use GPU accelerators, 
-enabling expensive markov chain monte carlo (MCMC) based analyses with hundreds of parameters. Basis splines can easily be generalized to 
-their two-dimensional analog, producing tensor product basis splines that, with this computational advantange, allow for high fidelity
-modeling of two-dimensional spline functions.
+\noindent This is known as the ``B-Spline'' basis after it's inventor de Boor \citep{deBoor78}. The power of basis splines
+comes from the fact that one only has to do the somewhat-expensive interpolation once for each set of points at which the spline is evaluated. 
+This provides a considerable computational speedup since each evaluation of the spline function becomes a simpler operation that is just
+a dot product of a matrix and a vector. This straightforward operation is also ideal for optimizations from the use GPU accelerators, 
+enabling expensive Markov chain Monte Carlo (MCMC) based analyses with hundreds of parameters \bruce{citation?}. 
+Basis splines can easily be generalized to their two-dimensional analog, producing tensor product basis splines that, 
+with this computational advantage, allow for high fidelity modeling of two-dimensional spline functions.
 
 A similar basis, the M-Spline basis \citep{monotone_regression_splines}, has desirable properties when looking to model a probability density function, 
-which is the goal of population inference. Namely, $M_i \geq 0$ within $(t_i, t_i+k)$, zero elsewhere, and normalized to unity, $\int M_i(x)dx = 1$. We now have
-a useful basis that can represent all spline functions that are probability density functions given our array of knots. The M-Spline basis differs 
-from B-Splines by the normalization factor:
+which is the goal of population inference. Each basis component is scaled such that it is normalized over the domain, $\int M_i(x)dx = 1$. This ensures 
+that given a vector of basis coefficients, if they sum to unity, the resulting spline function is normalized across the interpolation domain. 
+The M-Spline basis differs from B-Splines by the scaling factor that normalizes each component:
 
 \begin{equation}\label{eq:MB_SplineRelation}
 M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
 \end{equation}
 
-\noindent We use this definition of the M-Spline basis for the models presented and applied in the later sections of this paper. 
-Figure \ref{fig:spline_basis} shows an example of a 3rd order M-Spline basis with 20 degrees of freedom and knots linearly spaced from 0 to 1.
-Another important feature of basis splines is that under appropiate prior conditions, one can alleviate sensitivities to arbitrarily 
-chosen prior specifications that splines commonly struggle with. We look to the use of penalized splines or P-Splines \cite{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}, 
-that adds a smoothing penalty (or prior) based on the difference of basis spline coeficients. This allows one to much more denseley populate
-the domain with knots without the worry of extra variance in the inferred spline functions. We discuss the smoothing prior in more detail 
-in Appendix \ref{sec:psplines}, along with our specific prior and basis choices for each model in Appendix \ref{sec:modelpriors}.
+\noindent We use this definition of the M-Spline basis for all the basis spline models used in this manuscript. Figure \ref{fig:spline_basis} 
+shows an example of a cubic (3rd order) M-Spline basis with 20 degrees of freedom and knots linearly spaced from 0 to 1.
+Another important feature of basis splines is that under appropriate prior conditions, one can alleviate sensitivities to arbitrarily 
+chosen prior specifications that splines commonly struggle with. We look to the use of penalized splines (or P-Splines) \citep{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}, 
+where one adds a smoothing prior based on the difference of basis spline coefficients. This allows one to populate the domain with more dense knots 
+without the worry of extra variance in the inferred spline functions. We discuss the details of our smoothing prior implementation 
+in more detail in Appendix \ref{sec:psplines}, along with our specific prior and basis choices for each model in Appendix \ref{sec:modelpriors}.
