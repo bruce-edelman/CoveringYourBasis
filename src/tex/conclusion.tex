@@ -1,31 +1,31 @@
 \section{Astrophysical Implications}\label{sec:astrodiscussion}
 
-The collective distibution of BBH source properties provides a useful probe of the complex and uncertain astrophysics that governs their 
-formation and evolution to eventually merge \citep{Zevin_2017}. Our analysis with the newly constructed \textsc{MSpline} models corroborates important 
+The collective distribution of BBH source properties provides a useful probe of the complex and uncertain astrophysics that governs their 
+formation and evolution to eventually merge \citep{Zevin_2017}. Our analysis with the newly constructed M-Spline models corroborates important 
 conclusions of recent work and provides a robust data-driven framework for future population studies. 
 
 % mass dist
 The results presented in section \ref{sec:mass_dist} illustrate a much wider mass distribution than inferred with power-law based models in \citet{o3b_astro_dist}. 
 While isolated formation is able to predict the $10\msun$ peak \bruce{cite}, cluster and dynamical formation scenarios struggle to predict a peak in the BH mass distribution less than 
 $15-20\msun$ \bruce{cite}. Globular cluster formation is expected to produce more top-heavy mass distributions than isolated and recent studies have shown suppressed BBH merger rates 
-at lower ($m\leq15\msun$) masses when compared to predictions from the isolated channel \bruce{cite}. BBHs that form near active galactive nuclei (AGN) can preferentially produce higher 
+at lower ($m\leq15\msun$) masses when compared to predictions from the isolated channel \bruce{cite}. BBHs that form near active galactic nuclei (AGN) can preferentially produce higher 
 mass black holes \bruce{cite}. We do not find any evidence for a truncation or rapid decline in the merger rate as a function of mass, that stellar evolution theory predicts 
-due to pair-instability supernovae (PISNe) \citep{Heger_2002,PISN_Woosley,Heger_2003,Spera_2017}. The original motivation for the peak in the \textsc{PLPeak} model \citep{Talbot_2018} was to represent a possible ``pileup'' of 
+due to pair-instability supernovae (PISNe) \citep{Heger_2002,PISN_Woosley,Heger_2003,Spera_2017}. The original motivation for the peak in the \textsc{PowerlawPeak} model \citep{Talbot_2018} was to represent a possible ``pileup'' of 
 masses just before such the truncation, since massive stars just light enough to avoid PISN will shed large amounts of mass in a series of ``pulses'' before collapsing to BHs in a process called 
 pulsational pair-instability supernova (PPISN) \citep{Woosley_2017,Woosley_2019,Farmer_2019}. While the predictions of the mass scale where pair-instability kicks in are uncertain and depend on not well understood physics, 
 like nuclear reaction rates of carbon and oxygen in the core of stars, models have a hard time predicting this peak to be lower than $m\sim40\msun$ \citep{Belczynski_2016,Marchant_2019,Renzo_2020,Farmer_2019,Farmer_2020}. The lack of a truncation could 
 point towards a higher prevalence of dynamical processes that can produce black holes in mass ranges stellar collapse cannot, such as hierarchical mergers of BHs \citep{Fishbach_2017,Doctor_2020,Kimball_genealogy,kimball2020evidence,doctor2021black,Fishbach_2022}, 
-very low metallictiy population III stars \citep{Belczynski_2020,Farrell_2020}, new beyond the standard model physics\cite{Croon_newphysics,Sakstein_2020}, or black hole accretion of BHs in gaseous environments such as AGNs \citep{Secunda_2020,McKernan_2020,cruzosorio2021gw190521}. 
+very low metallicity population III stars \citep{Belczynski_2020,Farrell_2020}, new beyond the standard model physics\citep{Croon_newphysics,Sakstein_2020}, or black hole accretion of BHs in gaseous environments such as AGNs \citep{Secunda_2020,McKernan_2020,cruzosorio2021gw190521}. 
 
 % spin dist
-Section \ref{sec:spin_dist} focused on inferences of the spin distributions of black holes, observing evidence of spin mis-alignment, spin anti-alignment, and suppressed support 
+Section \ref{sec:spin_dist} focused on inferences of the spin distributions of black holes, observing evidence of spin misalignment, spin anti-alignment, and suppressed support 
 for exactly aligned systems. These point towards a significant contribution of the population being formed through dynamical formation processes, agreeing with 
 conclusions drawn about the mass distribution inference of section \ref{sec:mass_dist}. While field formation is expected to produce systems with preferentially 
 aligned spins due to tidal interactions, but observational evidence suggests that tides may not be able to re-align spins in all systems as some 
-isolated population models assume. Additionally because of uncertain knowledge of supernovae kicks, isolated formation can produce systems with negative but small effective spins. 
-We report an effective spin distribution that is not symmetric about zero, disfavoring a scenarior in wihch all BBHs are formed dynamically. Following the rules in \citet{Fishbach_2022}, 
-we place conservative upper bounds on the fraction of hierarhical mergers $f_\mathrm{HM}$ and fraction of dynamically formed BBHs, $f_\mathrm{dyn}$ with 
-the \textsc{MSpline} $\chi_\mathrm{eff}$ model constraining $f_\mathrm{HM} < $\result{$\macros[ChiEffective][chieff][frac_hm][10th percentile]$} 
+isolated population models assume. Additionally, because of uncertain knowledge of supernovae kicks, isolated formation can produce systems with negative but small effective spins. 
+We report an effective spin distribution that is not symmetric about zero, disfavoring a scenario in which all BBHs are formed dynamically. Following the rules in \citet{Fishbach_2022}, 
+we place conservative upper bounds on the fraction of hierarchical mergers $f_\mathrm{HM}$ and fraction of dynamically formed BBHs, $f_\mathrm{dyn}$ with 
+the M-Spline $\chi_\mathrm{eff}$ model constraining $f_\mathrm{HM} < $\result{$\macros[ChiEffective][chieff][frac_hm][10th percentile]$} 
 and $f_\mathrm{dyn} < $\result{$\macros[ChiEffective][chieff][frac_dyn][10th percentile]$} at 90\% credibility. 
 
 \section{Conclusions}\label{sec:conclusion}
@@ -33,6 +33,6 @@ and $f_\mathrm{dyn} < $\result{$\macros[ChiEffective][chieff][frac_dyn][10th per
 Non-parametric and data-driven statistical modeling methods have been put to use with great success across the ever-growing field of gravitational 
 waves \citep{B_Farr_etal_2014,Littenberg_2015,Mandel_2016,Edwards_2018,Doctor_GPR,Edelman_2021,Vitale_2021,Tiwari_2021_a,Tiwari_2021_b,Edelman_2022ApJ,Tiwari_2022ApJ}. 
 We presented a case study exploring how basis splines make for an especially powerful and efficient model-agnostic probe of the binary black hole population observed 
-with gravitational waves. With the coming influx of new data with the LVK's next observing run, and the wide range of questions in astro/physics that a better 
+with gravitational waves. With the coming influx of new data with the LVK's next observing run, and the wide range of questions in astrophysics and cosmology that a better 
 understanding of the black hole population will uncover, development of model-agnostic methods, such as the one we proposed here, will become necessary to efficiently make
 sense of the data.  
