@@ -13,3 +13,13 @@ superradiance
 astrophysically
 BBHs
 Cox-de
+PowerlawSpline
+PowerlawRedshift
+PowerlawPeak
+PISN
+pulsational
+PPISNe
+IID
+iid
+extremal
+PPDs

@@ -1,2 +1,7 @@
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qspline_basis_plot.py\\E$"}
 {"rule":"TO_TOO","sentence":"^\\QThis allows one to much more densely populate the domain with knots without the worry of extra variance in the inferred spline functions.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qmass_distribution_plot.py\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_iid_spinmag.py\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_ind_spinmag.py\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_ind_spintilt.py\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_chieff.py\\E$"}
