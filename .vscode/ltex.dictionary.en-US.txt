@@ -27,3 +27,5 @@ PISNe
 PPISN
 BHs
 AGNs
+NumPyro
+Jax

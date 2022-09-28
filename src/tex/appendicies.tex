@@ -1,17 +1,17 @@
 \appendix
 \section{Penalized Splines and Smoothing}\label{sec:psplines}
 
-Spline functions have been shown to be sensitivite to the chosen number of knots, and their locations or spacing \citep{deBoor78}. 
-Adding more knots knots increases the a-priori variance in the spline function, while the space between knots can limit the 
+Spline functions have been shown to be sensitive to the chosen number of knots, and their locations or spacing \citep{deBoor78}. 
+Adding more knots increases the a priori variance in the spline function, while the space between knots can limit the 
 resolution of features in the data the spline is capable of resolving. To ensure your spline based model is flexible enough 
-one would want to add as many knots as densely as possible, but this comes with the inherit larger variance as mentioned above. 
-To overcome this we resort to the frequentist penalized spline (P-Spline) in which one applies a penalty or regularization term 
-to the likelihood based on the difference of adjacent knot coeficients \citep{eilers2021practical}. The linear combination of spline basis components 
-or the resulting spline function is flat when the basis coeficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as 
-the differences between adjacent knot coeficients get larger, one gets a smoothing of the spline function inferences \citep{eilers2021practical}. 
-Since we are using hierarchical Bayesian inferece as our statistical framework, we formulate this penalized likelihood with its Bayesian analog. 
-The difference penalty is equivalent to applying a stochastic differnece prior among the knots, as described in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}. 
-This is also sometimes referred to as a Gaussian random walk prior, since each coeficient is normally distributed about its neighboring coeficients. 
+one would want to add as many knots as densely as possible, but this comes with unwanted side effect of larger variance as mentioned above. 
+To overcome this we resort to the frequentest penalized spline (P-Spline) in which one applies a penalty or regularization term 
+to the likelihood based on the difference of adjacent knot coefficients \citep{eilers2021practical}. The linear combination of spline basis components 
+or the resulting spline function is flat when the basis coefficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as 
+the differences between adjacent knot coefficients get larger, one gets a smoothing of the spline function inferences \citep{eilers2021practical}. 
+Since we are using hierarchical Bayesian inference as our statistical framework, we formulate this penalized likelihood with its Bayesian analog. 
+The difference penalty is equivalent to applying a stochastic difference prior among the knots, as described in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}. 
+This is also sometimes referred to as a Gaussian random walk prior, since each coefficient is normally distributed about its neighboring coefficients. 
 For a spline basis with $n$ degree's of freedom, and a difference penalty of order of $r$ (see \citet{eilers2021practical}), the smoothing prior is defined as:
 
 \begin{eqnarray}
@@ -20,11 +20,12 @@ p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\m
 \end{eqnarray}
 
 \noindent Above $\bm{D}_r$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $\Gamma(a,b)$ the Gamma distribution with shape parameters, $a$ and $b$. 
-This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. By adding in a very large number 
-of knots such that your domain is densly populated with basis coeficients, this allows the freedom for the model to find the smoothing 
+This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. The $\tau_\lambda$ controls the ``strength'' of 
+smoothing, or the inverse variance of the Gaussian priors on knot differences. By adding in a very large number 
+of knots such that your domain is densely populated with basis coefficients, this allows the freedom for the model to find the smoothing 
 scale that the data prefers. One downside of this prior specification as noted in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}, is a slight dependence on choice 
-of the b hyper-parameter for Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method introduced in \citet{Jullion2007RobustSO}
-to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model on gamma distributions with varying b hyper-parameters. 
+of the b hyperparameter for Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method introduced in \citet{Jullion2007RobustSO}
+to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model on gamma distributions with varying b hyperparameters. 
 We now replace the prior on $\tau_\lambda$ with:
 
 \begin{align}
@@ -51,11 +52,11 @@ and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
 %across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
 %the power-law like mass distributions that are commonly used. 
 
-This prior is imparting a natural attraction of the coeficients closer to each other in order to smooth the spline function, so one 
-must ensure that the spline function is in fact flat given all equal coeficients. Since one needs to define n+k knots to construct an order-k basis with 
-n degrees of freedom, people often will place knots on top of each other at hard parameter boundaries \cite{deBoor78,monotone_regression_splines}. 
-This may seemed motivated, especially if there is no reality in the parameter beyond the boundary, but this violates the above condition. 
-We follow the distinction from \citet{eilers2021practical} that the difference penalty or smooothing prior is only valid with ``proper'' spline bases. 
+Since the prior is imparting a natural attraction of the coefficients closer to each other in order to smooth the spline function, so one 
+must ensure that the spline function is in fact flat given all equal coefficients. Since one needs to define n+k knots to construct an order-k basis with 
+n degrees of freedom, sometimes studies place knots on top of each other at hard parameter boundaries \cite{deBoor78,monotone_regression_splines}. 
+This may seem motivated, especially when is no reality in the parameter beyond the boundary, but this violates the above condition. 
+We follow the distinction from \citet{eilers2021practical} that such a smoothing prior is only valid with ``proper'' spline bases. 
 A proper basis is where all n+k knots are evenly spaced, see Figure \ref{fig:spline_basis}, as opposed to stacking them at the bounds.
 
 \section{Hierarchical Bayesian Inference} \label{sec:hierarchical_inference}
@@ -63,7 +64,7 @@ A proper basis is where all n+k knots are evenly spaced, see Figure \ref{fig:spl
 % This appendix goes over in detail the hierarchical bayeisan inference framework
 We use hierarchical Bayesian inference to infer the population properties of CBCs. We want to infer the number density of merging CBCs 
 in the universe and how this can change with their masses, spins, etc. Often times it is useful to formulate the question in terms of the 
-merger rates which is the number of mergers per $Gpc^{3}$ co-moving volume per year. For a set of hyper-parameters, $\Lambda$, $\lambda$, and local ($z=0$) 
+merger rates which is the number of mergers per $Gpc^{3}$ co-moving volume per year. For a set of hyperparameters, $\Lambda$, $\lambda$, and local ($z=0$) 
 merger rate density, $\mathcal{R}_0$, we write the overall number density of BBH mergers in the universe as: 
 
 \begin{equation} \label{number_density}
@@ -72,30 +73,30 @@ merger rate density, $\mathcal{R}_0$, we write the overall number density of BBH
 
 \noindent
 Where up above, we denote the co-moving volume element as $dV_c$ \citep{hogg_cosmo}, and $T_\mathrm{obs}$ as the observing time period that produced the 
-catalog with the related factor of $1+z$ converting this detector-frame time to source-frame. We assume a LambdaCDM cosmology using 
+catalog with the related factor of $1+z$ converting this detector-frame time to source-frame. We assume a Lambda CDM cosmology using 
 the cosmological parameters from \citet{Planck2015}. We model the merger rate evolving with redshift following a power law distribution: 
 $p(z|\lambda) \propto \frac{dV_c}{dz}\frac{1}{1+z}(1+z)^\lambda$ \cite{Fishbach_2018redshift}. When integrating equation \ref{number_density} across all $\theta$
 and out to some maximum redshift, $z_\mathrm{max}$, we get the total number of CBCs in the universe out to that redshift. We follow previous notations, \
-letting $\{d_i\}$ represent the set of data from $N_\mathrm{obs}$ CBCs observed with gravitational waves. The merger rate is then described as an inhomogenous 
-Poisson process and after imposing the usual log-uniform prior on the merger rate, we marginalize out merger rate and arrive at the posterior
-distribution of our hyper-parameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}.
+letting $\{d_i\}$ represent the set of data from $N_\mathrm{obs}$ CBCs observed with gravitational waves. The merger rate is then described as an inhomogeneous 
+Poisson process and after imposing the usual log-uniform prior on the merger rate, we marginalize over the local merger rate, $\mathcal{R}_0$, and arrive at the posterior
+distribution of our hyperparameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}.
 
 \begin{equation}
     p\left(\Lambda, \lambda | \{d_i\}\right) \frac{p(\Lambda)p(\lambda)}{\xi(\Lambda,\lambda)^{N_\mathrm{obs}}} \prod_{i=1}^{N_\mathrm{obs}} \bigg[ \frac{1}{K_i} \sum_{j=1}^{K_i} \frac{p(\theta^{i,j}|\Lambda)p(z^{i,j}|\lambda)}{\pi(\theta, z^{i,j})} \bigg]
 \end{equation}
 
 \noindent
-where, we replaced the integrals over each event's likelihood with ensemble averages over $K_i$ posterior samples. Above, $j$
+Where above, we replaced the integrals over each event's likelihood with ensemble averages over $K_i$ posterior samples. Above, $j$
 indexes the $K_i$ posterior samples from each event and $\pi(\theta, z)$ is the default prior used by parameter estimations that 
 produced the posterior samples for each event. In the analyses of GWTC-3, either the default prior used was uniform in detector frame masses, 
 component spins and Euclidean volume or the posterior samples were re-weighted to such a prior before using them in our analysis. 
-The corresponding prior evaluated in the parameters we hierarchicaly model, i.e. source frame primary mass, mass ratio, component spins and redshift is:
+The corresponding prior evaluated in the parameters we hierarchically model, i.e. source frame primary mass, mass ratio, component spins and redshift is:
 
 \begin{equation}
     \pi(m_1, q, a_1, a_2, \cos{\theta_1}, \cos{\theta_2}, z) \propto \frac{1}{4} m_1 (1+z)^2 D_L^2(z) \frac{dD_L}{dz}
 \end{equation}
 
-\noindent where $D_L$ is the luminosity distance. To carefully incorporate selection effects to our model we need to quantify the detection efficiency,
+\noindent Above, $D_L$ is the luminosity distance. To carefully incorporate selection effects to our model we need to quantify the detection efficiency,
 $\xi(\Lambda, \lambda)$, of the search pipelines that were used to create GWTC-3, at a given population distribution described by $\Lambda$ and $\lambda$.
  
 \begin{equation}
@@ -104,9 +105,9 @@ $\xi(\Lambda, \lambda)$, of the search pipelines that were used to create GWTC-3
  
 \noindent
 To estimate this integral we use a software injection campaign where gravitational waveforms from a large population of simulated sources. 
-These simulated waevforms are put into real detector data, and then this data is evaluated with the same search pipelines that were used to 
+These simulated waveforms are put into real detector data, and then this data is evaluated with the same search pipelines that were used to 
 produce the catalog we are analyzing. With these search results in hand, we use importance sampling and evaluate the integral 
-with the monte carlo sum estimate $\mu$, and its corresponding variance and effective number of samples:
+with the Monte Carlo sum estimate $\mu$, and its corresponding variance and effective number of samples:
 
 \begin{equation} \label{xi}
      \xi(\Lambda, \lambda) \approx \mu(\Lambda, \lambda) \frac{1}{N_\mathrm{inj}} \sum_{i=1}^{N_\mathrm{found}} \frac{p(\theta^i | \Lambda) p(z^i | \lambda)}{p_\mathrm{inj}(\theta, z^i)}
@@ -117,11 +118,12 @@ with the monte carlo sum estimate $\mu$, and its corresponding variance and effe
 \end{equation}
 
 \noindent
-Where the sums indexes only over the $N_\mathrm{found}$ injections that were successfully detected out of $N_\mathrm{inj}$ total injections, 
-and $p_\mathrm{inj}(\theta, z)$ is the reference distribution from which the injections were drawn. Additionally, we follow the procedure 
+Where the sum is only over the $N_\mathrm{found}$ injections that were successfully detected out of $N_\mathrm{inj}$ total injections, 
+and $p_\mathrm{inj}(\theta, z)$ is the reference distribution from which the injections were drawn. We use the LVK released injection sets that describe the 
+detector sensitivities over the first, second and third observing runs \citep{o1o2o3_injection_sets}. Additionally, we follow the procedure 
 outlined in \citet{Farr_2019} to marginalize the uncertainty in our estimate of $\xi(\Lambda, \lambda)$, in which we verify that $N_\mathrm{eff}$ is 
 sufficiently high after re-weighting the injections to a given population (i.e. $N_\mathrm{eff} > 4N_\mathrm{obs}$). 
-The total hyper-posterior marginalized over the merger rate and the uncertainty in the monte carlo integral calculating $\xi(\Lambda, \lambda)$ \citep{Farr_2019}, as:
+The total hyper-posterior marginalized over the merger rate and the uncertainty in the Monte Carlo integral calculating $\xi(\Lambda, \lambda)$ \citep{Farr_2019}, as:
 
 \begin{equation}\label{importance-posterior}
     \log p\left(\Lambda, \lambda | \{d_i\}\right) \propto \sum_{i=1}^{N_\mathrm{obs}} \log \bigg[ \frac{1}{K_i} \sum_{j=1}^{K_i} \frac{p(\theta^{i,j}|\Lambda)p(z^{i,j}|\lambda)}{\pi(\theta^{i,j}, z^{i,j})} \bigg] -  \\
@@ -129,13 +131,13 @@ The total hyper-posterior marginalized over the merger rate and the uncertainty 
 \end{equation}
 
 We explicitly enumerate each of the models used in this work for $p(\theta|\Lambda)$, along with 
-their respective hyper-parameters and prior distributions in the next section. To calculate draw 
-samples of the hyper parameters from the hierarchical posterior distribution shown in equation \ref{importance-posterior}, we use the 
-NUTS hamiltonian monte carlo sampler in \textsc{NumPyro} and \textsc{Jax} to calculate likelihoods \citep{jax,pyro,numpyro}.
+their respective hyperparameters and prior distributions in the next section. To calculate draw 
+samples of the hyperparameters from the hierarchical posterior distribution shown in equation \ref{importance-posterior}, we use the 
+NUTS Hamiltonian Monte Carlo sampler in \textsc{NumPyro} and \textsc{Jax} to calculate likelihoods \citep{jax,pyro,numpyro}.
 
 \section{Model specification} \label{sec:modelpriors}
 
-\bruce{Need to fill this section in and put tables with specific hyper-parameter/prior settings made}
+\bruce{Need to fill this section in and put tables with specific hyperparameter/prior settings made}
 
 %\section{Validation Studies} \label{sec:validation}
 
