@@ -3,9 +3,9 @@
 A common non-parametric method used in many statistical applications is basis splines. A spline function of order $k$, 
 is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
 They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
-\it{Basis splines} (or ``B-Splines'') of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
-Therefore, given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of B-Splines for 
-every possible spline function interpolated by knots, $\mathbf{t}$. The basis components for a given knot vector are constructed  
+Basis splines of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
+Therefore, given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of basis splines 
+for every possible spline function interpolated from knots, $\mathbf{t}$. The basis components for a given knot vector are constructed  
 using the Cox-de Boor recursion formula \citep{deBoor78}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
 
 \begin{figure}[ht!]
