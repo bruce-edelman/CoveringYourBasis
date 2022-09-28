@@ -22,7 +22,7 @@
 ## Instructions to Build Paper
 
 This is an open source scientific article created using the [showyourwork](https://github.com/showyourwork/showyourwork) workflow.
-To re-generate the figures macros and paper pdf, clone this repository and run `showyourwork build`
+To re-generate the figures macros and paper PDF, clone this repository and run `showyourwork build`
 
 ```bash
 git clone https://github.com/bruce-edelman/CoveringYourBasis.git
@@ -30,11 +30,11 @@ cd CoveringYourBasis
 showyouwork build
 ```
 
-The first build will take a long time as it needs to download some static dataset files from zenodo but this will be cached after the first build.
+The first build will take a long time as it needs to download some static dataset files from zenodo, but this will be cached after the first build.
 
 ## Data
 
-The data is all either hosted on zenodo and will be downloaded or programatically created in the build process, stored in `src/data/` folder.
+The data is all either hosted on zenodo and will be downloaded or programmatically created in the build process, stored in `src/data/` folder.
 
 ## Scripts
 
@@ -54,8 +54,8 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
     - [x] Spin Orientation
     - [x] The Effective Spin Dimension
 - [x] Astrophysical Implications (`src/tex/conclusion.tex`)
-- [ ] Conclusion (`src/tex/conclusion.tex`)
-- [x] Acknowledgements  (`src/tex/ms.tex`)
+- [x] Conclusion (`src/tex/conclusion.tex`)
+- [x] Acknowledgements (`src/tex/ms.tex`)
 - [ ] Appendices (`src/tex/appendicies.tex`)
   - [x] Penalized Splines and Smoothing
   - [x] Hierarchical Bayesian Inference
@@ -64,9 +64,7 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
 
 ## Non-Writing Paper TODO's
 - High Priority
-  - [ ] Finish adding citations 
-    - [ ] formation channel predictions from dyn/iso literature -- In intro / astro / spin results
-    - [ ] Any other places where I missed something? -- do quick readthrough
+  - [ ] Finish adding citations where I left comments
   - [ ] Make Table for Model appendix
 - Medium Priority
   - [ ] Decide on Author List 
@@ -74,5 +72,5 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
 - Low Priority
   - [x] Make showyourwork widget buttons not overlap figure captions
   - [ ] Add validation study Appendix
-    - [ ] Simulaton script
+    - [ ] Simulation script
     - [ ] Figures

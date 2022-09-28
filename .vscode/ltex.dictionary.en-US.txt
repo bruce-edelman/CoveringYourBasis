@@ -29,3 +29,6 @@ BHs
 AGNs
 NumPyro
 Jax
+zenodo
+showyourwork
+TODO
