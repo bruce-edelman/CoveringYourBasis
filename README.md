@@ -65,7 +65,7 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
 ## Non-Writing Paper TODO's
 - High Priority
   - [ ] Finish adding citations where I left comments
-  - [ ] Make Table for Model appendix
+  - [x] Make Table for Model appendix
 - Medium Priority
   - [ ] Decide on Author List 
   - [ ] Final title?

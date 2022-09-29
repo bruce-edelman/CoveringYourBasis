@@ -78,3 +78,4 @@ datasets:
                 o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
                 o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
                 o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
+                o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_samples.hdf5: src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_samples.hdf5

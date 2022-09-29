@@ -137,6 +137,41 @@ NUTS Hamiltonian Monte Carlo sampler in \textsc{NumPyro} and \textsc{Jax} to cal
 
 \section{Model specification} \label{sec:modelpriors}
 
+\begin{table*}[ht!]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Model} & \textbf{Parameter} & \textbf{Description} & \textbf{Prior} \\ \hline \hline
+    \multicolumn{4}{|c|}{\textbf{Primary Mass Model Parameters}} \\ \hline
+    \textsc{M-Spline} & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$ \\ \cline{2-4} 
+     & $\tau_\lambda$ & Smoothing Prior Scale & $\sum_i^m p_i \Gamma(1, b_i)$ \\ \cline{2-4}
+     & $\bm{p}$ & Hyper-Parameter weights on smoothing scale mixture prior & $\sim \mathcal{D}(m)$ \\ \cline{2-4}
+     & $b_m$ & array of different concentration parameters for $\Gamma$ distribution & equal in $[10^{-9},10^{-1}]$ \\ \cline{2-4} 
+     & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+     & $n$ & number of knots in the basis spline & 50 \\ \cline{2-4} 
+     & $m$ & number of mixture components for prior on $\tau_\lambda$ & 24  \\ \hline \hline
+    \multicolumn{4}{|c|}{\textbf{Mass Ratio Model Parameters}} \\ \hline
+    \textsc{PowerLaw Mass Ratio} & $\beta$ & slope of the mass ratio power law & $\sim \mathcal{N}(0,2)$ \\ \cline{2-4} 
+    & $m_\mathrm{min}$ & minimum BH mass & 3\msun  \\ \hline \hline    
+    \multicolumn{4}{|c|}{\textbf{Redshift Evolution Model Parameters}} \\ \hline
+    \textsc{PowerLaw Redshift} & $\lambda$ & slope of redshift evolution power law $(1+z)^\lambda$ &  $\sim \mathcal{N}(0,2)$ \\ \hline \hline
+    \multicolumn{4}{|c|}{\textbf{Spin Distribution Model Parameters}} \\ \hline
+    \textsc{M-Spline Magnitude} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
+    & $\tau_\lambda$ & Smoothing Prior Scale & $\sum_i^m p_i \Gamma(1, 10^{-3})$ \\ \cline{2-4}
+    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+    & $n$ & number of knots in the basis spline & 16 \\ \hline
+    \textsc{M-Spline Tilt} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
+    & $\tau_\lambda$ & Smoothing Prior Scale & $\sim \Gamma(1, 10^{-3})$ \\ \cline{2-4}
+    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+    & $n$ & number of knots in the basis spline & 16 \\ \hline
+    \textsc{M-Spline Effective} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
+    & $\tau_\lambda$ & Smoothing Prior Scale & $\sim \Gamma(1, 10^{-3})$ \\ \cline{2-4}
+    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+    & $n$ & number of knots in the basis spline & 24 \\ \hline
+    \end{tabular}
+\end{table*} 
+
+
 \bruce{Need to fill this section in and put tables with specific hyperparameter/prior settings made}
 
 %\section{Validation Studies} \label{sec:validation}

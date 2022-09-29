@@ -23,6 +23,7 @@ def load_base_parser():
     parser.add_argument('--samples', type=int, default=2000)
     parser.add_argument('--warmup', type=int, default=250)
     parser.add_argument('--dirichlet', action='store_true', default=False)
+    parser.add_argument('--sample-prior', action='store_true', default=False)
     parser.add_argument('--chieff-knots', type=int, default=24)
     parser.add_argument('--chip-knots', type=int, default=12)
     return parser
@@ -40,16 +41,14 @@ def setup_mass_MSpline_model(injdata, pedata, pmap, nknots, mmax=100.0, k=4):
     knots = 10**(logknots)
     model = MSplinePrimaryPowerlawRatio(nknots, pedata[pmap['mass_1']],injdata[pmap['mass_1']],
                                        knots=knots)
-    return {'model': model, 'pe': {'mass_1': pedata[pmap['mass_1']], 'mass_ratio': pedata[pmap['mass_ratio']]}, 
-            'inj': {'mass_1': injdata[pmap['mass_1']], 'mass_ratio': injdata[pmap['mass_ratio']]}}, mmin
-    return model
+    return model, mmin
 
 
 def setup_redshift_model(injdata, pedata, pmap):
     z_pe = pedata[pmap['redshift']]
     z_inj = injdata[pmap['redshift']]
     model = PowerlawRedshiftModel(z_pe, z_inj)
-    return {'pe': z_pe, 'inj': z_inj, 'model': model}
+    return model
 
 
 def calculate_penalty(coefs, inv_var, Lambda=None, degree=1):

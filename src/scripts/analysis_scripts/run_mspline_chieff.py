@@ -30,7 +30,7 @@ def setup_effspin_MSpline_model(injdata, pedata, pmap, nknots, k=4):
     dx = interior_knots[1] - interior_knots[0]
     knots = np.concatenate([xmin-dx*np.arange(1,k)[::-1], interior_knots, xmax+dx*np.arange(1,k)])
     model = MSplineChiEffective(nknots, pedata[pmap['chi_eff']], injdata[pmap['chi_eff']], knots=knots)#HARDCODED_KNOTS)
-    return {'model': model}
+    return model
 
 
 def setup(args):
@@ -48,37 +48,29 @@ def setup(args):
     total_inj = injections["total_generated"]
     obs_time = injections["analysis_time"]
     
-    mass_dict, min_m1_interp = setup_mass_MSpline_model(injdata, pedata, param_map, args.mass_knots, mmax=args.mmax)
-    z_dict = setup_redshift_model(injdata, pedata, param_map)
+    mass_model, min_m1_interp = setup_mass_MSpline_model(injdata, pedata, param_map, args.mass_knots, mmax=args.mmax)
+    z_model = setup_redshift_model(injdata, pedata, param_map)
+    spin_model = setup_effspin_MSpline_model(injdata, pedata, param_map, args.chieff_knots)
     
-    prior_dict = {'pe': pedata[param_map['prior']], 'inj': injdata[param_map['prior']]}
-    spin_dict = setup_effspin_MSpline_model(injdata, pedata, param_map, args.chieff_knots)    
-    print(f"{len(z_dict['inj'])} found injections out of {total_inj} total")
-    print(f"Observed {nObs} events, each with {z_dict['pe'].shape[1]} samples, over an observing time of {obs_time} yrs")    
-    return mass_dict, spin_dict, z_dict, prior_dict, total_inj, nObs, obs_time, min_m1_interp
+    inj_dict = {k: injdata[param_map[k]] for k in param_names}
+    pe_dict = {k: pedata[param_map[k]] for k in param_names}
+     
+    print(f"{len(inj_dict['redshift'])} found injections out of {total_inj} total")
+    print(f"Observed {nObs} events, each with {pe_dict['redshift'].shape[1]} samples, over an observing time of {obs_time} yrs")    
+    return mass_model, spin_model, z_model, pe_dict, inj_dict, total_inj, nObs, obs_time, min_m1_interp
 
 
-def model(mass_dict, spin_dict, z_dict, prior_dict, total_inj, Nobs, Tobs, args):
-    z_model = z_dict['model']
+def model(mass_model, spin_model, z_model, pe_dict, inj_dict, total_inj, Nobs, Tobs, args):
     m1_pen_degree = 2
-    mass_model = mass_dict['model']
     mass_knots = mass_model.primary_model.nknots
-    spin_model = spin_dict['model']
     chi_eff_knots = spin_model.nknots
     
     mass_cs = numpyro.sample('mass_cs', dist.Exponential(mass_knots), sample_shape=(mass_knots,))
-    #mass_cs = numpyro.sample('mass_cs', dist.Uniform(0, 10*mass_knots), sample_shape=(mass_knots,))
     mass_tau = numpyro.deterministic("mass_tau",  mixture_smoothing_parameter("mass", n_mix=24, log10bmin=-6, log10bmax=-2))
-    #mass_Lambda = get_adaptive_Lambda("mass", mass_knots, degree=m1_pen_degree, omega=0.1)
     numpyro.factor("mass_log_smoothing_penalty", calculate_penalty(mass_cs, mass_tau, degree=m1_pen_degree))
-    
-    if args.dirichlet:
-        chi_eff_cs = numpyro.sample('chi_eff_cs', dist.Dirichlet(jnp.ones(chi_eff_knots)))
-    else:
-        chi_eff_cs = numpyro.sample('chi_eff_cs', dist.Exponential(chi_eff_knots), sample_shape=(chi_eff_knots,))
-        chi_eff_tau = numpyro.deterministic("chi_eff_tau",  mixture_smoothing_parameter("chi_eff", n_mix=5, log10bmin=-4, log10bmax=-1))
-        #chi_eff_tau = numpyro.sample("chi_eff_tau", dist.Gamma(1.0, 1e-3)) 
-        numpyro.factor("chi_eff_log_smoothing_penalty", calculate_penalty(chi_eff_cs, chi_eff_tau, degree=m1_pen_degree))
+    chi_eff_cs = numpyro.sample('chi_eff_cs', dist.Exponential(chi_eff_knots), sample_shape=(chi_eff_knots,))
+    chi_eff_tau = numpyro.deterministic("chi_eff_tau",  mixture_smoothing_parameter("chi_eff", n_mix=5, log10bmin=-4, log10bmax=-1))
+    numpyro.factor("chi_eff_log_smoothing_penalty", calculate_penalty(chi_eff_cs, chi_eff_tau, degree=m1_pen_degree))
     beta = numpyro.sample("beta", dist.Normal(0,2))
     lamb = numpyro.sample("lamb", dist.Normal(0,2))
     mmin = args.mmin
@@ -90,27 +82,40 @@ def model(mass_dict, spin_dict, z_dict, prior_dict, total_inj, Nobs, Tobs, args)
         wts = p_m1q*p_chieff*p_z/prior
         return jnp.where(jnp.isnan(wts) | jnp.isinf(wts), 0, wts)
 
-    peweights = get_weights(mass_dict['pe']['mass_1'], mass_dict['pe']['mass_ratio'], z_dict['pe'], prior_dict['pe'])
-    injweights = get_weights(mass_dict['inj']['mass_1'], mass_dict['inj']['mass_ratio'], z_dict['inj'], prior_dict['inj'])
+    peweights = get_weights(pe_dict['mass_1'], pe_dict['mass_ratio'], pe_dict['redshift'], pe_dict['prior'])
+    injweights = get_weights(inj_dict['mass_1'], inj_dict['mass_ratio'], inj_dict['redshift'], inj_dict['prior'])
 
     heirarchical_likelihood(peweights, injweights, total_inj=total_inj, Nobs=Nobs, Tobs=Tobs, 
                             surv_hypervolume_fct=z_model.normalization, lamb=lamb, marginalize_selection=False)
-    
+    obs_idx = random.choice(numpyro.prng_key(), peweights.shape[1])
+    pred_idx = random.choice(numpyro.prng_key(), injweights.shape[0])
+    for p in ['mass_1', 'mass_ratio', 'redshift', 'chi_eff']:
+        numpyro.deterministic(f"{p}_obs", pe_dict[p][:,obs_idx])
+        numpyro.deterministic(f"{p}_pred", inj_dict[p][pred_idx])
+
 
 def main():
     args = setup_parser()
-    #args.chieff_knots = len(HARDCODED_KNOTS)-4
-    if args.dirichlet:
-        label = f'results/paper/mspline_{args.mass_knots}m1_{args.chieff_knots}chieff_dirchprior_powerlaw_q_z_fitlamb'
-    else:
-        label = f'results/paper/mspline_{args.mass_knots}m1_{args.chieff_knots}chieff_smoothprior_powerlaw_q_z_fitlamb'
+    label = f'results/paper/mspline_{args.mass_knots}m1_{args.chieff_knots}chieff_smoothprior_powerlaw_q_z_fitlamb'
     RNG = random.PRNGKey(0)
     MCMC_RNG, RNG = random.split(RNG)
     kernel = NUTS(model)
+    mass, spin, z, pe, inj, total_inj, nObs, obs_time, m1min = setup(args)
+    
+    print("sampling prior...")
+    args.sample_prior = True
     mcmc = MCMC(kernel, num_warmup=args.warmup, num_samples=args.samples, num_chains=args.chains, chain_method='sequential', progress_bar=True)
-    mass, spin, z, prior, total_inj, nObs, obs_time, m1min = setup(args)
-    mcmc.run(MCMC_RNG, mass, spin, z, prior, float(total_inj), nObs, obs_time, args) 
+    mcmc.run(MCMC_RNG, mass, spin, z, pe, inj, float(total_inj), nObs, obs_time, args) 
+    dd.io.save(f'{label}_prior_samples.h5', mcmc.get_samples())
+
+    print("running mcmc...")
+    args.sample_prior = False
+    mcmc = MCMC(kernel, num_warmup=args.warmup, num_samples=args.samples, num_chains=args.chains, chain_method='sequential', progress_bar=True)
+    mcmc.run(MCMC_RNG, mass, spin, z, pe, inj, float(total_inj), nObs, obs_time, args) 
     mcmc.print_summary()
+    plot_params = ['beta', 'chi_eff_cs', 'chi_eff_tau', 'detection_efficency', 'lamb', 'log10_nEff_inj', 'log10_nEffs', 'logBFs', 'log_l', 'mass_cs', 'mass_tau', 'rate', 'surveyed_hypervolume']
+    az.plot_trace(az.from_numpyro(mcmc), var_names=plot_params)
+    
     posterior = mcmc.get_samples()
     pm1s, pqs, ms, qs = calculate_m1q_ppds(posterior['mass_cs'], posterior['rate'], posterior['beta'], MSplinePrimaryPowerlawRatio, nknots=args.mass_knots, mmin=args.mmin, m1mmin=m1min, mmax=args.mmax)
     pchieffs, chieffs = calculate_chi_ppds(posterior['chi_eff_cs'], posterior['rate'], MSplineChiEffective, nknots=args.chieff_knots, xmin=-1,xmax=1)
@@ -121,8 +126,6 @@ def main():
     ppd_dict = {'dRdm1': pm1s, 'dRdq': pqs, 'm1s': ms, 'qs': qs, 'dRdchieff': pchieffs, 'chieffs': chieffs, 'Rofz': Rofz, 'zs': zs}
     dd.io.save(f'{label}_posterior_samples.h5', posterior)
     dd.io.save(f'{label}_ppds.h5', ppd_dict)
-    idata = az.from_numpyro(mcmc)
-    az.plot_trace(idata)
     plt.savefig(f'{label}_trace_plot.png')
     fig = plot_mass_dist(pm1s, pqs, ms, qs, mmin=m1min, mmax=args.mmax);
     plt.savefig(f'{label}_mass_distribution.png')
