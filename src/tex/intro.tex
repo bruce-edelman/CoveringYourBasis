@@ -3,10 +3,10 @@
 Observations of gravitational waves (GWs) from compact binary coalescences (CBCs) are becoming a regular occurrence, 
 recently producing catalogs of 90 such detections \citep{GWTC1,gwtc2,GWTC3}. With this growing catalog size, we are steadily approaching a more complete  
 understanding of the population properties of CBCs, just 7 years after the first observation \citep{o1o2_pop,o3a_pop,o3b_astro_dist}. 
-In the coming fourth observing run of the LIGO-Virgo-KAGRA (LVK) collaboration detectors \citep{aLIGO,aVIRGO}, with the increased sensitivities, 
-there could be a detection as often as every day \citep{LVK_prospects}. This large influx of incoming data will drastically increase what we can 
-learn by combining all observations in order to study the compact object population. The history of these dense objects is imprinted on the properties 
-of the population  of CBCs, allowing us to learn about their formation and evolution by the last few seconds of gravitational radiation emitted \citep{Zevin_2017}. 
+Due to their increased sensitivity, detections could occur as often as every day in the upcoming fourth observing run of the LIGO-Virgo-KAGRA (LVK) collaboration 
+detectors \citep{aLIGO,aVIRGO,LVK_prospects}. This large influx of data will drastically improve our ability to study the population of observed CBCs by 
+combining the insights from the entire catalog. The history of these dense objects is imprinted on the properties 
+of the population  of CBCs, allowing us to learn about their formation and evolution from the last few seconds of gravitational radiation emitted \citep{Zevin_2017}. 
 The population distributions of merging compact objects inferred from gravitational-wave observations have been shown to be particularly useful in order to
 measure cosmological parameters \citep{Farr_2019HUB,gwtc3_cosmo}, constrain modified gravitational wave propagation \citep{ModGWProp,ModGWProp2}, 
 constrain a running Planck mass \citep{Lagos_runningPlanckMass}, look for evidence of ultralight bosons through superradiance \citep{Ng_Boson2021,GWTC2_superradiance_Ng}, 
@@ -14,24 +14,25 @@ constrain stellar nuclear reaction rates \citep{Farmer_2019,Farmer_2020}, look f
 and to constrain physics of neutron stars \citep{Golomb_EOS,LandryRead_NS_Masses2021}. Through a better understanding of the mass, spin, and redshift distributions of 
 compact binaries that will come with the increased catalog size, one can probe a wide range of different physical phenomena with even greater fidelity.
 
-Studies using flexible methods to analyze the binary black hole (BBH) mass distribution with GWTC-2 found signs of structure 
-beyond the first reported feature found at $m_1\sim35\,\msun$ \citep{Talbot_2018,o3a_pop,Tiwari_2021_b,Edelman_2022ApJ}. The evidence for this structure, 
-such as the peak at $m_1\sim10\,\msun$, has only increased after analyzing the following catalog, GWTC-3 \citep{o3b_astro_dist,Tiwari_2022ApJ}. 
-This substructure was first confidently found with multiple different flexible or non-parametric models that are data-driven with little 
-bias on the functional form. Conversely, the other canonical approach is to use simple parametric models that aim to describe the data
-in the simplest way, building in astrophysically motivated priors, followed by sequentially adding complexities only as the data demands it. While in data-scarce, prior dominated
-environments, this simple approach is more powerful. However, as we go forward into the data-rich catalog era, flexible models will be necessary to discover new features that may be in
-the data, which quickly becomes unwieldy with the sequential approach. Non-parametric or semi-parametric methods are particularly useful in looking for unexpected features in the data, finding where 
-our simpler parametric models may be failing to capture meaningful features in the data. Development and robust testing of such methods in the short term will provide
-knock on effects as the size of our catalogs increase, and GW astronomy enters its data-dominated era. 
+Studies using flexible methods to analyze the binary black hole (BBH) mass distribution with GWTC-2 found signs of structure beyond the first reported feature found at 
+$m_1\sim35\,\msun$ \citep{Talbot_2018,o3a_pop,Tiwari_2021_b,Edelman_2022ApJ}. The evidence for this structure, 
+such as the peak at $m_1\sim10\,\msun$, only grew after analyzing the latest catalog, GWTC-3, with the same models \citep{o3b_astro_dist,Tiwari_2022ApJ}, illustrating  
+the usefulness of data-driven methods even with the relatively small current catalog size. Canonically, the approach to constructing population models has been 
+to use simple parametric models that aim to describe the data in the simplest way, build in astrophysically motivated priors, then sequentially add in 
+complexities only as the data demands. This simple approach is powerful in data-scarce, prior dominated environments; however, as we go forward into 
+the data-rich catalog era, flexible methods such as non-parametric modeling will be necessary to discover new features in the data that can quickly 
+become unwieldy to incorporate into the parametric approach. As opposed to parametric models, flexible and non-parametric models are data-driven and 
+contribute little bias to functional form. Non-parametric or semi-parametric methods are particularly useful to search for unexpected features in the 
+data, such as meaningful features that parametric models may fail to capture. Development and robust testing of such flexible methods in the short 
+term will only provide knock on effects when the time comes to analyze the next catalog of CBC detections.
 
 The spin distributions of BBHs are particularly interesting since the two main formation scenarios produce distinctly different spin distributions \bruce{cite}. 
 Isolated or field formation scenarios predict component spins that are preferentially aligned with the binaries orbital angular momentum, although some small 
-misalignment can occur depending on the nature of the supernova kicks as each star collapses to a compact object \bruce{cite}. Dynamical formation scenarios may 
-occur in dense environments where many-body interactions between a large number compact objects occur during the binary formation hardening the binary so that it 
-will merge within a Hubble time. Thus, the dynamical channel produces an isotropic spin tilt distribution \bruce{cite}. BBH spins have also been of controversial 
-interest recently, with different parametric approaches to modeling the spin distribution coming to different conclusions. The studies have disagreed on the possible existence 
-of a significant zero-spinning subpopulation, along with the presence of significant spin misalignment (i.e. $\cos{\theta_i} < 0.0$) \citep{o3b_astro_dist,RouletGWTC2Pop,BuildBetterSpinModels,GWTC3MonashSpin,Callister_NoEvidence}. 
+misalignment can occur depending on the nature of the supernova kicks as each star collapses to a compact object \bruce{cite}. Dynamical formation scenarios may occur in 
+dense environments where many-body interactions between many compact objects cause a binary to harden so that it will merge within a Hubble time. Thus, the dynamical 
+channel produces an isotropic spin tilt distribution \bruce{cite}. BBH spins have also been of controversial interest recently, with different parametric approaches to modeling 
+the spin distribution coming to different conclusions. The studies have disagreed on the possible existence of a significant zero-spinning subpopulation, along with the presence of 
+significant spin misalignment (i.e. $\cos{\theta_i} < 0.0$) \citep{o3b_astro_dist,RouletGWTC2Pop,BuildBetterSpinModels,GWTC3MonashSpin,Callister_NoEvidence}. 
 Another study recently showed that the spin tilt distribution inference is sensitive to modeling choices and may not peak at perfectly aligned spins, as is often assumed \citep{spinitasyoulike}. 
 Other approaches to building improved models for BBH spins again, as with the mass models, focus on iterating through different simple parametric descriptions with 
 increasing complexities \citep{BuildBetterSpinModels,Callister_NoEvidence,spinitasyoulike}. The spin distributions offer a nice use case for flexible data-driven models, as 
@@ -43,7 +44,7 @@ detector calibration uncertainties, coherent gravitational waveform deviations, 
 In this paper we highlight how the use of basis-splines can provide a powerful non-parametric modeling approach to the astrophysical distributions of compact 
 binaries. We illustrate how one can efficiently model both the mass and spin distributions of merging compact binaries in GWTC-3 with basis splines to infer CBC population properties using 
 hierarchical Bayesian inference. We discuss our results in the context of current literature on compact object populations and how this method complements the simpler lower 
-dimensional parametric models in the short run, and will become necessary with future catalogs. This data-driven approach will provide checks of our understanding by finding more 
-subtle features, that may not be expected, should they appear in with more observations. The rest of this manuscript is structured by first going over the background of basis splines in 
-section \ref{sec:basis_splines}, followed by presenting the results of our extensive data-driven study of the mass and spin distributions of BBHs in GWTC-3 section \ref{sec:results}. We 
-discuss our results and their astrophysical implications in section \ref{sec:astrodiscussion}, finishing with our conclusions in section \ref{sec:conclusion}.
+dimensional parametric models in the short run, and will become necessary with future catalogs. Should they appear with more observations, this data-driven approach will provide checks of 
+our understanding by uncovering more subtle -- potentially unexpected -- features. The rest of this manuscript is structured as follows: a description of the background of 
+basis splines in section \ref{sec:basis_splines}, followed by a presentation of the results of our extensive, data-driven study of the mass and spin distributions of BBHs in GWTC-3 in section 
+\ref{sec:results}. We then discuss these results and their astrophysical implications in section \ref{sec:astrodiscussion} and finish with our conclusions in section \ref{sec:conclusion}.

@@ -45,8 +45,8 @@ using the Cox-de Boor recursion formula \citep{deBoor78}. Given knots $t_0$, $t_
 
 \noindent This is known as the ``B-Spline'' basis after it's inventor de Boor \citep{deBoor78}. The power of basis splines
 comes from the fact that one only has to do the somewhat-expensive interpolation once for each set of points at which the spline is evaluated. 
-This provides a considerable computational speedup since each evaluation of the spline function becomes a simpler operation that is just
-a dot product of a matrix and a vector. This straightforward operation is also ideal for optimizations from the use GPU accelerators, 
+This provides a considerable computational speedup as each evaluation of the spline function becomes a simpler operation: a dot product of a 
+matrix and a vector. This straightforward operation is also ideal for optimizations from the use of GPU accelerators, 
 enabling expensive Markov chain Monte Carlo (MCMC) based analyses with hundreds of parameters \bruce{citation?}. 
 Basis splines can easily be generalized to their two-dimensional analog, producing tensor product basis splines that, 
 with this computational advantage, allow for high fidelity modeling of two-dimensional spline functions.

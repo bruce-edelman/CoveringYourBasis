@@ -33,3 +33,8 @@ zenodo
 showyourwork
 TODO
 PowerLaw
+Jaxen
+Astropy
+GWPopulation
+Bilby
+Dynesty
