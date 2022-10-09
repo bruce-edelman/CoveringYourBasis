@@ -38,3 +38,4 @@ Astropy
 GWPopulation
 Bilby
 Dynesty
+AstroPy

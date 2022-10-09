@@ -1,69 +1,13 @@
-\section{Constructing A Basis} \label{sec:basis_splines}
+\section{Building the Model} \label{sec:methods}
 
-A common non-parametric method used in many statistical applications is basis splines. A spline function of order $k$, 
-is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
-They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
-Basis splines of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
-Therefore, given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of basis splines 
-for every possible spline function interpolated from knots, $\mathbf{t}$. The basis components for a given knot vector are constructed  
-using the Cox-de Boor recursion formula \citep{deBoor78}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ we start with the base case as:
-
-\begin{figure}[ht!]
-    \begin{centering}
-        \includegraphics[width=\linewidth]{figures/spline_basis_plot.pdf}
-        \caption{Plot showing a ``proper'' (see appendix \ref{sec:psplines}) M-Spline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
-        In black, we show the resulting spline function with given equal weights and denote the location of the knots with gray x's.}
-        \label{fig:spline_basis}
-    \end{centering}
-    \script{spline_basis_plot.py}
-\end{figure}
-
-\begin{equation}
-    B_{i,1}(x | \mathbf{t}) = 
-    \begin{cases}
-        1, & \text{if } t_i \leq x < t_{i+1} \\
-        0, & \text{otherwise}
-    \end{cases}
-\end{equation}
-
-\noindent combined with the recursion relation:
-
-\begin{multline*}
-    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x | \mathbf{t})B_{i,k}(x | \mathbf{t})\\
-                                + \big[1-\omega_{i+1,k}(x | \mathbf{t})\big] B_{i+1,k}(x | \mathbf{t})
-\end{multline*}
-
-\noindent where above $\omega_{i,k}$ is defined as:
-
-\begin{equation}
-\omega_{i,k}(x | \mathbf{t}) =
-\begin{cases}
-    \frac{x-t_i}{t_{i+k}-t_i}, & t_{i+k} \neq t_i \\
-    0, & \text{otherwise}
-\end{cases}
-\end{equation}
-
-\noindent This is known as the ``B-Spline'' basis after it's inventor de Boor \citep{deBoor78}. The power of basis splines
-comes from the fact that one only has to do the somewhat-expensive interpolation once for each set of points at which the spline is evaluated. 
-This provides a considerable computational speedup as each evaluation of the spline function becomes a simpler operation: a dot product of a 
-matrix and a vector. This straightforward operation is also ideal for optimizations from the use of GPU accelerators, 
-enabling expensive Markov chain Monte Carlo (MCMC) based analyses with hundreds of parameters \bruce{citation?}. 
-Basis splines can easily be generalized to their two-dimensional analog, producing tensor product basis splines that, 
-with this computational advantage, allow for high fidelity modeling of two-dimensional spline functions.
-
-A similar basis, the M-Spline basis \citep{monotone_regression_splines}, has desirable properties when looking to model a probability density function, 
-which is the goal of population inference. Each basis component is scaled such that it is normalized over the domain, $\int M_i(x)dx = 1$. This ensures 
-that given a vector of basis coefficients, if they sum to unity, the resulting spline function is normalized across the interpolation domain. 
-The M-Spline basis differs from B-Splines by the scaling factor that normalizes each component:
-
-\begin{equation}\label{eq:MB_SplineRelation}
-M_{i,k} = \frac{k}{t_{i+k} - t_i} B_{i,k}
-\end{equation}
-
-\noindent We use this definition of the M-Spline basis for all the basis spline models used in this manuscript. Figure \ref{fig:spline_basis} 
-shows an example of a cubic (3rd order) M-Spline basis with 20 degrees of freedom and knots linearly spaced from 0 to 1.
-Another important feature of basis splines is that under appropriate prior conditions, one can alleviate sensitivities to arbitrarily 
-chosen prior specifications that splines commonly struggle with. We look to the use of penalized splines (or P-Splines) \citep{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}, 
-where one adds a smoothing prior based on the difference of basis spline coefficients. This allows one to populate the domain with more dense knots 
-without the worry of extra variance in the inferred spline functions. We discuss the details of our smoothing prior implementation 
-in more detail in Appendix \ref{sec:psplines}, along with our specific prior and basis choices for each model in Appendix \ref{sec:modelpriors}.
+We parameterize the binaries' masses with the primary (defined as the more massive component) mass 
+and the mass ratio -- defined as $q=\frac{m_2}{m_1}$, bounded in the range from 0 to 1. Furthermore, we model 4 of the 6 total 
+spin degrees of freedom of a binary merger with each component spin magnitude $a_1$ and $a_2$, along with the cosine of the tilt angle of each component, 
+$\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binaries orbital angular momentum vector. 
+We assume the polar spin angles are uniformly distributed in the orbital plane. While we choose to use M-Spline distributions to model the primary mass and spin distributions, we 
+model the mass ratio distribution with a power law, i.e. $p(q | m_1, m_\mathrm{min}, \beta) \propto q^{\beta} \Theta(qm_1 - m_\mathrm{min}) \Theta(m_1 - qm_1)$, where $\beta$ is 
+the power law index and $\Theta$ is the Heaviside step function which ensures $m_2$ is within the allowed range, [$m_\mathrm{min}$, $m_1$] \citep{Talbot_2018,o1o2_pop,o3a_pop}.
+Additionally, we fit a population model on the redshift or luminosity distance distribution of BBHs, assuming a $\Lambda\mathrm{CDM}$ cosmology defined by the parameters 
+from the Planck 2015 results \citep{Planck2015}. This defines an analytical mapping between each event's inferred luminosity distance, and it's redshift, which we now use interchangeably. 
+We model the evolution of the merger rate with redshift with the \textsc{PowerlawRedshift} model, described by $p(z|\lambda_z)\propto \frac{dV_c}{dz}(1+z)^{\lambda_z-1}$ \citep{Fishbach_2018redshift}. 
+We describe our specific prior choices on the hyperparameters and each model in more detail in Appendix \ref{sec:modelpriors}.

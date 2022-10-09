@@ -1,18 +1,78 @@
 \appendix
-\section{Penalized Splines and Smoothing}\label{sec:psplines}
+\section{Basis Splines} \label{sec:basis_splines}
+
+A common non-parametric method used in many statistical applications is basis splines. A spline function of order $k$, 
+is a piece-wise polynomial of order $k$ polynomials stitched together from defined ``knot'' locations across the domain. 
+They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
+Basis splines of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
+Therefore, given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of basis splines 
+for every possible spline function interpolated from knots, $\mathbf{t}$. The basis components for a given knot vector can be constructed  
+using the Cox-de Boor recursion formula \citep{deBoor78,monotone_regression_splines}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ 
+the base case and recursion relation that generates this particular basis are defined as:
+
+\begin{equation}
+    B_{i,1}(x | \mathbf{t}) = 
+    \begin{cases}
+        1, & \text{if } t_i \leq x < t_{i+1} \\
+        0, & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+\begin{equation}
+    B_{i,k+1}(x | \mathbf{t}) = \omega_{i,k}(x | \mathbf{t})B_{i,k}(x | \mathbf{t}) + \big[1-\omega_{i+1,k}(x | \mathbf{t})\big] B_{i+1,k}(x | \mathbf{t})
+\end{equation}
+
+\begin{equation}
+    \omega_{i,k}(x | \mathbf{t}) =
+    \begin{cases}
+        \frac{x-t_i}{t_{i+k}-t_i}, & t_{i+k} \neq t_i \\
+        0, & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+\noindent This is known as the ``B-Spline'' basis after it's inventor de Boor \citep{deBoor78}. The power of basis splines
+comes from the fact that one only has to do the somewhat-expensive interpolation once for each set of points at which the spline is evaluated. 
+This provides a considerable computational speedup as each evaluation of the spline function becomes a simpler operation: a dot product of a 
+matrix and a vector. This straightforward operation is also ideal for optimizations from the use of GPU accelerators, 
+enabling our Markov chain Monte Carlo (MCMC) based analyses, often with hundreds of parameters, to converge in an hour or less. 
+Basis splines can easily be generalized to their two-dimensional analog, producing tensor product basis splines that, 
+with this computational advantage, allow for high fidelity modeling of two-dimensional spline functions.
+
+\begin{figure}[ht!]
+    \begin{centering}
+        \includegraphics[width=\linewidth]{figures/spline_basis_plot.pdf}
+        \caption{Plot showing a ``proper'' (see appendix \ref{sec:psplines}) normalized B-Spline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
+        In black, we show the resulting spline function given equal weights and denote the location of the knots with gray x's.}
+        \label{fig:spline_basis}
+    \end{centering}
+    \script{spline_basis_plot.py}
+\end{figure}
+
+Another important feature of basis splines is that under appropriate prior conditions, one can alleviate sensitivities to arbitrarily 
+chosen prior specifications that splines commonly struggle with. Previous studies using splines had to perform multiple analyses, varying the 
+number of spline knots, then either marginalized over the models or used model comparisons to motivate the best choice \citep{Edelman_2022ApJ}. 
+We can avoid this step with the use of penalized splines (or P-Splines) \citep{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}, 
+where one adds a smoothing prior comprised of Gaussian distributions on the differences between neighboring basis spline coefficients. 
+This prior allows one to populate the domain more densely with knots without the worry of extra variance in the inferred spline functions. When also fitting the scale 
+of the smoothing prior (i.e. the width of the Gaussian distributions on the differences), this allows the data to inform the scale of smoothing required. 
+We discuss the details of our smoothing prior implementation in more detail in the next section, Appendix \ref{sec:psplines}, 
+along with our specific prior and basis choices for each model following that in Appendix \ref{sec:modelpriors}.
+
+\section{Penalized Splines and Smoothing Priors}\label{sec:psplines}
 
 Spline functions have been shown to be sensitive to the chosen number of knots, and their locations or spacing \citep{deBoor78}. 
 Adding more knots increases the a priori variance in the spline function, while the space between knots can limit the 
 resolution of features in the data the spline is capable of resolving. To ensure your spline based model is flexible enough 
-one would want to add as many knots as densely as possible, but this comes with unwanted side effect of larger variance as mentioned above. 
-To overcome this we resort to the frequentest penalized spline (P-Spline) in which one applies a penalty or regularization term 
+one would want to add as many knots as densely as possible, but this comes with unwanted side effect of larger variance imposed by your model. 
+This can be fixed with the use of penalized splines (P-Spline) in which one applies a prior or regularization term 
 to the likelihood based on the difference of adjacent knot coefficients \citep{eilers2021practical}. The linear combination of spline basis components 
 or the resulting spline function is flat when the basis coefficients are equal (see Figure \ref{fig:spline_basis}). By penalizing the likelihood as 
-the differences between adjacent knot coefficients get larger, one gets a smoothing of the spline function inferences \citep{eilers2021practical}. 
-Since we are using hierarchical Bayesian inference as our statistical framework, we formulate this penalized likelihood with its Bayesian analog. 
-The difference penalty is equivalent to applying a stochastic difference prior among the knots, as described in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}. 
-This is also sometimes referred to as a Gaussian random walk prior, since each coefficient is normally distributed about its neighboring coefficients. 
-For a spline basis with $n$ degree's of freedom, and a difference penalty of order of $r$ (see \citet{eilers2021practical}), the smoothing prior is defined as:
+the differences between adjacent knot coefficients get larger, one gets a smoothing effect on the spline function \citep{eilers2021practical}. 
+With hierarchical Bayesian inference as our statistical framework, we formulate the penalized likelihood of \citet{eilers2021practical}'s P-Splines with 
+their Bayesian analog \citep{BayesianPSplines}. The Bayesian P-Spline prior places Gaussian distributions over the $r$-th order differences of the 
+coefficients \citep{BayesianPSplines,Jullion2007RobustSO}. This is also sometimes referred to as a Gaussian random walk prior. 
+For a spline basis with $n$ degree's of freedom, and a difference penalty of order of $r$ (see \citet{eilers2021practical}), 
+the smoothing prior is defined as:
 
 \begin{eqnarray}
 \tau_\lambda \sim \Gamma(a, b) \\
@@ -21,19 +81,19 @@ p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\m
 
 \noindent Above $\bm{D}_r$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $\Gamma(a,b)$ the Gamma distribution with shape parameters, $a$ and $b$. 
 This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. The $\tau_\lambda$ controls the ``strength'' of 
-smoothing, or the inverse variance of the Gaussian priors on knot differences. By adding in a very large number 
-of knots such that your domain is densely populated with basis coefficients, this allows the freedom for the model to find the smoothing 
-scale that the data prefers. One downside of this prior specification as noted in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}, is a slight dependence on choice 
-of the b hyperparameter for Gamma distribution prior on $\tau_\lambda$. We reduce this affect by following the method introduced in \citet{Jullion2007RobustSO}
-to alleviate this. This is done by modeling $\tau_\lambda$ with a mixture model on gamma distributions with varying b hyperparameters. 
-We now replace the prior on $\tau_\lambda$ with:
+smoothing, or the inverse variance of the Gaussian priors on knot differences. When there are a very large number of knots, 
+such that your domain is densely populated with basis coefficients, this allows the freedom for the model to find the smoothing 
+scale that the data prefers. One downside of this prior specification as noted in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}, is the dependence on 
+one's choice of value for the $b$ hyperparameter in the Gamma distribution for $\tau_\lambda$. The models introduced in \citet{Jullion2007RobustSO} show how 
+to alleviate this. W model $\tau_\lambda$ with a mixture model composed of multiple Gamma distributions each with varying values for $b$. 
+With this we now have the full prior on $\tau_\lambda$ as:
 
 \begin{align}
     \bm{p} \sim \mathcal{D}(m) \\
     p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_i)
 \end{align}
 
-\noindent Where above $\mathcal{D}(m)$ is a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
+\noindent Above $\mathcal{D}(m)$, denotes a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
 and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
 
 %Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
@@ -52,12 +112,12 @@ and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
 %across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
 %the power-law like mass distributions that are commonly used. 
 
-Since the prior is imparting a natural attraction of the coefficients closer to each other in order to smooth the spline function, so one 
-must ensure that the spline function is in fact flat given all equal coefficients. Since one needs to define n+k knots to construct an order-k basis with 
-n degrees of freedom, sometimes studies place knots on top of each other at hard parameter boundaries \cite{deBoor78,monotone_regression_splines}. 
-This may seem motivated, especially when is no reality in the parameter beyond the boundary, but this violates the above condition. 
-We follow the distinction from \citet{eilers2021practical} that such a smoothing prior is only valid with ``proper'' spline bases. 
-A proper basis is where all n+k knots are evenly spaced, see Figure \ref{fig:spline_basis}, as opposed to stacking them at the bounds.
+This prior is imparting a natural attraction of the coefficients closer to each other in order to smooth the spline function, so one 
+must ensure that the spline function is in fact flat given all equal coefficients. There needs to be $n+k$ knots to construct an order-k 
+basis with n degrees of freedom. Some studies place knots on top of each other at hard parameter boundaries \citep{deBoor78,monotone_regression_splines}, 
+which may seem motivated, but this violates the above condition necessary for the P-Spline prior. We follow the distinction in \citet{eilers2021practical} 
+that such a smoothing prior is only valid with ``proper'' spline bases. A proper basis is where all $n+k$ knots are evenly and equally spaced, 
+see Figure \ref{fig:spline_basis}, as opposed to stacking them at the bounds.
 
 \section{Hierarchical Bayesian Inference} \label{sec:hierarchical_inference}
 

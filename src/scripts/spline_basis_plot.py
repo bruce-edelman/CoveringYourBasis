@@ -12,7 +12,7 @@ xmax = 1
 xlab = 'x'
 
 cmap = 'magma'
-figx, figy = 7, 5
+figx, figy = 14, 5
 fig, axs = plt.subplots(nrows=1, ncols=1, sharey='all', figsize=(figx,figy))
 
 nadd = k - 1
@@ -56,12 +56,12 @@ leg_item = ndof + 2
 max_col = 6
 ncol = max([leg_item // max_col, 3])
 axs.legend(loc='upper center', fancybox=True, shadow=True, ncol=ncol, fontsize=16)
-axs.set_xlim(0,1)
+axs.set_xlim(0-1./(2*ndof),1+1./(2*ndof))
 axs.set_ylim(0, 1.45)
 axs.set_xlabel(xlab, fontsize=18)
 axs.grid(True, which="major", ls=":")
 axs.set_ylabel(f'p({xlab})', fontsize=18)
 axs.tick_params(labelsize=14)
-plt.title(f'MSpline Basis: k={k-1}, n={ndof}', fontsize=16)
+plt.title(f'Normalized B-Spline Basis: k={k-1}, n={ndof}', fontsize=16)
 fig.tight_layout()
 plt.savefig(paths.figures / 'spline_basis_plot.pdf', dpi=300)
