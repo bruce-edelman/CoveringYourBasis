@@ -10,10 +10,10 @@ dependencies:
     - src/tex/appendicies.tex
   src/tex/macros.tex:
     - src/scripts/create_macros.py
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-    - src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5
+    - src/data/bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_posterior_samples.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
+    - src/data/bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_ppds.h5
     - src/data/chi_eff_ppds.h5
     - src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_posterior_samples.h5
     - src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5
@@ -23,30 +23,30 @@ dependencies:
     - src/data/gaussian-spin-xeff-xp-ppd-data.json
   src/scripts/create_chieff_from_compspin.py:
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
-    - src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5
+    - src/data/bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_posterior_samples.h5
   src/scripts/plot_iid_spinmag.py:
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
   src/scripts/plot_ind_spinmag.py:
-    - src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_ppds.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
   src/scripts/plot_iid_spintilt.py:
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
   src/scripts/plot_ind_spintilt.py:
-    - src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_ppds.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5
   src/scripts/mass_distribution_plot.py: 
     - src/data/plbspline_38n_mspline_12n_iid_compsins_8chains_ppds.h5
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
     - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
   src/scripts/create_macros.py:
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-    - src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
-    - src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5
+    - src/data/bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_posterior_samples.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
+    - src/data/bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_ppds.h5
     - src/data/chi_eff_ppds.h5
     - src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_posterior_samples.h5
     - src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5
@@ -59,11 +59,10 @@ datasets:
     contents:
       mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5: src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5
       mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_posterior_samples.h5: src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_posterior_samples.h5
-      mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5: src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-      mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5: src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
-      mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5: src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5
-      mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5: src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-      
+#      mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5: src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
+#      mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5: src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
+#      mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5: src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5
+#      mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5: src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5     
   10.5281/zenodo.5655785:
       contents:
         GWTC-3-population-data.tar.gz:

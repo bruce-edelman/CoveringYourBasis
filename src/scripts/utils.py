@@ -38,399 +38,15 @@ def powerlaw_pdf(xx, alpha, low, high):
     return jnp.where(jnp.greater(xx, high) | jnp.less(xx, low), 0.0, prob * norm)
 
 
-class MSpline(object):
-    def __init__(
-        self, n_df, knots=None, interior_knots=None, xrange=(0, 1), k=4, proper=True
-    ):
-        self.order = k
-        self.N = n_df
-        self.xrange = xrange
-        if knots is None:
-            if interior_knots is None:
-                interior_knots = np.linspace(*xrange, n_df - k + 2)
-            if proper:
-                dx = interior_knots[1] - interior_knots[0]
-                knots = np.append(
-                    np.append(
-                        np.array([xrange[0] - 2 * dx, xrange[0] - dx]), interior_knots
-                    ),
-                    np.array([xrange[1] + dx, xrange[1] + 2 * dx]),
-                )
-            else:
-                knots = np.append(
-                    np.append(np.array([xrange[0]] * (k - 1)), interior_knots),
-                    np.array([xrange[1]] * (k - 1)),
-                )
-        self.knots = knots
-        self.interior_knots = knots
-        assert len(self.knots) == self.N + self.order
-
-    def _basis(self, xs, i, k):
-        if self.knots[i + k] - self.knots[i] < 1e-6:
-            return np.zeros_like(xs)
-        elif k == 1:
-            v = np.zeros_like(xs)
-            v[(xs >= self.knots[i]) & (xs < self.knots[i + 1])] = 1 / (
-                self.knots[i + 1] - self.knots[i]
-            )
-            return v
-        else:
-            v = (xs - self.knots[i]) * self._basis(xs, i, k - 1) + (
-                self.knots[i + k] - xs
-            ) * self._basis(xs, i + 1, k - 1)
-            return (v * k) / ((k - 1) * (self.knots[i + k] - self.knots[i]))
-
-    def basis(self, xs):
-        return [self._basis(xs, i, k=self.order) for i in range(self.N)]
-
-    def __call__(self, xs):
-        return np.concatenate(self.basis(xs)).reshape(self.N, *xs.shape)
-
-
-class Base1DMSplineModel(object):
-    def __init__(
-        self,
-        nknots,
-        xx,
-        xx_inj,
-        knots=None,
-        interior_knots=None,
-        xrange=(0, 1),
-        order=3,
-        prefix="c",
-        domain="x",
-        basis=MSpline,
-    ):
-        self.nknots = nknots
-        self.domain = domain
-        self.xmin, self.xmax = xrange
-        self.order = order
-        self.prefix = prefix
-        self.interpolator = basis(
-            nknots,
-            knots=knots,
-            interior_knots=interior_knots,
-            xrange=xrange,
-            k=order + 1,
-        )
-        self.variable_names = [f"{self.prefix}{i}" for i in range(self.nknots)]
-        self.pe_design_matrix = jnp.array(self.interpolator(xx))
-        self.inj_design_matrix = jnp.array(self.interpolator(xx_inj))
-        self.funcs = [self.inj_pdf, self.pe_pdf]
-        self.grid = jnp.linspace(*xrange, 2500)
-        self.grid_basis = self.interpolator(self.grid)
-
-    def norm(self, coefs):
-        return 1.0 / (
-            sum(
-                [
-                    jnp.trapz(self.grid_basis[i, :], self.grid) * coefs[i]
-                    for i in range(self.nknots)
-                ]
-            )
-        )
-
-    def eval_spline(self, x, shape, coefs):
-        coefs = coefs.reshape(shape)
-        coefs /= jnp.sum(coefs)
-        return jnp.sum(coefs * x, axis=0) * self.norm(coefs)
-
-    def pe_pdf(self, coefs):
-        return self.eval_spline(self.pe_design_matrix, (self.nknots, 1, 1), coefs)
-
-    def inj_pdf(self, coefs):
-        return self.eval_spline(self.inj_design_matrix, (self.nknots, 1), coefs)
-
-    def __call__(self, ndim, coefs):
-        return self.funcs[ndim - 1](coefs)
-
-
-class MSplineSpinMagnitude(Base1DMSplineModel):
-    def __init__(
-        self,
-        nknots,
-        a,
-        a_inj,
-        knots=None,
-        interior_knots=None,
-        order=3,
-        prefix="c",
-        domain="a",
-    ):
-        super().__init__(
-            nknots,
-            a,
-            a_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            order=order,
-            prefix=prefix,
-            domain=domain,
-        )
-
-
-class MSplineSpinTilt(Base1DMSplineModel):
-    def __init__(
-        self,
-        nknots,
-        ct,
-        ct_inj,
-        knots=None,
-        interior_knots=None,
-        order=3,
-        prefix="x",
-        domain="cos_tilt",
-    ):
-        super().__init__(
-            nknots,
-            ct,
-            ct_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            order=order,
-            prefix=prefix,
-            domain=domain,
-            xrange=(-1, 1),
-        )
-
-
-class MSplineMass(Base1DMSplineModel):
-    def __init__(
-        self,
-        nknots,
-        m,
-        m_inj,
-        knots=None,
-        interior_knots=None,
-        mmin=2,
-        mmax=100,
-        order=3,
-        prefix="f",
-        domain="mass",
-    ):
-        super().__init__(
-            nknots,
-            m,
-            m_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            xrange=(mmin, mmax),
-            order=order,
-            prefix=prefix,
-            domain=domain,
-        )
-    
-    
-class MSplineIIDSpinMagnitudes(object):
-    def __init__(
-        self,
-        nknots,
-        a1,
-        a2,
-        a1_inj,
-        a2_inj,
-        knots=None,
-        interior_knots=None,
-        order=3,
-        prefix="c",
-    ):
-        self.primary_model = MSplineSpinMagnitude(
-            nknots=nknots,
-            a=a1,
-            a_inj=a1_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            order=order,
-            prefix=prefix,
-            domain="a_1",
-        )
-        self.secondary_model = MSplineSpinMagnitude(
-            nknots=nknots,
-            a=a2,
-            a_inj=a2_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            order=order,
-            prefix=prefix,
-            domain="a_2",
-        )
-
-    def __call__(self, ndim, coefs):
-        p_a1 = self.primary_model(ndim, coefs)
-        p_a2 = self.secondary_model(ndim, coefs)
-        return p_a1 * p_a2
-
-
-class MSplineIndependentSpinMagnitudes(object):
-    def __init__(
-        self,
-        nknots1,
-        nknots2,
-        a1,
-        a2,
-        a1_inj,
-        a2_inj,
-        knots1=None,
-        interior_knots1=None,
-        order1=3,
-        prefix1="c",
-        knots2=None,
-        interior_knots2=None,
-        order2=3,
-        prefix2="w",
-    ):
-        self.primary_model = MSplineSpinMagnitude(
-            nknots=nknots1,
-            a=a1,
-            a_inj=a1_inj,
-            knots=knots1,
-            interior_knots=interior_knots1,
-            order=order1,
-            prefix=prefix1,
-            domain="a_1",
-        )
-        self.secondary_model = MSplineSpinMagnitude(
-            nknots=nknots2,
-            a=a2,
-            a_inj=a2_inj,
-            knots=knots2,
-            interior_knots=interior_knots2,
-            order=order2,
-            prefix=prefix2,
-            domain="a_2",
-        )
-
-    def __call__(self, ndim, pcoefs, scoefs):
-        p_a1 = self.primary_model(ndim, pcoefs)
-        p_a2 = self.secondary_model(ndim, scoefs)
-        return p_a1 * p_a2
-
-
-class MSplineIIDSpinTilts(object):
-    def __init__(
-        self,
-        nknots,
-        ct1,
-        ct2,
-        ct1_inj,
-        ct2_inj,
-        knots=None,
-        interior_knots=None,
-        order=3,
-        prefix="x",
-    ):
-        self.primary_model = MSplineSpinTilt(
-            nknots=nknots,
-            ct=ct1,
-            ct_inj=ct1_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            order=order,
-            prefix=prefix,
-            domain="cos_tilt_1",
-        )
-        self.secondary_model = MSplineSpinTilt(
-            nknots=nknots,
-            ct=ct2,
-            ct_inj=ct2_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            order=order,
-            prefix=prefix,
-            domain="cos_tilt_2",
-        )
-
-    def __call__(self, ndim, coefs):
-        p_ct1 = self.primary_model(ndim, coefs)
-        p_ct2 = self.secondary_model(ndim, coefs)
-        return p_ct1 * p_ct2
-
-
-class MSplineIndependentSpinTilts(object):
-    def __init__(
-        self,
-        nknots1,
-        nknots2,
-        ct1,
-        ct2,
-        ct1_inj,
-        ct2_inj,
-        knots1=None,
-        interior_knots1=None,
-        order1=3,
-        prefix1="x",
-        knots2=None,
-        interior_knots2=None,
-        order2=3,
-        prefix2="z",
-    ):
-        self.primary_model = MSplineSpinTilt(
-            nknots=nknots1,
-            ct=ct1,
-            ct_inj=ct1_inj,
-            knots=knots1,
-            interior_knots=interior_knots1,
-            order=order1,
-            prefix=prefix1,
-            domain="cos_tilt_1",
-        )
-        self.secondary_model = MSplineSpinTilt(
-            nknots=nknots2,
-            ct=ct2,
-            ct_inj=ct2_inj,
-            knots=knots2,
-            interior_knots=interior_knots2,
-            order=order2,
-            prefix=prefix2,
-            domain="cos_tilt_2",
-        )
-
-    def __call__(self, ndim, pcoefs, scoefs):
-        p_ct1 = self.primary_model(ndim, pcoefs)
-        p_ct2 = self.secondary_model(ndim, scoefs)
-        return p_ct1 * p_ct2
-
-
-class MSplinePrimaryPowerlawRatio(object):
-    def __init__(
-        self,
-        nknots,
-        m1,
-        m1_inj,
-        mmin=2,
-        mmax=100,
-        knots=None,
-        interior_knots=None,
-        order=3,
-        prefix="c",
-    ):
-        self.primary_model = MSplineMass(
-            nknots,
-            m1,
-            m1_inj,
-            knots=knots,
-            interior_knots=interior_knots,
-            mmin=mmin,
-            mmax=mmax,
-            order=order,
-            prefix=prefix,
-            domain="mass_1",
-        )
-
-    def __call__(self, m1, q, beta, mmin, coefs):
-        p_m1 = self.primary_model(len(m1.shape), coefs)
-        p_q = powerlaw_pdf(q, beta, mmin / m1, 1)
-        return p_m1 * p_q
-    
 def load_iid_tilt_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
     xs = datadict['tilts']
     dRdct = datadict['dRdct']
     return xs, dRdct
 
 def load_ind_tilt_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
-    return datadict['tilts'], datadict['dRdct1'], datadict['dRdct2']
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_ppds.h5')
+    return datadict['tilts'], datadict['dRdct'], datadict['dRdct']
 
 def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
     xs = np.linspace(-1, 1, 1000)
@@ -447,7 +63,7 @@ def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
     return ax
 
 def load_iid_mag_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
     return datadict['mags'], datadict['dRda']
 
 def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
@@ -465,15 +81,15 @@ def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
     return ax
 
 def load_ind_mag_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5')
-    return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_ppds.h5')
+    return datadict['dRda'], datadict['dRda'], datadict['mags'], datadict['mags']
 
 
 def load_ind_posterior():
-    return dd.io.load(paths.data / 'mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5')
+    return dd.io.load(paths.data / 'bsplines_64m1_18q_ind16mag_ind12tilt_pl16z_posterior_samples.h5')
 
 def load_iid_posterior():
-    return dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5')
+    return dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5')
 
 def load_o3b_posterior(filename):
     return read_in_result(paths.data / filename).posterior
@@ -499,5 +115,553 @@ def load_o3b_paper_run_masspdf(filename):
     return marginals['mass_1'], marginals['mass_ratio'], mass_1, mass_ratio
 
 def load_mass_ppd():
-    datadict = dd.io.load(paths.data / 'mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
+
+
+class MSpline(object):
+    def __init__(
+        self,
+        n_df,
+        xrange=(0, 1),
+        k=4,
+        knots=None,
+        normalize=True,
+    ):
+        self.order = k
+        self.N = n_df
+        self.xrange = xrange
+        if knots is None:
+            interior_knots = np.linspace(*xrange, n_df - k + 2)
+            dx = interior_knots[1] - interior_knots[0]
+            knots = np.concatenate(
+                [
+                    xrange[0] - dx * np.arange(1, k)[::-1],
+                    interior_knots,
+                    xrange[1] + dx * np.arange(1, k),
+                ]
+            )
+        self.knots = knots
+        self.interior_knots = knots
+        assert len(self.knots) == self.N + self.order
+
+        self.normalize = normalize
+        self.basis_vols = np.ones(self.N)
+        if normalize:
+            grid = jnp.linspace(*xrange, 1000)
+            grid_bases = jnp.array(self.bases(grid))
+            self.basis_vols = jnp.array(
+                [jnp.trapz(grid_bases[i, :], grid) for i in range(self.N)]
+            )
+
+    def norm(self, coefs):
+        n = 1.0 / jnp.sum(self.basis_vols * coefs.flatten()) if self.normalize else 1.0
+        return n
+
+    def _basis(self, xs, i, k):
+        if self.knots[i + k] - self.knots[i] < 1e-6:
+            return np.zeros_like(xs)
+        elif k == 1:
+            v = np.zeros_like(xs)
+            v[(xs >= self.knots[i]) & (xs < self.knots[i + 1])] = 1 / (
+                self.knots[i + 1] - self.knots[i]
+            )
+            return v
+        else:
+            v = (xs - self.knots[i]) * self._basis(xs, i, k - 1) + (
+                self.knots[i + k] - xs
+            ) * self._basis(xs, i + 1, k - 1)
+            return (v * k) / ((k - 1) * (self.knots[i + k] - self.knots[i]))
+
+    def _bases(self, xs):
+        return [self._basis(xs, i, k=self.order) for i in range(self.N)]
+
+    def bases(self, xs):
+        return jnp.concatenate(self._bases(xs)).reshape(self.N, *xs.shape)
+
+    def project(self, bases, shape, coefs):
+        coefs = coefs.reshape(shape)
+        coefs /= jnp.sum(coefs)
+        return jnp.sum(coefs * bases, axis=0) * self.norm(coefs)
+
+    def eval(self, xs, shape, coefs):
+        return self.project(self.bases(xs), shape, coefs)
+
+    def __call__(self, xs, coefs):
+        return self.eval(xs, (-1, 1), coefs)
+
+
+class BSpline(MSpline):
+    def __init__(
+        self,
+        n_df,
+        xrange=(0, 1),
+        k=4,
+        knots=None,
+        normalize=False,
+    ):
+        super().__init__(
+            n_df=n_df,
+            knots=knots,
+            xrange=xrange,
+            k=k,
+            normalize=normalize,
+        )
+
+    def _bases(self, xs):
+        return [
+            (self.knots[i + self.order] - self.knots[i])
+            / self.order
+            * self._basis(xs, i, k=self.order)
+            for i in range(self.N)
+        ]
+
+    def project(self, bases, shape, coefs):
+        coefs = coefs.reshape(shape)
+        return jnp.sum(coefs * bases, axis=0) * self.norm(coefs)
+
+
+class LogXBSpline(BSpline):
+    def __init__(self, n_df, xrange=(0.01, 1), knots=None, normalize=True, **kwargs):
+        knots = None if knots is None else np.log(knots)
+        xrange = np.log(xrange)
+        super().__init__(n_df, knots=knots, xrange=xrange, **kwargs)
+
+        self.normalize = normalize
+        self.basis_vols = np.ones(self.N)
+        if normalize:
+            self.grid = jnp.linspace(*np.exp(xrange), 1000)
+            self.grid_bases = jnp.array(self.bases(self.grid))
+
+    def bases(self, xs):
+        return super().bases(jnp.log(xs))
+
+
+class LogYBSpline(BSpline):
+    def __init__(self, n_df, xrange=(0, 1), knots=None, normalize=True, **kwargs):
+        super().__init__(n_df, knots=knots, xrange=xrange, **kwargs)
+        self.normalize = normalize
+        if normalize:
+            self.grid = jnp.linspace(*xrange, 1000)
+            self.grid_bases = jnp.array(self.bases(self.grid))
+
+    def _project(self, bases, shape, coefs):
+        coefs = coefs.reshape(shape)
+        return jnp.exp(jnp.sum(coefs * bases, axis=0))
+
+    def project(self, bases, shape, coefs):
+        return self._project(bases, shape, coefs) * self.norm(coefs)
+
+    def norm(self, coefs):
+        n = (
+            1.0 / jnp.trapz(self._project(self.grid_bases, (-1, 1), coefs), self.grid)
+            if self.normalize
+            else 1.0
+        )
+        return n
+
+
+class LogXLogYBSpline(LogYBSpline):
+    def __init__(self, n_df, xrange=(0.1, 1), knots=None, normalize=True, **kwargs):
+        knots = None if knots is None else np.log(knots)
+        xrange = np.log(xrange)
+        super().__init__(n_df, knots=knots, xrange=xrange, **kwargs)
+
+        self.normalize = normalize
+        self.basis_vols = np.ones(self.N)
+        if normalize:
+            self.grid = jnp.linspace(*jnp.exp(xrange), 1500)
+            self.grid_bases = jnp.array(self.bases(self.grid))
+
+    def bases(self, xs):
+        return super().bases(jnp.log(xs))
+
+    def project(self, bases, shape, coefs):
+        return self._project(bases, shape, coefs) * self.norm(coefs)
+    
+    
+class Base1DMSplineModel(object):
+    def __init__(
+        self,
+        nknots,
+        xx,
+        xx_inj,
+        knots=None,
+        xrange=(0, 1),
+        order=3,
+        prefix="c",
+        domain="x",
+        basis=MSpline,
+        **kwargs,
+    ):
+        self.nknots = nknots
+        self.domain = domain
+        self.xmin, self.xmax = xrange
+        self.order = order
+        self.prefix = prefix
+        self.interpolator = basis(
+            nknots,
+            knots=knots,
+            xrange=xrange,
+            k=order + 1,
+            **kwargs,
+        )
+        self.variable_names = [f"{self.prefix}{i}" for i in range(self.nknots)]
+        self.pe_design_matrix = jnp.array(self.interpolator.bases(xx))
+        self.inj_design_matrix = jnp.array(self.interpolator.bases(xx_inj))
+        self.funcs = [self.inj_pdf, self.pe_pdf]
+
+    def eval_spline(self, bases, shape, coefs):
+        return self.interpolator.project(bases, shape, coefs)
+
+    def pe_pdf(self, coefs):
+        return self.eval_spline(self.pe_design_matrix, (self.nknots, 1, 1), coefs)
+
+    def inj_pdf(self, coefs):
+        return self.eval_spline(self.inj_design_matrix, (self.nknots, 1), coefs)
+
+    def __call__(self, ndim, coefs):
+        return self.funcs[ndim - 1](coefs)
+
+
+class MSplineSpinMagnitude(Base1DMSplineModel):
+    def __init__(
+        self,
+        nknots,
+        a,
+        a_inj,
+        knots=None,
+        order=3,
+        prefix="c",
+        domain="a",
+        **kwargs,
+    ):
+        super().__init__(
+            nknots,
+            a,
+            a_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            domain=domain,
+            **kwargs,
+        )
+
+
+class MSplineSpinTilt(Base1DMSplineModel):
+    def __init__(
+        self,
+        nknots,
+        ct,
+        ct_inj,
+        knots=None,
+        order=3,
+        prefix="x",
+        domain="cos_tilt",
+        **kwargs,
+    ):
+        super().__init__(
+            nknots,
+            ct,
+            ct_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            domain=domain,
+            xrange=(-1, 1),
+            **kwargs,
+        )
+
+
+class MSplineChiEffective(Base1DMSplineModel):
+    def __init__(
+        self,
+        nknots,
+        chieff,
+        chieff_inj,
+        knots=None,
+        order=3,
+        prefix="x",
+        domain="chi_eff",
+        **kwargs,
+    ):
+        super().__init__(
+            nknots,
+            chieff,
+            chieff_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            domain=domain,
+            xrange=(-1, 1),
+            **kwargs,
+        )
+        
+class MSplineRatio(Base1DMSplineModel):
+    def __init__(
+        self,
+        nknots,
+        q,
+        q_inj,
+        qmin=0,
+        knots=None,
+        order=3,
+        prefix="u",
+        **kwargs,
+    ):
+        super().__init__(
+            nknots,
+            q,
+            q_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            xrange=(qmin, 1),
+            domain="mass_ratio",
+            **kwargs,
+        )
+
+
+class MSplineMass(Base1DMSplineModel):
+    def __init__(
+        self,
+        nknots,
+        m,
+        m_inj,
+        knots=None,
+        mmin=2,
+        mmax=100,
+        order=3,
+        prefix="f",
+        domain="mass",
+        **kwargs,
+    ):
+        super().__init__(
+            nknots,
+            m,
+            m_inj,
+            knots=knots,
+            xrange=(mmin, mmax),
+            order=order,
+            prefix=prefix,
+            domain=domain,
+            **kwargs,
+        )
+
+class MSplineIIDSpinMagnitudes(object):
+    def __init__(
+        self,
+        nknots,
+        a1,
+        a2,
+        a1_inj,
+        a2_inj,
+        knots=None,
+        order=3,
+        prefix="c",
+        **kwargs,
+    ):
+        self.primary_model = MSplineSpinMagnitude(
+            nknots=nknots,
+            a=a1,
+            a_inj=a1_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            domain="a_1",
+            **kwargs,
+        )
+        self.secondary_model = MSplineSpinMagnitude(
+            nknots=nknots,
+            a=a2,
+            a_inj=a2_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            domain="a_2",
+            **kwargs,
+        )
+
+    def __call__(self, ndim, coefs):
+        p_a1 = self.primary_model(ndim, coefs)
+        p_a2 = self.secondary_model(ndim, coefs)
+        return p_a1 * p_a2
+
+
+class MSplineIndependentSpinMagnitudes(object):
+    def __init__(
+        self,
+        nknots1,
+        nknots2,
+        a1,
+        a2,
+        a1_inj,
+        a2_inj,
+        knots1=None,
+        order1=3,
+        prefix1="c",
+        knots2=None,
+        order2=3,
+        prefix2="w",
+        **kwargs,
+    ):
+        self.primary_model = MSplineSpinMagnitude(
+            nknots=nknots1,
+            a=a1,
+            a_inj=a1_inj,
+            knots=knots1,
+            order=order1,
+            prefix=prefix1,
+            domain="a_1",
+            **kwargs,
+        )
+        self.secondary_model = MSplineSpinMagnitude(
+            nknots=nknots2,
+            a=a2,
+            a_inj=a2_inj,
+            knots=knots2,
+            order=order2,
+            prefix=prefix2,
+            domain="a_2",
+            **kwargs,
+        )
+
+    def __call__(self, ndim, pcoefs, scoefs):
+        p_a1 = self.primary_model(ndim, pcoefs)
+        p_a2 = self.secondary_model(ndim, scoefs)
+        return p_a1 * p_a2
+
+
+class MSplineIIDSpinTilts(object):
+    def __init__(
+        self,
+        nknots,
+        ct1,
+        ct2,
+        ct1_inj,
+        ct2_inj,
+        knots=None,
+        order=3,
+        prefix="x",
+        **kwargs,
+    ):
+        self.primary_model = MSplineSpinTilt(
+            nknots=nknots,
+            ct=ct1,
+            ct_inj=ct1_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            domain="cos_tilt_1",
+            **kwargs,
+        )
+        self.secondary_model = MSplineSpinTilt(
+            nknots=nknots,
+            ct=ct2,
+            ct_inj=ct2_inj,
+            knots=knots,
+            order=order,
+            prefix=prefix,
+            domain="cos_tilt_2",
+            **kwargs,
+        )
+
+    def __call__(self, ndim, coefs):
+        p_ct1 = self.primary_model(ndim, coefs)
+        p_ct2 = self.secondary_model(ndim, coefs)
+        return p_ct1 * p_ct2
+
+
+class MSplineIndependentSpinTilts(object):
+    def __init__(
+        self,
+        nknots1,
+        nknots2,
+        ct1,
+        ct2,
+        ct1_inj,
+        ct2_inj,
+        knots1=None,
+        order1=3,
+        prefix1="x",
+        knots2=None,
+        order2=3,
+        prefix2="z",
+        **kwargs,
+    ):
+        self.primary_model = MSplineSpinTilt(
+            nknots=nknots1,
+            ct=ct1,
+            ct_inj=ct1_inj,
+            knots=knots1,
+            order=order1,
+            prefix=prefix1,
+            domain="cos_tilt_1",
+            **kwargs,
+        )
+        self.secondary_model = MSplineSpinTilt(
+            nknots=nknots2,
+            ct=ct2,
+            ct_inj=ct2_inj,
+            knots=knots2,
+            order=order2,
+            prefix=prefix2,
+            domain="cos_tilt_2",
+            **kwargs,
+        )
+
+    def __call__(self, ndim, pcoefs, scoefs):
+        p_ct1 = self.primary_model(ndim, pcoefs)
+        p_ct2 = self.secondary_model(ndim, scoefs)
+        return p_ct1 * p_ct2
+
+
+class MSplinePrimaryMSplineRatio(object):
+    def __init__(
+        self,
+        nknots_m,
+        nknots_q,
+        m1,
+        m1_inj,
+        q,
+        q_inj,
+        knots_m=None,
+        knots_q=None,
+        order_m=3,
+        order_q=3,
+        prefix_m="c",
+        prefix_q="q",
+        m1min=3.0,
+        m2min=3.0,
+        mmax=100.0,
+        basis_m=MSpline,
+        basis_q=MSpline,
+        **kwargs,
+    ):
+        self.primary_model = MSplineMass(
+            nknots_m,
+            m1,
+            m1_inj,
+            knots=knots_m,
+            mmin=m1min,
+            mmax=mmax,
+            order=order_m,
+            prefix=prefix_m,
+            domain="mass_1",
+            basis=basis_m,
+            **kwargs,
+        )
+        self.ratio_model = MSplineRatio(
+            nknots_q,
+            q,
+            q_inj,
+            qmin=m2min / mmax,
+            knots=knots_q,
+            order=order_q,
+            prefix=prefix_q,
+            basis=basis_q,
+            **kwargs,
+        )
+
+    def __call__(self, ndim, mcoefs, qcoefs):
+        return self.ratio_model(ndim, qcoefs) * self.primary_model(ndim, mcoefs)
