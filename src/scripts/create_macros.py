@@ -74,8 +74,7 @@ def MSplineIIDSpinMacros():
     frac_neg_cts = np.array(frac_neg_cts)
     posts = load_iid_posterior()
     mags, a_pdfs = load_iid_mag_ppd()
-    return {'beta': save_param_cred_intervals(posts['beta']),
-            'a_90percentile': save_param_cred_intervals(get_percentile(a_pdfs, mags, 90)),
+    return {'a_90percentile': save_param_cred_intervals(get_percentile(a_pdfs, mags, 90)),
             'lamb': save_param_cred_intervals(posts['lamb']),
             'peakCosTilt': save_param_cred_intervals(peak_tilts), 
             'log10gammaFrac': save_param_cred_intervals(np.log10(gamma_fracs)), 
@@ -111,8 +110,7 @@ def MSplineIndSpinMacros():
     frac_neg_cts2 = np.array(frac_neg_cts2)
     posts = load_ind_posterior()
     a1_pdfs, a2_pdfs, mags, mags = load_ind_mag_ppd()
-    return {'beta': save_param_cred_intervals(posts['beta']),
-            'lamb': save_param_cred_intervals(posts['lamb']),
+    return {'lamb': save_param_cred_intervals(posts['lamb']),
             'a1_90percentile': save_param_cred_intervals(get_percentile(a1_pdfs, mags, 90)),
             'a2_90percentile': save_param_cred_intervals(get_percentile(a2_pdfs, mags, 90)),
             'peakCosTilt1': save_param_cred_intervals(peak_tilts1), 'peakCosTilt2': save_param_cred_intervals(peak_tilts2), 
@@ -125,18 +123,18 @@ def chi_eff():
     default = ppds["Default"]
     msplind = ppds["MSplineInd"]
     mspliid = ppds['MSplineIID']
-    msplchieff = dd.io.load(paths.data / "mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5")
-    below_0 = {'default': [], 'iid': [], 'ind': [], 'chieff': [], 'gaussian': []}
-    below_m0p3 = {'default': [], 'iid': [], 'ind': [], 'chieff': [], 'gaussian': []}
-    maxchis = {'default': [], 'iid': [], 'ind': [], 'chieff': [], 'gaussian': []}
+    #msplchieff = dd.io.load(paths.data / "mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5")
+    below_0 = {'default': [], 'iid': [], 'ind': [], 'gaussian': []}#'chieff': [], 
+    below_m0p3 = {'default': [], 'iid': [], 'ind': [], 'gaussian': []}#'chieff': [], 
+    maxchis = {'default': [], 'iid': [], 'ind': [], 'gaussian': []}#'chieff': [], 
     with open(paths.data / "gaussian-spin-xeff-xp-ppd-data.json",'r') as jf:
         gaussian_data = json.load(jf)
         gauschieff = {'pchieff': np.array(gaussian_data['chi_eff_pdfs']), 'chieffs': np.array(gaussian_data['chi_eff_grid'])}
-    for i in range(1500):
-        norm = np.trapz(msplchieff['dRdchieff'][i, :], x=msplchieff['chieffs'])
-        below_m0p3['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<-0.3], x=msplchieff['chieffs'][msplchieff['chieffs']<-0.3]))
-        below_0['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<0.0], x=msplchieff['chieffs'][msplchieff['chieffs']<0.0]))
-        maxchis['chieff'].append(msplchieff['chieffs'][np.argmax(msplchieff['dRdchieff'][i])])
+    #for i in range(1500):
+    #    norm = np.trapz(msplchieff['dRdchieff'][i, :], x=msplchieff['chieffs'])
+    #    below_m0p3['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<-0.3], x=msplchieff['chieffs'][msplchieff['chieffs']<-0.3]))
+    #    below_0['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<0.0], x=msplchieff['chieffs'][msplchieff['chieffs']<0.0]))
+    #    maxchis['chieff'].append(msplchieff['chieffs'][np.argmax(msplchieff['dRdchieff'][i])])
     for j in range(500):
         for k,v in zip(['default', 'ind', 'iid', 'gaussian'], [default, msplind, mspliid, gauschieff]):
             below_m0p3[k].append(np.trapz(v['pchieff'][j,v['chieffs']<-0.3], x=v['chieffs'][v['chieffs']<-0.3]))
