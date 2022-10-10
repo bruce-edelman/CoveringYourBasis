@@ -52,12 +52,11 @@ dependencies:
 datasets:
 #  10.5072/zenodo.1107940:
 #    contents:
-#      mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5: src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5
-#      mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_posterior_samples.h5: src/data/mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_posterior_samples.h5
-#      mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5: src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5
-#      mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5: src/data/mspline_50m1_16iid_compspins_smoothprior_powerlaw_q_z_ppds.h5
-#      mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5: src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_ppds.h5
-#      mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5: src/data/mspline_50m1_16ind_compspins_smoothprior_powerlaw_q_z_posterior_samples.h5     
+#      bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5: src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5
+#      bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_posterior_samples.h5: src/data/bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_posterior_samples.h5
+#      bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5: src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
+#      bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_ppds.h5: src/data/bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_ppds.h5
+#      plbspline_38n_mspline_12n_iid_compsins_8chains_ppds.h5: src/data/plbspline_38n_mspline_12n_iid_compsins_8chains_ppds.h5
   10.5281/zenodo.5655785:
       contents:
         GWTC-3-population-data.tar.gz:

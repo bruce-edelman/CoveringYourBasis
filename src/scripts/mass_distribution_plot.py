@@ -39,10 +39,10 @@ plspl_ms, plspl_mpdfs, plspl_qs, plspl_qpdfs = load_plsplinemass_ppd()
 bspl_ms, bspl_mpdfs, bspl_qs, bspl_qpdfs = load_bsplinemass_ppd()
 
 for ax, xs, ps, lab in zip([axs], [ms], [m_pdfs], ['m1']):
-    ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PL+Peak', col='tab:blue', bounds=True, fill_alpha=0.15)
-    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PL+Spline', col='tab:green', bounds=True, fill_alpha=0.15)
+    ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PL+Peak', col='tab:blue', bounds=False)#, fill_alpha=0.15)
+    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', lab='PL+Spline', col='tab:green', bounds=False)#, fill_alpha=0.15)
     #ax = plot_mean_and_90CI(ax, xs, ps, color='tab:red', label='MSpline', fill_alpha=0.125)
-    #ax = plot_mean_and_90CI(ax, plspl_ms, plspl_mpdfs, color='tab:purple', label='PL+BSpline', bounds=True, fill_alpha=0.125)
+    ax = plot_mean_and_90CI(ax, plspl_ms, plspl_mpdfs, color='tab:purple', label='PL+BSpline', bounds=False)#, fill_alpha=0.125)
     ax = plot_mean_and_90CI(ax, bspl_ms, bspl_mpdfs, color='tab:red', label='LogLogBSpline', bounds=True, fill_alpha=0.125)
     ax.legend(frameon=False, fontsize=14);
     ax.set_xlabel(r'$m_1 \,\,[M_\odot]$', fontsize=18)
