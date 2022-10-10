@@ -23,7 +23,7 @@ knots = np.concatenate([xmin-np.arange(1,k)[::-1]*dx, interior_knots, xmax+dx*np
 
 coef = np.array([1./ndof]*ndof)
 grid = np.linspace(xmin, xmax, 2500)
-basis = MSpline(ndof, k=k, knots=knots)(grid)
+basis = MSpline(ndof, k=k, knots=knots).bases(grid)
 
 color_cycle = iter(plt.cm.get_cmap(cmap)(np.linspace(0.3, .9,ndof)[::-1]))
 total_color = iter(plt.cm.get_cmap(cmap)([0.05]))
