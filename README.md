@@ -15,7 +15,7 @@
 </a>
 </p>
 
-# Cover Your Basis: Comprehensive Model Agnostic Probes of the Binary Black Hole Population
+# Cover Your Basis: Comprehensive Data-Driven Probes of the Binary Black Hole Population
 
 ## [Download Paper PDF](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/ms.pdf) -- [Download Paper Source](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/arxiv.tar.gz)
 
@@ -60,7 +60,6 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
   - [x] Penalized Splines and Smoothing
   - [x] Hierarchical Bayesian Inference
   - [ ] Model specification
-  - [ ] Validation Studies
 
 ## Non-Writing Paper TODO's
 - High Priority
@@ -68,9 +67,6 @@ Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writ
   - [x] Make Table for Model appendix
 - Medium Priority
   - [ ] Decide on Author List 
-  - [ ] Final title?
+  - [x] Final title?
 - Low Priority
   - [x] Make showyourwork widget buttons not overlap figure captions
-  - [ ] Add validation study Appendix
-    - [ ] Simulation script
-    - [ ] Figures
