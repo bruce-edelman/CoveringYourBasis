@@ -75,26 +75,29 @@ For a spline basis with $n$ degree's of freedom, and a difference penalty of ord
 the smoothing prior is defined as:
 
 \begin{eqnarray}
-\tau_\lambda \sim \Gamma(a, b) \\
-p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D}_{r}^{\mathrm{T}} \bm{D}_r \bm{c}  \big] e^{-n\bm{c}}
+\bm{c} \sim \mathcal{N}(0, \sigma) \\
+p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D}_{r}^{\mathrm{T}} \bm{D}_r \bm{c}  \big] 
 \end{eqnarray}
 
-\noindent Above $\bm{D}_r$ is the order-$r$ difference matrix, of shape $(n-r \times n)$ and $\Gamma(a,b)$ the Gamma distribution with shape parameters, $a$ and $b$. 
-This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. The $\tau_\lambda$ controls the ``strength'' of 
-smoothing, or the inverse variance of the Gaussian priors on knot differences. When there are a very large number of knots, 
-such that your domain is densely populated with basis coefficients, this allows the freedom for the model to find the smoothing 
-scale that the data prefers. One downside of this prior specification as noted in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}, is the dependence on 
-one's choice of value for the $b$ hyperparameter in the Gamma distribution for $\tau_\lambda$. The models introduced in \citet{Jullion2007RobustSO} show how 
-to alleviate this. W model $\tau_\lambda$ with a mixture model composed of multiple Gamma distributions each with varying values for $b$. 
-With this we now have the full prior on $\tau_\lambda$ as:
+\noindent Above $\bm{D}_r$ is the order-$r$ difference matrix, of shape $(n-r \times n)$, and $\mathcal{N}(0,\sigma)$ a Gaussian distribution with zero mean 
+and standard deviation, $\sigma$. This smoothing prior removes the strong dependence on number and location of knots that arises with using splines. 
+The $\tau_\lambda$ controls the ``strength'' of the smoothing, or the inverse variance of the Gaussian priors on knot differences. We 
+place uniform priors on $\tau_\lambda$ marginalize over this smoothing scale hyperparameter to let the data inform the optimal scale needed.
+When there are a very large number of knots, such that your domain is densely populated with basis coefficients, this allows the freedom for the model to find the smoothing 
+scale that the data prefers. 
 
-\begin{align}
-    \bm{p} \sim \mathcal{D}(m) \\
-    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_i)
-\end{align}
+%One downside of this prior specification as noted in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}, is the dependence on 
+%one's choice of value for the $b$ hyperparameter in the Gamma distribution for $\tau_\lambda$. The models introduced in \citet{Jullion2007RobustSO} show how 
+%to alleviate this. W model $\tau_\lambda$ with a mixture model composed of multiple Gamma distributions each with varying values for $b$. 
+%With this we now have the full prior on $\tau_\lambda$ as:
 
-\noindent Above $\mathcal{D}(m)$, denotes a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
-and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
+%\begin{align}
+%    \bm{p} \sim \mathcal{D}(m) \\
+%    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_i)
+%\end{align}
+
+%\noindent Above $\mathcal{D}(m)$, denotes a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
+%and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
 
 %Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
 %that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly
@@ -190,6 +193,44 @@ The total hyper-posterior marginalized over the merger rate and the uncertainty 
     N_\mathrm{obs} \log \mu(\Lambda, \lambda) + \frac{3N_\mathrm{obs} + N_\mathrm{obs}^2}{2N_\mathrm{eff}} + \mathcal{O}(N_\mathrm{eff}^{-2}).
 \end{equation}
 
+
+\begin{table*}[hb!]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Model} & \textbf{Parameter} & \textbf{Description} & \textbf{Prior} \\ \hline \hline
+    \multicolumn{4}{|c|}{\textbf{Primary Mass Model Parameters}} \\ \hline
+    \textsc{B-Spline} & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$ \\ \cline{2-4} 
+     & $\tau_\lambda$ & Smoothing Prior Scale & U(1,100) \\ \cline{2-4}
+     & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+     & $n$ & number of knots in the basis spline & 64 \\ \cline{2-4} 
+    \multicolumn{4}{|c|}{\textbf{Mass Ratio Model Parameters}} \\ \hline
+    \textsc{B-Spline} & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$ \\ \cline{2-4} 
+     & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
+     & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+     & $n$ & number of knots in the basis spline & 18 \\ \cline{2-4}  
+    \multicolumn{4}{|c|}{\textbf{Redshift Evolution Model Parameters}} \\ \hline
+    \textsc{PowerLaw+B-Spline} & $\lambda$ & slope of redshift evolution power law $(1+z)^\lambda$ &  $\sim \mathcal{N}(0,3)$ \\ \cline{2-4}
+    & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$ \\ \cline{2-4} 
+     & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
+     & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+     & $n$ & number of knots in the basis spline & 16 \\ \cline{2-4} 
+    \multicolumn{4}{|c|}{\textbf{Spin Distribution Model Parameters}} \\ \hline
+    \textsc{B-Spline Magnitude} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
+    & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
+    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+    & $n$ & number of knots in the basis spline & 18 \\ \cline{2-4} 
+    \textsc{B-Spline Tilt} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
+    & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
+    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
+    & $n$ & number of knots in the basis spline & 16 \\ \cline{2-4} 
+    \end{tabular}
+    \caption{All hyperparameter prior choices for each of the newly introduced basis spline models from this manuscript. See appendix 
+    \ref{sec:basis_splines} and \ref{sec:psplines} for more detailed description of basis spline or smoothing prior parameters.}
+    \label{tab:model_priors}
+\end{table*} 
+
+
 We explicitly enumerate each of the models used in this work for $p(\theta|\Lambda)$, along with 
 their respective hyperparameters and prior distributions in the next section. To calculate draw 
 samples of the hyperparameters from the hierarchical posterior distribution shown in equation \ref{importance-posterior}, we use the 
@@ -197,43 +238,10 @@ NUTS Hamiltonian Monte Carlo sampler in \textsc{NumPyro} and \textsc{Jax} to cal
 
 \section{Model specification} \label{sec:modelpriors}
 
-\begin{table*}[ht!]
-    \centering
-    \begin{tabular}{|l|l|l|l|}
-    \hline
-    \textbf{Model} & \textbf{Parameter} & \textbf{Description} & \textbf{Prior} \\ \hline \hline
-    \multicolumn{4}{|c|}{\textbf{Primary Mass Model Parameters}} \\ \hline
-    \textsc{M-Spline} & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$ \\ \cline{2-4} 
-     & $\tau_\lambda$ & Smoothing Prior Scale & $\sum_i^m p_i \Gamma(1, b_i)$ \\ \cline{2-4}
-     & $\bm{p}$ & Hyper-Parameter weights on smoothing scale mixture prior & $\sim \mathcal{D}(m)$ \\ \cline{2-4}
-     & $b_m$ & array of different concentration parameters for $\Gamma$ distribution & equal in $[10^{-9},10^{-1}]$ \\ \cline{2-4} 
-     & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
-     & $n$ & number of knots in the basis spline & 50 \\ \cline{2-4} 
-     & $m$ & number of mixture components for prior on $\tau_\lambda$ & 24  \\ \hline \hline
-    \multicolumn{4}{|c|}{\textbf{Mass Ratio Model Parameters}} \\ \hline
-    \textsc{PowerLaw Mass Ratio} & $\beta$ & slope of the mass ratio power law & $\sim \mathcal{N}(0,2)$ \\ \cline{2-4} 
-    & $m_\mathrm{min}$ & minimum BH mass & 3\msun  \\ \hline \hline    
-    \multicolumn{4}{|c|}{\textbf{Redshift Evolution Model Parameters}} \\ \hline
-    \textsc{PowerLaw Redshift} & $\lambda$ & slope of redshift evolution power law $(1+z)^\lambda$ &  $\sim \mathcal{N}(0,2)$ \\ \hline \hline
-    \multicolumn{4}{|c|}{\textbf{Spin Distribution Model Parameters}} \\ \hline
-    \textsc{M-Spline Magnitude} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
-    & $\tau_\lambda$ & Smoothing Prior Scale & $\sum_i^m p_i \Gamma(1, 10^{-3})$ \\ \cline{2-4}
-    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
-    & $n$ & number of knots in the basis spline & 16 \\ \hline
-    \textsc{M-Spline Tilt} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
-    & $\tau_\lambda$ & Smoothing Prior Scale & $\sim \Gamma(1, 10^{-3})$ \\ \cline{2-4}
-    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
-    & $n$ & number of knots in the basis spline & 16 \\ \hline
-    \textsc{M-Spline Effective} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, r, n)$  \\ \cline{2-4} 
-    & $\tau_\lambda$ & Smoothing Prior Scale & $\sim \Gamma(1, 10^{-3})$ \\ \cline{2-4}
-    & $r$ & order of the difference matrix for smoothing prior & 2 \\ \cline{2-4} 
-    & $n$ & number of knots in the basis spline & 24 \\ \hline
-    \end{tabular}
-\end{table*} 
-
-
-\bruce{Need to fill this section in and put tables with specific hyperparameter/prior settings made}
-
-%\section{Validation Studies} \label{sec:validation}
-
-%bruce{Need to fill this section}
+For each of the distributions with basis spline distributions, we have 2 fixed hyperparameters to specify. The number of degrees of freedom, $n$, and the difference 
+penalty order for the smoothing prior, $r$. Additionally, one must choose a prior distribution on the smoothing prior scale hyperparameter, $\tau_\lambda$, which we take to be Uniform. 
+For the primary mass distribution we model the log probability with a B-Spline interpolated in $\log(m_1)$ space. We follow a similar scheme for the models in mass ratio and spin, but since 
+these parameters have natural hard boundaries we model the log probability with B-Splines interpolated in $q$, $a_i$ or $\cos{\theta_i}$ space. The 
+redshift distribution is also lacking of a natural upper boundary, which we mitigate by using a semi parametric approach where B-Splines model modulations to the 
+simpler underlying \textsc{PowerlawRedshift} model. We both these B-Spline modulations in log probability interpolated in $\log z$ space. We enumerate each of our specific model hyperparameter 
+and prior choices in table \ref{tab:model_priors}.

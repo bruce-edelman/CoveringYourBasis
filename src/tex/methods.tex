@@ -16,7 +16,7 @@ knots linearly spaced in $\log(m_1)$ in the range of support given our observati
 $k$-th order B-Spline function with basis coefficients, $\bm{c}$. We follow the same procedure for the models in mass ratio and spin distributions with knots spaced linearly across each domain, 
 so that we have $\log(p(\theta | \bm{c}_\theta)) \propto B_{k}(\theta | \bm{c}_\theta)$, where $\theta$ can be $q$, $a_1$, $a_2$, $\cos{\theta_1}$ or $\cos{\theta_2}$. 
 For the spin magnitude and tilt distributions we construct two versions of the model: first, we model  
-each component's distribution is independently and identically distribution (IID), where we have a single B-Spline model and parameters (coefficients) for each binary spin. 
+each component's distribution as independently and identically distribution (IID), where we have a single B-Spline model and parameters (coefficients) for each binary spin. 
 Secondly, we model each component's distribution to be unique, fitting separate sets of coefficients for the B-Spline models of the primary and secondary spin distributions. 
 Lastly, we fit a population model on the redshift or luminosity distance distribution of BBHs, assuming a $\Lambda\mathrm{CDM}$ cosmology defined by the parameters 
 from the Planck 2015 results \citep{Planck2015}. This defines an analytical mapping between each event's inferred luminosity distance, and it's redshift, which we now use interchangeably. 

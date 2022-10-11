@@ -39,3 +39,4 @@ GWPopulation
 Bilby
 Dynesty
 AstroPy
+semi-parameteric
