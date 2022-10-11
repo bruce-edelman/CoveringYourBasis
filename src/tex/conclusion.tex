@@ -1,40 +1,44 @@
 \section{Astrophysical Implications}\label{sec:astrodiscussion}
 
-The collective distribution of BBH source properties provides a useful probe of the complex and uncertain astrophysics that governs their 
-formation and evolution to eventually merge \citep{Zevin_2017}. Our analysis with the newly constructed M-Spline models corroborates important 
-conclusions of recent work and provides a robust data-driven framework for future population studies. 
+The collective distribution of BBH source properties provides a useful probe of the complex and uncertain astrophysics that govern their 
+formation and evolution until merger \citep{Zevin_2017}. Our analyses with the newly constructed B-spline models uncover hints new features in the population (e.g., in mass ratio and redshift) and corroborates important 
+conclusions of recent work, and provides a robust data-driven framework for future population studies. 
 
 % mass dist
 The results presented in section \ref{sec:mass_dist} illustrate a much wider mass distribution than inferred with power-law based models in \citet{o3b_astro_dist}. 
-While isolated formation is able to predict the $10\msun$ peak \citep{Antonini_2020}, cluster and dynamical formation scenarios struggle to predict a peak in the BH mass distribution less than 
-$15-20\msun$ \citep{Hong_2018, Rodriguez_2019}. Globular cluster formation is expected to produce more top-heavy mass distributions than isolated and recent studies have shown suppressed BBH merger rates 
+While isolated formation could explain the $10\msun$ peak \citep{Antonini_2020}, cluster and dynamical formation scenarios struggle to predict a peak in the BH mass distribution less than 
+$15-20\msun$ \citep{Hong_2018, Rodriguez_2019}. Globular cluster formation is expected to produce more top-heavy mass distributions than isolated channels, and recent studies have shown suppressed BBH merger rates 
 at lower ($m\leq15\msun$) masses when compared to predictions from the isolated channel \citep{Rodriguez_2015, Rodriguez_2019, BaveraMassTransfer,Belczynski_2016}. BBHs that form near active galactic nuclei (AGN) can preferentially produce higher 
-mass black holes \citep{FordAGN, Tagawa_2021, Yang_2019}. We do not find any evidence for a truncation or rapid decline in the merger rate as a function of mass, that stellar evolution theory predicts 
+mass black holes \citep{FordAGN, Tagawa_2021, Yang_2019}. We do not find any evidence for a truncation or rapid decline in the merger rate as a function of mass, which stellar evolution theory predicts 
 due to pair-instability supernovae (PISNe) \citep{Heger_2002,PISN_Woosley,Heger_2003,Spera_2017}. The original motivation for the peak in the \textsc{PowerlawPeak} model \citep{Talbot_2018} was to represent a possible ``pileup'' of 
 masses just before such truncation, since massive stars just light enough to avoid PISN will shed large amounts of mass in a series of ``pulses'' before collapsing to BHs in a process called 
-pulsational pair-instability supernova (PPISN) \citep{Woosley_2017,Woosley_2019,Farmer_2019}. While the predictions of the mass scale where pair-instability kicks in are uncertain and depend on poorly understood physics, 
-like nuclear reaction rates of carbon and oxygen in the core of stars, models have a hard time predicting this peak to be lower than $m\sim40\msun$ \citep{Belczynski_2016,Marchant_2019,Renzo_2020,Farmer_2019,Farmer_2020}. The lack of a truncation could 
+pulsational pair-instability supernova (PPISN) \citep{Woosley_2017,Woosley_2019,Farmer_2019}. While the predictions of the mass scale where pair-instability kicks in are uncertain and depend on poorly understood physics 
+like nuclear reaction rates of carbon and oxygen in the core of stars, models have a hard time producing this peak lower than $m\sim40\msun$ \citep{Belczynski_2016,Marchant_2019,Renzo_2020,Farmer_2019,Farmer_2020}. The lack of a truncation could 
 point towards a higher prevalence of dynamical processes that can produce black holes in mass ranges stellar collapse cannot, such as hierarchical mergers of BHs \citep{Fishbach_2017,Doctor_2020,Kimball_genealogy,kimball2020evidence,doctor2021black,Fishbach_2022}, 
-very low metallicity population III stars \citep{Belczynski_2020,Farrell_2020}, new beyond the standard model physics\citep{Croon_newphysics,Sakstein_2020}, or black hole accretion of BHs in gaseous environments such as AGNs \citep{Secunda_2020,McKernan_2020,cruzosorio2021gw190521}. 
+very low metallicity population III stars \citep{Belczynski_2020,Farrell_2020}, new beyond-standard-model physics\citep{Croon_newphysics,Sakstein_2020}, or black hole accretion of BHs in gaseous environments such as AGNs \citep{Secunda_2020,McKernan_2020,cruzosorio2021gw190521}. 
+
+Our constraints on the mass ratio distribution are not yet precise enough to claim diffinitive departures from power law behaviour, but do suggest possible plateaus in the rate at several mass ratios, including equal mass.  These features should sharpen (or resolve) with future updates to the catalog.
 
 % spin dist
 Section \ref{sec:spin_dist} focused on inferences of the spin distributions of black holes, observing evidence of spin misalignment, spin anti-alignment, and suppressed support 
-for exactly aligned systems. These point towards a significant contribution of the population being formed through dynamical formation processes, agreeing with 
+for exactly aligned systems. These point towards a significant contribution to the population from dynamical formation processes, agreeing with 
 conclusions drawn about the mass distribution inference of section \ref{sec:mass_dist}. While field formation is expected to produce systems with preferentially 
 aligned spins due to tidal interactions, observational evidence suggests that tides may not be able to re-align spins in all systems as some 
 isolated population models assume. Additionally, because of uncertain knowledge of supernovae kicks, isolated formation can produce systems with negative but small effective spins. 
 We report an effective spin distribution that is not symmetric about zero, disfavoring a scenario in which all BBHs are formed dynamically. Following the rules in \citet{Fishbach_2022}, 
 we place conservative upper bounds on the fraction of hierarchical mergers $f_\mathrm{HM}$ and fraction of dynamically formed BBHs, $f_\mathrm{dyn}$ with 
-the M-Spline $\chi_\mathrm{eff}$ model constraining $f_\mathrm{HM} < $\result{$\macros[ChiEffective][iid][frac_hm][10th percentile]$} 
+the B-spline $\chi_\mathrm{eff}$ model constraining $f_\mathrm{HM} < $\result{$\macros[ChiEffective][iid][frac_hm][10th percentile]$} 
 and $f_\mathrm{dyn} < $\result{$\macros[ChiEffective][iid][frac_dyn][10th percentile]$} at 90\% credibility. 
+
+Finally, section \ref{sec:redshift} shows potentially interesting evolution of the BBH merger rate with redshift.  Though uncertainties are still large, we may be seeing the first signs of departure from following the star formation rate.  Again, we expect these features to be resolved with future catalogs.
 
 \section{Conclusions}\label{sec:conclusion}
 
 Non-parametric and data-driven statistical modeling methods have been put to use with great success across the ever-growing field of gravitational 
 waves \citep{B_Farr_etal_2014,Littenberg_2015,Mandel_2016,Edwards_2018,Doctor_GPR,Edelman_2021,Vitale_2021,Tiwari_2021_a,Tiwari_2021_b,Edelman_2022ApJ,Tiwari_2022ApJ}. 
 We presented a case study exploring how basis splines make for an especially powerful and efficient data driven method of characterizing the binary black hole population observed 
-with gravitational waves. Our study paved the way as the first completely non-parametric compact object population study, employing data driven models for each of the hierarchically 
+with gravitational waves. Our study is the first completely non-parametric compact object population study, employing data driven models for each of the hierarchically 
 modeled population distributions. A complete understanding of the population properties of compact objects will help to advance poorly understood areas of stellar and 
 nuclear astrophysics and provide a novel independent cosmological probe. With the coming influx of new data with the LVK's next observing run and the wide 
 range of research avenues the compact object population will help to uncover, development of model-agnostic methods, such as the one we proposed here, will become necessary to efficiently make
-sense of the data.  
+sense of the data.
