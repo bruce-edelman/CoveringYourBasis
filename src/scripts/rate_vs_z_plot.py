@@ -18,22 +18,22 @@ def load_o3b_rofz(zs):
 zs, dR = load_plbspline_ppd()
 pl_zs, pl_dR = load_o3b_rofz(zs)
 
-def plot_rofz(dRdz, zs, pl_dRdz, pl_zs):
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(7, 4))
-    me = np.median(dRdz, axis=0)
-    ax = plot_mean_and_90CI(ax, zs, dRdz, color='tab:red', bounds=True, label='PL+BSpline', median=True, mean=False)
-    ax = plot_mean_and_90CI(ax, pl_zs, pl_dRdz, color='tab:blue', bounds=True, fill_alpha=0.2, label='PL', median=False, mean=False)
-    ax.plot(zs, me[0] * (1.0 + zs) ** 2.7, lw=5, alpha=0.15, color="k", label="SFR")
-    
-    ax.set_xlabel(r"$z$", fontsize=16)
-    ax.set_ylabel(r"$\mathcal{R}(z)$", fontsize=16)
-    ax.set_yscale("log")
-    ax.set_ylim(1,1e3)
-    ax.set_xlim(zs[0], 1.5)
-    ax.legend()
-    return fig
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(7, 5))
+me = np.median(dR, axis=0)
+ax = plot_mean_and_90CI(ax, zs, dR, color='tab:red', bounds=True, label='This Work', median=True, mean=False)
+ax = plot_mean_and_90CI(ax, pl_zs, pl_dR, color='tab:blue', bounds=True, fill_alpha=0.2, label='Abbott et. al. 2021b', median=False, mean=False)
+ax.plot(zs, me[0] * (1.0 + zs) ** 2.7, lw=5, alpha=0.25, color="k", label=r"SFR: $\lambda_z=2.7$")
 
-fig = plot_rofz(dR, zs, pl_dR, pl_zs)
+ax.set_xlabel(r"$z$", fontsize=18)
+ax.set_ylabel(r"$\mathcal{R}(z)$", fontsize=18)
+ax.set_yscale("log")
+ax.set_xscale("log")
+ax.set_ylim(5,1e3)
+ax.set_xlim(zs[0], 1.5)
+ax.legend(frameon=False, fontsize=14, loc='upper left')
+ax.grid(True, which="major", ls=":")
+ax.tick_params(labelsize=14)
+
 plt.title(r'GWTC-3: $\mathcal{R}(z)$', fontsize=18);
 fig.tight_layout()
 plt.savefig(paths.figures / 'rate_vs_z_plot.pdf', dpi=300);

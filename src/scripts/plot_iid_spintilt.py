@@ -14,18 +14,18 @@ for jj in range(len(ct_pdfs)):
 
 xmin=-1
 ax = axs
-ax = plot_o3b_spintilt(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5', ct1=True, lab='Default', col='tab:blue')
-ax = plot_mean_and_90CI(ax, xs, ct_pdfs, color='tab:red', label='MSpline')
+ax = plot_o3b_spintilt(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5', ct1=True, lab='Abbott et. al. 2021b', col='tab:blue')
+ax = plot_mean_and_90CI(ax, xs, ct_pdfs, color='tab:red', label='This Work')
 high = np.percentile(ct_pdfs, 95, axis=0)
 ax.set_xlabel(r'$\cos{\theta}$', fontsize=18)
 ax.set_ylabel(r'$p(\cos{\theta})$', fontsize=18)
 
 ax.set_xlim(xmin, xmax)
-ax.legend(frameon=False, fontsize=14);
+ax.legend(frameon=False, fontsize=14, loc='upper left');
 ax.grid(True, which="major", ls=":")
 ax.tick_params(labelsize=14)
-ax.set_ylim(0, max(high))
+ax.set_ylim(0, 2.)
 
-plt.title(f'GWTC-3: MSpline Spin Tilt Distribution', fontsize=18);
+plt.title(f'GWTC-3: Spin Tilt Distribution', fontsize=18);
 fig.tight_layout()
 plt.savefig(paths.figures / 'iid_spintilt.pdf', dpi=300);

@@ -8,17 +8,19 @@ import deepdish as dd
 def plot_mean_and_90CI(ax, xs, ar, color, label, bounds=True, CI=90, traces=None, tracecolor='k', fill_alpha=0.08, median=False, mean=True):
 
     if mean:
-        mean = np.mean(ar, axis=0)    
-        ax.plot(xs, mean, color=color, label=label, lw=5, alpha=0.75)
+        me = np.mean(ar, axis=0)    
+        ax.plot(xs, me, color=color, label=label, lw=5, alpha=0.75)
     elif median:
-        mean = np.median(ar,axis=0)
-        ax.plot(xs, mean, color=color, label=label, lw=5, alpha=0.75)
+        me = np.median(ar,axis=0)
+        ax.plot(xs, me, color=color, label=label, lw=5, alpha=0.75)
     if bounds:
         low = np.percentile(ar, (100-CI)/2., axis=0)
         high = np.percentile(ar, 100-(100-CI)/2., axis=0)
         #ax.plot(xs, low, color='k', lw=0.05, alpha=0.05)
         #ax.plot(xs, high, color='k', lw=0.05, alpha=0.05)
-        ax.fill_between(xs, low, high, color=color, alpha=fill_alpha)
+        if mean | median:
+            label=None
+        ax.fill_between(xs, low, high, color=color, alpha=fill_alpha, label=label)
     if traces is not None:
         for _ in range(traces):
             idx = np.random.choice(ar.shape[0])

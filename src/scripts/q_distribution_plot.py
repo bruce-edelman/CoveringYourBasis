@@ -28,9 +28,9 @@ fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(figx,figy))
 
 
 for ax, xs, ps, lab in zip([axs], [qs], [q_pdfs], ['q']):
-    ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=False, lab='PL+Peak', col='tab:blue', bounds=False)#, fill_alpha=0.15)
-    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=False, lab='PL+Spline', col='tab:green', bounds=False)#, fill_alpha=0.15)
-    ax = plot_mean_and_90CI(ax, qs, q_pdfs, color='tab:red', label='BSpline', bounds=True)
+    ax = plot_o3b_res(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=False, lab='PP (Abbott et. al. 2021b)', col='tab:blue', bounds=False)#, fill_alpha=0.15)
+    ax = plot_o3b_res(ax,'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5', m1=False, lab='PS (Abbott et. al. 2021b)', col='tab:green', bounds=False)#, fill_alpha=0.15)
+    ax = plot_mean_and_90CI(ax, qs, q_pdfs, color='tab:red', label='This Work', bounds=True)
     ax.legend(frameon=False, fontsize=14);
     ax.set_xlabel(r'$q$', fontsize=18)
     ax.set_ylabel(r'$p(q)$', fontsize=18)

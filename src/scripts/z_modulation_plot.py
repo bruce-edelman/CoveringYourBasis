@@ -26,22 +26,19 @@ zs, Rofz, pr_zs, pr_Rofz, lamb, pr_lamb, rate = load_plbspline_ppd()
 modulation = get_modulation(Rofz, zs, lamb, rate=rate)
 prior_modulation = get_modulation(pr_Rofz, pr_zs, pr_lamb)
 
-def plot_zmod(mod,priormod,zs):
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(7, 4))
-    ax = plot_mean_and_90CI(ax, zs, mod, color='tab:red', bounds=True, label='PL+BSpline', median=True, mean=False)
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(7, 5))
+ax = plot_mean_and_90CI(ax, zs, modulation, color='tab:red', label = 'This Work', bounds=True, median=True, mean=False)
 
-    ax.plot(pr_zs, np.percentile(priormod,5,axis=0), lw=3, ls='--', color="k", label="Prior")
-    ax.plot(pr_zs, np.percentile(priormod,95,axis=0), lw=3, ls='--', color="k")
+ax.plot(pr_zs, np.percentile(prior_modulation,5,axis=0), lw=2, ls='--', color="k", label="Prior")
+ax.plot(pr_zs, np.percentile(prior_modulation,95,axis=0), lw=2, ls='--', color="k")
+ax.axhline(0, color="k", lw=2)
 
-    ax.set_xlabel(r"$z$", fontsize=16)
-    ax.set_ylabel(r"$B(z)$", fontsize=16)
-    ax.set_xscale('log')
-    ax.set_ylim(-2,2)
-    ax.set_xlim(zs[0], zs[1])
-    ax.legend()
-    return fig
-
-fig = plot_zmod(modulation, prior_modulation, zs)
-plt.title(r'GWTC-3: Redshift Modulation$', fontsize=18);
+ax.set_xlabel(r"$z$", fontsize=18)
+ax.set_ylabel(r"$B(z)$", fontsize=18)
+ax.set_xscale('log')
+ax.set_ylim(-2,2)
+ax.set_xlim(zs[0], zs[-1])
+ax.grid(True, which="major", ls=":")
+plt.title(r'GWTC-3: Redshift Modulation', fontsize=18);
 fig.tight_layout()
 plt.savefig(paths.figures / 'z_modulation_plot.pdf', dpi=300);

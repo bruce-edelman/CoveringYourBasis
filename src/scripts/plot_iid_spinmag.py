@@ -14,19 +14,19 @@ mags, a_pdfs = load_iid_mag_ppd()
 for jj in range(len(a_pdfs)):
     a_pdfs[jj,:] /= np.trapz(a_pdfs[jj,:], mags)
 ax = axs
-ax = plot_o3b_spinmag(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5', lab='Default', col='tab:blue')
-ax = plot_mean_and_90CI(ax, mags, a_pdfs, color='tab:red', label='MSpline')
+ax = plot_o3b_spinmag(ax,'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5', lab='Abbott et. al. 2021b', col='tab:blue')
+ax = plot_mean_and_90CI(ax, mags, a_pdfs, color='tab:red', label='This Work')
 high = np.percentile(a_pdfs, 95, axis=0)
 ax.legend(frameon=False, fontsize=14);
 ax.set_xlabel(r'$a$', fontsize=18)
 ax.set_ylabel(r'$p(a)$', fontsize=18)
 
 ax.set_xlim(xmin, xmax)
-ax.set_ylim(0, max(high))
+ax.set_ylim(0, 6)
 ax.legend(frameon=False, fontsize=14);
 ax.grid(True, which="major", ls=":")
 ax.tick_params(labelsize=14)
 
-plt.title(f'GWTC-3: MSpline Spin Mag Distribution', fontsize=18);
+plt.title(f'GWTC-3: Spin Magnitude Distribution', fontsize=18);
 fig.tight_layout()
 plt.savefig(paths.figures / 'iid_spinmag.pdf', dpi=300);
