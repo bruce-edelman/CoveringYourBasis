@@ -30,14 +30,14 @@ agreeing with the \textsc{PowerlawSpline} model, the mass distribution is more u
 Additionally, there is some disagreement at low masses where the models based on power laws show a much higher rate below $\sim8--9\msun$. This is partly due to  
 the minimum mass hyperparameter, which is where the power law ``begins'' in those models. They enforce this hyperparameter as the minimum allowable primary and secondary 
 masses of the catalog. This leads to inferences of $m_\mathrm{min}$ below the minimum observed primary mass in the catalog, $\sim 6.4\msun$, to account for secondary BBH masses 
-that can possibly get to as low as $\sim 3\msun$. Since non-parametric models cannot provide meaningful insights where there is no data - we enforce the minimum primary mass of 
+that can possibly get to as low as $\sim 3\msun$. Since non-parametric models do not provide meaningful insights where there is no data - we enforce the minimum primary mass of 
 our B-Spline model to be $6.5\msun$, while secondary BBH masses are enforced to be greater than $3\msun$. The lack of observations in the low primary mass region could 
 point towards signs of a decrease in merger rate from a purported ``lower mass gap'' between neutron star and BH masses, or could be a feature of selection effects which make it 
 more unlikely to observe BBHs in that region of parameter space due to small sensitive volumes probed. We also find no evidence for a sharp fall off in merger rate either following 
 the pileup at $\sim35\,\msun$, which is expected if such a pileup was due to pulsational pair instability supernovae (PPISNe), or where the maximum mass truncation of the power law models 
 is inferred. The lack of any high mass truncation along with the most significant peak found to be at $\sim35\msun$, significantly lower than expected, may pose challenges for conventional stellar 
-evolution theory. This could be a sign of the significant presence of subpopulations that may avoid PISN as the binary forms, but the confirmation of their existence cannot be determined 
-with current catalog sizes. 
+evolution theory. This could be hinting at the significant presence of subpopulations that avoid PISN during binary formation, but the confirmation of the existence of such subpopulations 
+cannot be determined with current catalog sizes. 
 
 \begin{figure}[h]
     \includegraphics[width=\linewidth]{figures/q_distribution_plot.pdf}
@@ -49,11 +49,12 @@ with current catalog sizes.
     \script{q_distribution_plot.py}
 \end{figure}
 
-We report the B-Spline model's inferred marginal mass ratio distribution in figure \ref{fig:q_distribution}, where we can begin to see some departure from a simple 
-power law. Specifically there looks to be a small decrease or flattening of the merger rate near equal mass ratios. Then we see a small decline to flat plateau from 
-$q\sim0.3$ to $q\sim0.7$. The last step down in rate below $q\sim0.3$ is due to the minimum mass ratio truncation defined by: $q_\mathrm{min}=\frac{m_\mathrm{min}}{m_1}$. 
-When marginalizing over the primary mass distribution with a strong peak at $10\msun$, we get a strong truncation at $q\sim0.3$ which is the minimum secondary mass, $3\msun$, 
-over the most common primary mass, $10\msun$. 
+We report the B-Spline model's inferred marginal mass ratio distribution in figure \ref{fig:q_distribution}, where we can begin to see departure from a simple 
+power law. Specifically there looks to be a small decrease or flattening of the merger rate near equal mass ratios, as well as a fatter tail towards unequal mass ratios 
+than the power law based models find. Then we see a small decline to flat plateau from $q\sim0.3$ to $q\sim0.7$. The sharp decrease in rate just below 
+$q\sim0.3$ is due to the minimum mass ratio truncation defined by: $q_\mathrm{min}=\frac{m_\mathrm{min}}{m_1}$. When marginalizing over the primary mass 
+distribution with a strong peak at $10\msun$, the mass ratio distribution truncates at $q\sim0.3$: the minimum secondary mass, $3\msun$, 
+divided by the most common primary mass, $\sim10\msun$. 
 
 
 \subsection{Binary Black Hole Spins} \label{sec:spin_dist}
@@ -71,11 +72,10 @@ over the most common primary mass, $10\msun$.
 
 \subsubsection{Spin Magnitude}
 
-The \textsc{Default} spin model describes the spin magnitude of both components as identical and independently distributed (IID) non-singular Beta distributions. \bruce{cite Wysocki/Talbot}
+The \textsc{Default} spin model describes the spin magnitude of both components as identical and independently distributed (IID) non-singular Beta distributions \citep{Talbot_2017,Wysocki_2019}.
 The Beta distribution provides a simple 2-parameter model that can produce a wide range of functional forms on the unit interval. However, the constraint that keeps 
-the Beta distribution non-singular (i.e. $\alpha>1$ and $\beta>1$) enforces a spin magnitude that always has $p(a_i=0) = 0$. In reality, it is expected that 
-all physical bodies must have at least some non-zero angular momentum, studies have proposed the existence of a distinct subpopulation of non-spinning or 
-negligibly spinning black holes that can elude discovery with such a model \citep{FullerMa2019,RouletGWTC2Pop,BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin}. 
+the Beta distribution non-singular (i.e. $\alpha>1$ and $\beta>1$) enforces a spin magnitude that always has $p(a_i=0) = 0$. Recent studies have proposed the possible existence of a 
+distinct subpopulation of non-spinning or negligibly spinning black holes that can elude discovery with such a model \citep{FullerMa2019,RouletGWTC2Pop,BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin}. 
 
 \begin{figure} 
     \begin{centering}
@@ -88,26 +88,28 @@ negligibly spinning black holes that can elude discovery with such a model \cite
     \script{plot_ind_spinmag.py}
 \end{figure}
 
-We model the spin magnitude distributions as IID B-Spline distributions as a flexible check
-to the assumptions of the \textsc{Default} model. Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the B-Spline model, 
-compared with the \textsc{Default} model. The B-Spline model finds broad agreement with the beta distribution, both peaking near ~0.2, with 90\% 
-of BBH spins below \result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][a_90percentile]}$} at 90\% credibility. The regions of parameter space where they don't agree as well are at 
-the boundaries. The B-Spline model has no enforcement for vanishing support at the extremal values like the Beta distribution, 
+We model the spin magnitude distributions as IID B-Spline distributions as a flexible check to the assumptions of the \textsc{Default} model. 
+Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the B-Spline model, compared with the \textsc{Default} model. 
+The B-Spline model finds consistent agreement with the beta distribution, peaking near $a\sim0.2$, with 90\% of BBH spins below 
+\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][a_90percentile]}$} at 90\% credibility. The B-Spline model has no enforcement for vanishing support at the extremal values like the Beta distribution, 
 allowing it to probe the zero-spin question. We find broad support, with large variance, for non-zero probabilities at $a_i=0$, but cannot confidently determine the presence of 
 a significant non-spinning subpopulation, corroborating similar recent conclusions \citep{BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin}. 
 We now repeat the same analysis as above but with independent B-Spline distributions for each spin magnitude component. In figure \ref{fig:ind_spinmag_dist} 
-we show the inferred primary (orange), and secondary (olive) spin magnitude distributions inferred when relaxing the IID assumption. We find both 
-distributions to be remarkably similar, showing no signs that each component spin magnitude are distributed differently from each other.
+we show the inferred primary (orange), and secondary (olive) spin magnitude distributions inferred when relaxing the IID assumption. We find that the primary spin magnitude distribution 
+peaking slightly higher at $a\sim0.25$ than the IID B-Spline model, but with similar support at near vanishing spins. The secondary spin magnitude distribution is more uncertain due to the 
+higher measurement uncertainty in inferring the secondary spins of BBH systems. The secondary distribution also peaks at smaller spin magnitudes of $a\sim0.15$, showing considerably larger 
+PPD and confidence band at $a\sim0$ than the primary distribution or B-Spline IID spin magnitude distribution in figure \ref{fig:iid_spinmag_dist}. While the distributions are still broadly 
+consistent with each other this could also be signs pointing towards component spin magnitude distributions uniquely distributed. 
 
 \subsubsection{Spin Orientation}
 
-The \textsc{Default} spin model assumes the spin orientation of both components are identical and independently distributed (IID) mixture models over an
+The \textsc{Default} spin model also assumes the spin orientation of both components are identical and independently distributed (IID), with a mixture model over an
 aligned and an isotropic component. The aligned component is modeled with a truncated Gaussian distribution with mean at $\cos{\theta}=1$ and variance a free 
-hyperparameter to be fit. This provides a simple 2-parameter model motivated by simple distributions expected from the two main formation scenario families, allowing 
+hyperparameter to be fit \citep{Talbot_2017,Wysocki_2019,o3a_pop,o3b_astro_dist}. This provides a simple 2-parameter model motivated by simple distributions expected from the two main formation scenario families, allowing 
 for a straightforward interpretation of results. One possible limitation however, is that by construction this distribution is forced to peak at perfectly aligned spins, 
 i.e. $\cos{\theta}=1$. While this may be a reasonable assumption, \citet{spinitasyoulike} recently extended the model space of parametric descriptions 
 used to model the spin orientation distribution and found considerable evidence that the distribution peaks away from $\cos{\theta}=1$. Again, this provides a clear 
-use-case where data-driven models can help in our understanding and possibly resolve disputes among differing parametric approaches.
+use-case where data-driven models can help in our understanding of and possibly resolve disputes among differing parametric approaches to modeling the spin orientation distribution.
 
 \begin{figure}
     \begin{centering}
@@ -120,8 +122,7 @@ use-case where data-driven models can help in our understanding and possibly res
     \script{plot_iid_spintilt.py}
 \end{figure}
 
-We repeat the tests done above on the spin magnitude distributions now with the spin orientation distributions. Figure \ref{fig:iid_spintilt_dist} 
-shows the inferred spin magnitude distribution with the B-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
+Figure \ref{fig:iid_spintilt_dist} shows the inferred spin magnitude distribution with the IID spin B-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
 The B-Spline inferences have large uncertainties but start to show the same features as found and discussed in \citet{spinitasyoulike}. 
 We find a distribution that instead of intrinsically peaking at $\cos{\theta}=1$, is found to peak at: $\cos{\theta}=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][peakCosTilt]}$}, at 
 90\% credibility. We find less, but still considerable, support for misaligned spins (i.e. $\cos{\theta}<0$) as the \textsc{Default} model. Specifically we 
@@ -139,9 +140,8 @@ and positive when aligned tilts are favored. We find a $\log_{10}Y=$\result{$\CI
 slight preference for aligned tilts.  
 
 Now we model each of the components' orientation distributions with independent B-Spline models as done above, and show the inferred 
-primary (orange), and secondary (olive) distributions in figure \ref{fig:ind_spintilt_dist}. The orientation distributions do not agree quite as well as 
-the magnitude distributions did in figure \ref{fig:ind_spinmag_dist}, and the PPDs look to peak at different values, but the wide uncertainties still are 
-consistent with both each other and the \textsc{Default} model's PPD. We find the two distributions to peak at: $\cos{\theta_1}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt1]}$} 
+primary (orange), and secondary (olive) distributions in figure \ref{fig:ind_spintilt_dist}. The orientation distributions do not match perfectly, but both are broadly
+are consistent with each other and the \textsc{Default} model's PPD given the wide credible intervals. We find the two distributions to peak at: $\cos{\theta_1}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt1]}$} 
 and $\cos{\theta_2}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt2]}$}, showing that the primary distribution peak is inferred further away 
 from the assumed $\cos{\theta}=1$ with the \textsc{Default} model. There is also significant (albeit uncertain) evidence of spin misalignment in each distribution, finding 
 the fraction of misaligned primary and secondary components as: $f_{\cos{\theta_1}<0}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][negFrac1]}$} and 
@@ -195,7 +195,9 @@ $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][
     \includegraphics[width=\linewidth]{figures/rate_vs_z_plot.pdf}
     \caption{The BBH merger rate as a function of redshift. We show the B-Spline model (red), with 16 knots spaced linearly in $\log(z)$, 
     from the minimum to the maximum observed redshifts. The solid line shows the population predictive distribution (PPD) and the shaded region, 
-    the 90\% credible interval. We show the inferred PPD from the \textsc{PowerlawRedshift} (blue) model from the LVK's GWTC-3 population analyses \citep{o3b_astro_dist}.}
+    the 90\% credible interval. We show the inferred 90\% credible interval from the \textsc{PowerlawRedshift} model 
+    from the LVK's GWTC-3 population analyses in blue and a power law with exponent of 2.7 in gray, representing the expected star formation rate 
+    \citep{Madau_2014, o3b_astro_dist}.}
     \label{fig:rofz}
     \script{rate_vs_z_plot.py}
 \end{figure}

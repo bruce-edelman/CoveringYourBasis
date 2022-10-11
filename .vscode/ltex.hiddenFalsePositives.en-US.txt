@@ -7,3 +7,5 @@
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_chieff.py\\E$"}
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_iid_spintilt.py\\E$"}
 {"rule":"QUESTION_MARK","sentence":"^\\QShould they appear with more observations, this data-driven approach will provide checks of our understanding by uncovering more subtle – potentially unexpected – features.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qrate_vs_z_plot.py\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qz_modulation_plot.py\\E$"}
