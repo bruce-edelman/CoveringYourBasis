@@ -171,8 +171,8 @@ $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][
 
 \begin{figure}[h]
     \includegraphics[width=\linewidth]{figures/rate_vs_z_plot.pdf}
-    \caption{The BBH merger rate as a function of redshift. We show the B-Spline model (red), with 16 knots spaced linearly in $\log(z)$, 
-    from the minimum to the maximum observed redshifts. The solid line shows the population predictive distribution (PPD) and the shaded region, 
+    \caption{The BBH merger rate as a function of redshift. We show the B-Spline model (red) with 16 knots spaced linearly in $\log(z)$, 
+    from the minimum to the maximum observed redshifts. The solid line shows the population predictive distribution (PPD), and the shaded region 
     the 90\% credible interval. We show the inferred 90\% credible interval from the \textsc{PowerlawRedshift} model 
     from the LVK's GWTC-3 population analyses in blue and a power law with exponent of 2.7 in gray, representing the expected star formation rate 
     \citep{Madau_2014, o3b_astro_dist}.}
@@ -182,23 +182,23 @@ $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][
 
 \subsection{Binary Black Hole Merger Rates}
 
-Recent analysis of the GWTC-3 BBH population has shown confident evidence for an increasing merger rate with redshift, nearly ruling out a merger rate that is 
+Recent analysis of the GWTC-3 BBH population has shown evidence for an increasing merger rate with redshift, nearly ruling out a merger rate that is 
 constant with co-moving volume \citep{Fishbach_2018redshift,o3b_astro_dist}. When extending the power law form of the previously used model to have a modulation 
-that we model with B-Splines, the merger rate as a function of redshift in figure \ref{fig:rofz}, shows mild support for features departing from the underlying power law. 
-In particular, we see a small increase in merger rate from $z\sim0.09$ to $z\sim0.2$ (where we best constrain the rate), followed by a plateau in the rate increase from $z\sim0.2$ to $z\sim0.4$. 
+that we model with B-Splines, the merger rate as a function of redshift in figure \ref{fig:rofz} shows mild support for features departing from the underlying power law. 
+In particular, we see a small increase in merger rate from $z\sim0.09$ to $z\sim0.2$ (where we best constrain the rate), followed by a plateau in the rate from $z\sim0.2$ to $z\sim0.4$. 
 At larger redshifts, where we begin to have sparse observations, we see no sign of departure from the power-law as the rate continues to increase with redshift. 
-The underlying power-law slope of our modulated B-Spline model is very similar to the GWTC-3 results with the underlying model by itself: the \textsc{PowerlawRedshift} model 
+The underlying power-law slope of our B-spline modulated model is consistent with the GWTC-3 results with the underlying model by itself: the \textsc{PowerlawRedshift} model 
 found $\lambda_z = $\result{$\CIPlusMinus{\macros[PLPeak][lamb]}$} when inferred with the \textsc{PowerlawPeak} mass, and \textsc{Default} spin models. Our more 
-flexible model infers a power law slope of $\lambda_z = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][lamb]}$}. We show the basis spline modulations or departure 
-from the power law in \ref{fig:z_modulation} compared to the prior -- showing where we can constrain deviations from the simpler parametric model. 
+flexible model infers a power law slope of $\lambda_z = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][lamb]}$}. We show the basis spline modulations (i.e., departure 
+from the power law) in \ref{fig:z_modulation} compared to the prior -- showing where we can constrain deviations from the simpler parametric model. 
 The extra freedom of our model does inflate the rate estimates, especially at $z\sim0$ where we don't have any observations. We find a local ($z=0$) merger rate 
-of $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][local_rate]}$} for the B-Spline modulation model which compares to 
+of $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][local_rate]}$} for the B-spline modulation model which compares to 
 $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[PLPeak][local_rate]}$} for the GWTC-3 result. 
 
 \begin{figure}[h]
     \includegraphics[width=\linewidth]{figures/z_modulation_plot.pdf}
-    \caption{The B-Spline modulation to the underlying power law in redshift, (red). The solid line shows the population predictive distribution (PPD) 
-    and the shaded region, the 90\% credible interval. We show the 90\% credible interval of the prior predictive distribution in dashed black lines.}
+    \caption{The B-spline modulation to the underlying power law in redshift, (red). The solid line shows the population predictive distribution (PPD),
+    and the shaded region the 90\% credible interval. We show the 90\% credible interval of the prior predictive distribution in dashed black lines.}
     \label{fig:z_modulation}
     \script{z_modulation_plot.py}
 \end{figure}
