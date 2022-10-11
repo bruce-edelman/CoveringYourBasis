@@ -91,20 +91,19 @@ higher measurement uncertainty when inferring the secondary spins of BBH systems
 
 \subsubsection{Spin Orientation}
 
-The \textsc{Default} spin model also assumes the spin orientation of both components are identical and independently distributed (IID), with a mixture model over an
+The \textsc{Default} spin model (used by \citet{o3b_astro_dist}) also assumes the spin orientation of both components are identical and independently distributed (IID), with a mixture model over an
 aligned and an isotropic component. The aligned component is modeled with a truncated Gaussian distribution with mean at $\cos{\theta}=1$ and variance a free 
 hyperparameter to be fit \citep{Talbot_2017,Wysocki_2019,o3a_pop,o3b_astro_dist}. This provides a simple 2-parameter model motivated by simple distributions expected from the two main formation scenario families, allowing 
 for a straightforward interpretation of results. One possible limitation however, is that by construction this distribution is forced to peak at perfectly aligned spins, 
 i.e. $\cos{\theta}=1$. While this may be a reasonable assumption, \citet{spinitasyoulike} recently extended the model space of parametric descriptions 
 used to model the spin orientation distribution and found considerable evidence that the distribution peaks away from $\cos{\theta}=1$. Again, this provides a clear 
-use-case where data-driven models can help in our understanding of and possibly resolve disputes among differing parametric approaches to modeling the spin orientation distribution.
+use-case where data-driven models can help us understand the population.
 
 \begin{figure}
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/iid_spintilt.pdf}
-        \caption{The spin orientation distribution inferred with the B-Spline model (red), with 16 knots spaced linearly from -1 to 1, and 
-        assuming the components are IID. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
-        We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+        \caption{The spin orientation distribution inferred with the B-Spline model (red) with 16 knots spaced linearly from -1 to 1, and assuming the components are IID. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
+        For comparison, we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:iid_spintilt_dist}
     \end{centering}
     \script{plot_iid_spintilt.py}
@@ -113,23 +112,20 @@ use-case where data-driven models can help in our understanding of and possibly 
 Figure \ref{fig:iid_spintilt_dist} shows the inferred spin magnitude distribution with the IID spin B-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
 The B-Spline inferences have large uncertainties but start to show the same features as found and discussed in \citet{spinitasyoulike}. 
 We find a distribution that instead of intrinsically peaking at $\cos{\theta}=1$, is found to peak at: $\cos{\theta}=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][peakCosTilt]}$}, at 
-90\% credibility. We find less, but still considerable, support for misaligned spins (i.e. $\cos{\theta}<0$) as the \textsc{Default} model. Specifically we 
+90\% credibility. We find less, but still considerable support for misaligned spins (i.e. $\cos{\theta}<0$), compared to the \textsc{Default} model. Specifically we 
 find that the fraction of misaligned systems is $f_{\cos{\theta}<0}=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][negFrac]}$}. This implies 
 the presence of an isotropic component as expected by dynamical formation channels, albeit less than with the \textsc{Default} model. To quantify the 
 amount of isotropy in the tilt distribution we calculate $\log_{10}Y$, where $Y$ is the ratio of nearly aligned tilts to nearly anti-aligned, 
 introduced in \citet{spinitasyoulike} and defined as:
-
 \begin{equation}
-    Y \equiv \frac{\int_{0.9}^{1.0} d\cos{\theta} p(\cos{\theta})}{\int_{-1.0}^{-0.9} d\cos{\theta} p(\cos{\theta})}
+    Y \equiv \frac{\int_{0.9}^{1.0} d\cos{\theta} p(\cos{\theta})}{\int_{-1.0}^{-0.9} d\cos{\theta} p(\cos{\theta})}.
 \end{equation}
+The log this quantity, $\log_{10}Y$, is 0 for tilt distribution that is purely isotropic, negative when anti-aligned values are favored, 
+and positive when aligned tilts are favored. We find a $\log_{10}Y=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][log10gammaFrac]}$}, exhibiting a slight preference for aligned tilts.  
 
-\noindent Now the log this quantity, $\log_{10}Y$, is 0 for tilt distribution that is purely isotropic, negative when anti-aligned values are favored, 
-and positive when aligned tilts are favored. We find a $\log_{10}Y=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][log10gammaFrac]}$}, exhibiting a 
-slight preference for aligned tilts.  
-
-Now we model each of the components' orientation distributions with independent B-Spline models as done above, and show the inferred 
-primary (orange), and secondary (olive) distributions in figure \ref{fig:ind_spintilt_dist}. The orientation distributions do not match perfectly, but both are broadly
-are consistent with each other and the \textsc{Default} model's PPD given the wide credible intervals. We find the two distributions to peak at: $\cos{\theta_1}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt1]}$} 
+We also model each component's orientation distribution with an independent B-Spline model as done above, and show the inferred 
+primary (orange), and secondary (olive) distributions in figure \ref{fig:ind_spintilt_dist}. The orientation distributions are broadly
+consistent with each other and the \textsc{Default} model's PPD given the wide credible intervals. We find the two distributions to peak at: $\cos{\theta_1}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt1]}$} 
 and $\cos{\theta_2}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt2]}$}, showing that the primary distribution peak is inferred further away 
 from the assumed $\cos{\theta}=1$ with the \textsc{Default} model. There is also significant (albeit uncertain) evidence of spin misalignment in each distribution, finding 
 the fraction of misaligned primary and secondary components as: $f_{\cos{\theta_1}<0}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][negFrac1]}$} and 
@@ -140,9 +136,8 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
 \begin{figure}
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/ind_spintilt.pdf}
-        \caption{The primary (orange) and secondary (olive) spin orientation distributions inferred with the B-Spline model, 
-        with 16 knots spaced linearly from -1 to 1. The solid line shows the population predictive distribution (PPD) and the shaded region, the 90\% credible interval. 
-        We show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+        \caption{The primary (orange) and secondary (olive) spin orientation distributions inferred with the B-Spline model with 16 knots spaced linearly from -1 to 1. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
+        For comparison we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:ind_spintilt_dist}
     \end{centering}
     \script{plot_ind_spintilt.py}
