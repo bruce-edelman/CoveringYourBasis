@@ -40,3 +40,5 @@ Bilby
 Dynesty
 AstroPy
 semi-parameteric
+isotropically
+ShowYourWork
