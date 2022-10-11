@@ -148,8 +148,7 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
 \begin{figure} 
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/chi_eff.pdf}
-        \caption{The effective spin distribution inferred with the B-Spline IID spin model (red). The solid line shows the population predictive 
-        distribution (PPD) and the shaded region, the 90\% credible interval. We show the inferred $\chi_\mathrm{eff}$ 
+        \caption{The effective spin distribution inferred with the B-Spline IID spin model (red). The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. We show the inferred $\chi_\mathrm{eff}$ 
         PPD from the independent component spin B-Spline model (purple), and both the \textsc{Default} (blue) model and the 
         Gaussian $\chi_\mathrm{eff}$ (green) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:chieff_dist}
@@ -157,18 +156,15 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
     \script{plot_chieff.py}
 \end{figure}
 
-While the component spin magnitude and tilts are more easily interpretable in context of the astrophysics, they are parameters that 
-are not measured well during individual event parameter estimation. The best measured spin parameter, that enters the waveform at XXPN, is 
-called the effective spin defined as: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. Figure \ref{fig:chieff_dist} 
+While the component spin magnitudes and tilts are more directly tied to formation physics, they are typically poorly measured.  The best-measured spin quantity, which enters at the highest post-Newtownian order, is the effective spin: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. Figure \ref{fig:chieff_dist} 
 shows the inferred effective spin distribution with the two versions of our B-Spline models (red and purple), 
 along with results on the \textsc{Default} and \textsc{Gaussian} models from \citet{o3b_astro_dist}. We find considerable agreement 
-among the effective spin distributions, but the more flexible B-Spline models in component spins, more closely resemble the \textsc{Gaussian} 
-that directly models $\chi_\mathrm{eff}$, than the \textsc{Default} model. This could be signs that the population fit is driven by $\chi_\mathrm{eff}$ 
+among the effective spin distributions, but the more flexible B-Spline models in component spins more closely resemble results form the \textsc{Gaussian} model that directly models $\chi_\mathrm{eff}$, than the \textsc{Default} model. This could indicate that the population fit is driven by $\chi_\mathrm{eff}$ 
 more than the component spin dimensions. The B-Spline model finds very similar shapes to the other models, with a peak centered at 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$}, compared to 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} with the \textsc{Default} model and 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$} with the \textsc{Gaussian} $\chi_\mathrm{eff}$ model. 
-As for the misaligned spin question, we calculate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and 
+As for spin misalignment, we calculate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and 
 find for the B-Spline model $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$}, compared to 
 $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} with the \textsc{Default} model and 
 $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$} with the Gaussian $\chi_\mathrm{eff}$ model.
