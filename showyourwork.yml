@@ -58,8 +58,8 @@ dependencies:
   src/scripts/z_modulation_plot.py:
     - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5
     - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
-    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5
-    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_prior_samples.h5
+    - src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_prior_ppds.h5
 datasets:
   10.5072/zenodo.1112614:
     contents:
