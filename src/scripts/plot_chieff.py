@@ -8,21 +8,21 @@ from utils import plot_mean_and_90CI
 fig, ax = plt.subplots(1,1,figsize=(7,5))
 ppds = dd.io.load(paths.data / "chi_eff_ppds.h5")
 default = ppds["Default"]
-mspl = ppds["MSplineInd"]
-mspl2 = ppds['MSplineIID']
+mspl = ppds["BSplineInd"]
+mspl2 = ppds['BSplineIID']
 ax = plot_mean_and_90CI(ax, default["chieffs"], default["pchieff"], color='tab:blue', label='Default', bounds=False)
-ax = plot_mean_and_90CI(ax, mspl["chieffs"], mspl["pchieff"], color='tab:purple', label='MSpline-Ind Spin', bounds=False)
-ax = plot_mean_and_90CI(ax, mspl2["chieffs"], mspl2["pchieff"], color='tab:red', label='MSpline-IID Spin', bounds=True, fill_alpha=0.125)
+ax = plot_mean_and_90CI(ax, mspl["chieffs"], mspl["pchieff"], color='tab:purple', label='BSpline-Ind Spin', bounds=False)
+ax = plot_mean_and_90CI(ax, mspl2["chieffs"], mspl2["pchieff"], color='tab:red', label='BSpline-IID Spin', bounds=True, fill_alpha=0.125)
 
 #handpicked_ppds = dd.io.load(
-#    paths.data / "mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5"
+#    paths.data / "BSpline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5"
 #)
 #xs = handpicked_ppds["chieffs"]
 #pchiefss = handpicked_ppds["dRdchieff"]
 #for i in range(1500):
 #    norm = np.trapz(pchiefss[i, :], x=xs)
 #    pchiefss[i, :] /= norm
-#ax = plot_mean_and_90CI(ax, xs, pchiefss, color='tab:red', label='MSpline Chi Eff')
+#ax = plot_mean_and_90CI(ax, xs, pchiefss, color='tab:red', label='BSpline Chi Eff')
 
 with open(paths.data / "gaussian-spin-xeff-xp-ppd-data.json", 'r') as jf:
     o3b_gaussian_data = json.load(jf)

@@ -154,8 +154,8 @@ def main():
     o3b_default_spin_result = read_in_result(paths.data / "o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json")
     chi_effs_o3b_default = draw_chieff_samples_gwpop(o3b_default_spin_result, DefaultSpinMagModel, DefaultSpinTiltModel, MassModel)
     pchieffs_def, chieffs_def = chi_eff_kde_ppd(chi_effs_o3b_default)
-    datadict = {'MSplineInd': {'pchieff': pchieffs, 'chieffs': chieffs}, 
-                'MSplineIID': {'pchieff': pchieffs_iid, 'chieffs': chieffs_iid}, 
+    datadict = {'BSplineInd': {'pchieff': pchieffs, 'chieffs': chieffs}, 
+                'BSplineIID': {'pchieff': pchieffs_iid, 'chieffs': chieffs_iid}, 
                 'Default': {'pchieff':pchieffs_def, 'chieffs':chieffs_def}}
     dd.io.save(paths.data / "chi_eff_ppds.h5", datadict)
 

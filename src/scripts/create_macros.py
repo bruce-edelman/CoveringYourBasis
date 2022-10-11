@@ -38,7 +38,7 @@ def get_percentile(pdfs, xs, perc):
         x.append(xs[i])
     return np.array(x)
 
-def MSplineMassMacros():
+def BSplineMassMacros():
     print("Saving Mass Distribution Macros...")
     ms, m_pdfs, _, _ = load_mass_ppd()
     m1s = get_percentile(m_pdfs, ms, 1)
@@ -53,11 +53,11 @@ def MSplineMassMacros():
     ps_m99s = get_percentile(ps_mpdfs, ps_ms, 99)
     ps_m75s = get_percentile(ps_mpdfs, ps_ms, 75)  
     return {'PLPeak': {'m_1percentile': save_param_cred_intervals(plpeak_m1s), 'm_75percentile': save_param_cred_intervals(plpeak_m75s), 'm_99percentile': save_param_cred_intervals(plpeak_m99s)}, 
-            'MSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_75percentile': save_param_cred_intervals(m75s), 'm_99percentile': save_param_cred_intervals(m99s)}, 
+            'BSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_75percentile': save_param_cred_intervals(m75s), 'm_99percentile': save_param_cred_intervals(m99s)}, 
             'PLSpline': {'m_1percentile': save_param_cred_intervals(ps_m1s), 'm_75percentile': save_param_cred_intervals(ps_m75s), 'm_99percentile': save_param_cred_intervals(ps_m99s)}}
 
-def MSplineIIDSpinMacros():
-    print("Saving MSpline IID Component Spin macros...")
+def BSplineIIDSpinMacros():
+    print("Saving BSpline IID Component Spin macros...")
     xs, ct_pdfs = load_iid_tilt_ppd()
     peak_tilts = []
     gamma_fracs = []
@@ -76,12 +76,13 @@ def MSplineIIDSpinMacros():
     mags, a_pdfs = load_iid_mag_ppd()
     return {'a_90percentile': save_param_cred_intervals(get_percentile(a_pdfs, mags, 90)),
             'lamb': save_param_cred_intervals(posts['lamb']),
+            'local_rate': save_param_cred_intervals(posts['rate']),
             'peakCosTilt': save_param_cred_intervals(peak_tilts), 
             'log10gammaFrac': save_param_cred_intervals(np.log10(gamma_fracs)), 
             'negFrac': save_param_cred_intervals(frac_neg_cts)}
 
-def MSplineIndSpinMacros():
-    print("Saving MSpline Independent Component Spin macros...")
+def BSplineIndSpinMacros():
+    print("Saving BSpline Independent Component Spin macros...")
     xs, ct1_pdfs, ct2_pdfs = load_ind_tilt_ppd()
     peak_tilts1 = []
     peak_tilts2 = []
@@ -111,6 +112,7 @@ def MSplineIndSpinMacros():
     posts = load_ind_posterior()
     a1_pdfs, a2_pdfs, mags, mags = load_ind_mag_ppd()
     return {'lamb': save_param_cred_intervals(posts['lamb']),
+            'local_rate': save_param_cred_intervals(posts['rate']),
             'a1_90percentile': save_param_cred_intervals(get_percentile(a1_pdfs, mags, 90)),
             'a2_90percentile': save_param_cred_intervals(get_percentile(a2_pdfs, mags, 90)),
             'peakCosTilt1': save_param_cred_intervals(peak_tilts1), 'peakCosTilt2': save_param_cred_intervals(peak_tilts2), 
@@ -121,9 +123,9 @@ def chi_eff():
     print("Saving ChiEffective macros...")
     ppds = dd.io.load(paths.data / "chi_eff_ppds.h5")
     default = ppds["Default"]
-    msplind = ppds["MSplineInd"]
-    mspliid = ppds['MSplineIID']
-    #msplchieff = dd.io.load(paths.data / "mspline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5")
+    BSplined = ppds["BSplineInd"]
+    mspliid = ppds['BSplineIID']
+    #msplchieff = dd.io.load(paths.data / "BSpline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5")
     below_0 = {'default': [], 'iid': [], 'ind': [], 'gaussian': []}#'chieff': [], 
     below_m0p3 = {'default': [], 'iid': [], 'ind': [], 'gaussian': []}#'chieff': [], 
     maxchis = {'default': [], 'iid': [], 'ind': [], 'gaussian': []}#'chieff': [], 
@@ -136,7 +138,7 @@ def chi_eff():
     #    below_0['chieff'].append(np.trapz(1./norm*msplchieff['dRdchieff'][i, msplchieff['chieffs']<0.0], x=msplchieff['chieffs'][msplchieff['chieffs']<0.0]))
     #    maxchis['chieff'].append(msplchieff['chieffs'][np.argmax(msplchieff['dRdchieff'][i])])
     for j in range(500):
-        for k,v in zip(['default', 'ind', 'iid', 'gaussian'], [default, msplind, mspliid, gauschieff]):
+        for k,v in zip(['default', 'ind', 'iid', 'gaussian'], [default, BSplined, mspliid, gauschieff]):
             below_m0p3[k].append(np.trapz(v['pchieff'][j,v['chieffs']<-0.3], x=v['chieffs'][v['chieffs']<-0.3]))
             below_0[k].append(np.trapz(v['pchieff'][j,v['chieffs']<0.0], x=v['chieffs'][v['chieffs']<0.0]))
             maxchis[k].append(v['chieffs'][np.argmax(v['pchieff'][j])])
@@ -152,15 +154,16 @@ def chi_eff():
 def PLPeakMacros():
     posterior = load_o3b_posterior('o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json')
     return {'beta': save_param_cred_intervals(posterior['beta']), 
+            'local_rate': save_param_cred_intervals(posterior['rate']),
             'lamb': save_param_cred_intervals(posterior['lamb'])}
 
 def main():
     macro_dict = {}
     macro_dict["PLPeak"] = PLPeakMacros()
-    macro_dict["MSplineIndependentCompSpins"] = MSplineIndSpinMacros()
-    macro_dict["MSplineIIDCompSpins"] = MSplineIIDSpinMacros()
+    macro_dict["BSplineIndependentCompSpins"] = BSplineIndSpinMacros()
+    macro_dict["BSplineIIDCompSpins"] = BSplineIIDSpinMacros()
     macro_dict["ChiEffective"] = chi_eff()
-    macro_dict['MassDistribution'] = MSplineMassMacros()
+    macro_dict['MassDistribution'] = BSplineMassMacros()
     
     print("Saving macros to src/data/macros.json...")
     with open(paths.data / "macros.json", 'w') as f:
