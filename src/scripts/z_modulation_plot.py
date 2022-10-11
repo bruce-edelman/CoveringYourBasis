@@ -19,7 +19,7 @@ def get_modulation(R,z,L,rate=None):
             rate_of_z = R[i,:] / rate[i]
         else:
             rate_of_z = R[i,:]
-        mod[i,:] = np.log(rate_of_z / (1+z)**(L[i]-1))
+        mod[i,:] = np.log(rate_of_z / (1+z)**(L[i]))
     return mod
 
 zs, Rofz, pr_zs, pr_Rofz, lamb, pr_lamb, rate = load_plbspline_ppd()
@@ -30,8 +30,8 @@ def plot_zmod(mod,priormod,zs):
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(7, 4))
     ax = plot_mean_and_90CI(ax, zs, mod, color='tab:red', bounds=True, label='PL+BSpline', median=True, mean=False)
 
-    ax.plot(zs, np.percentile(priormod,5,axis=0), lw=3, ls='--', color="k", label="Prior")
-    ax.plot(zs, np.percentile(priormod,95,axis=0), lw=3, ls='--', color="k")
+    ax.plot(pr_zs, np.percentile(priormod,5,axis=0), lw=3, ls='--', color="k", label="Prior")
+    ax.plot(pr_zs, np.percentile(priormod,95,axis=0), lw=3, ls='--', color="k")
 
     ax.set_xlabel(r"$z$", fontsize=16)
     ax.set_ylabel(r"$B(z)$", fontsize=16)
