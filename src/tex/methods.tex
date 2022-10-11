@@ -1,28 +1,26 @@
 \section{Building the Model} \label{sec:methods}
 
-We construct our data-driven model with the application of basis splines, or B-Splines \citep{deBoor78}. B-Splines of order $k$, are a set of order $k-1$ polynomials that 
-span the space of possible spline functions interpolated from a given set of knot locations. The basis representation of the splines allows for the computational 
+We construct our data-driven model with the application of basis splines, or B-Splines \citep{deBoor78}. B-Splines of order $k$ are a set of order $k-1$ polynomials that 
+span the space of possible spline functions interpolated from a given set of knot locations. The basis representation of the splines allows for the computationally
 expensive interpolation to be done in a single preprocessing step -- amortizing the cost of model evaluation during inference. To mitigate the unwanted side effects of 
-adding extra knots and to avoid running a model grid of differing numbers of knots (as in \citet{Edelman_2022ApJ}), we use the smoothing prior for Bayesian P-Splines, 
-allowing the data to pick the optimal scale needed to fit the present features \citep{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}. We discuss basis splines, the smoothing prior 
-and our specific prior choices on hyperparameters in Appendix \ref{sec:basis_splines}, \ref{sec:psplines} and \ref{sec:modelpriors}. 
+adding extra knots and to avoid running a model grid of differing numbers of knots (as in \citet{Edelman_2022ApJ}), we use the smoothing prior for Bayesian P-Splines \citep{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}, 
+allowing the data to pick the optimal scale needed to fit the present features. We discuss basis splines, the smoothing prior, and our specific prior choices on hyperparameters in Appendix \ref{sec:basis_splines}, \ref{sec:psplines} and \ref{sec:modelpriors}.
 
-We parameterize each binaries' masses with the primary (more massive component) mass 
-and the mass ratio ($q=\frac{m_2}{m_1}$), bounded in the range from 0 to 1. Furthermore, we model 4 of the 6 total 
-spin degrees of freedom of a binary merger with each component spin magnitude $a_1$ and $a_2$, along with the cosine of the tilt angle of each component, 
-$\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binaries orbital angular momentum vector. 
+We parameterize each binaries' masses with the primary (more massive component) mass ($m_1$) 
+and the mass ratio ($q=m_2/m_1$) with support from 0 to 1. Furthermore, we model 4 of the 6 total 
+spin degrees of freedom of a binary merger: component spin magnitudes $a_1$ and $a_2$, and (cosine of) the tilt angles of each component, $\cos{\theta_1}$ and $\cos{\theta_2}$. The tilt angle is defined as the angle between each components' spin vector and the binary's orbital angular momentum vector. 
 We assume the polar spin angles are uniformly distributed in the orbital plane. For the primary mass distribution, we model the log probability with a B-Spline interpolated over 
 knots linearly spaced in $\log(m_1)$ in the range of support given our observations ($[6.5\msun-100\msun]$), such that $\log(p(m_1 | \bm{c})) \propto B_{k}(\log(m_1) | \bm{c})$, where $B_{k}$ is the 
-$k$-th order B-Spline function with basis coefficients, $\bm{c}$. We follow the same procedure for the models in mass ratio and spin distributions with knots spaced linearly across each domain, 
+$k$-th order B-Spline function with basis coefficients $\bm{c}$. We follow the same procedure for the models in mass ratio and spin distributions with knots spaced linearly across each domain 
 so that we have $\log(p(\theta | \bm{c}_\theta)) \propto B_{k}(\theta | \bm{c}_\theta)$, where $\theta$ can be $q$, $a_1$, $a_2$, $\cos{\theta_1}$ or $\cos{\theta_2}$. 
 For the spin magnitude and tilt distributions we construct two versions of the model: first, we model  
 each component's distribution as independently and identically distribution (IID), where we have a single B-Spline model and parameters (coefficients) for each binary spin. 
 Secondly, we model each component's distribution to be unique, fitting separate sets of coefficients for the B-Spline models of the primary and secondary spin distributions. 
 Lastly, we fit a population model on the redshift or luminosity distance distribution of BBHs, assuming a $\Lambda\mathrm{CDM}$ cosmology defined by the parameters 
-from the Planck 2015 results \citep{Planck2015}. This defines an analytical mapping between each event's inferred luminosity distance, and it's redshift, which we now use interchangeably. 
+from the Planck 2015 results \citep{Planck2015}. This defines an analytical mapping between each event's inferred luminosity distance, and its redshift, which we now use interchangeably. 
 We take a semi-parametric approach to model the evolution of the merger rate with redshift, following \citet{Edelman_2022ApJ}, that parameterizes modulations to an underlying model 
-with splines (in our case basis Splines). We use the \textsc{PowerlawRedshift} model as the underlying distribution to modulate, which has a single hyperparameter, $\lambda_z$, and 
+with splines (in our case basis splines). We use the \textsc{PowerlawRedshift} model as the underlying distribution to modulate, which has a single hyperparameter, $\lambda_z$, and 
 probability density defined as: $p(z|\lambda_z)\propto \frac{dV_c}{dz}(1+z)^{\lambda_z-1}$ \citep{Fishbach_2018redshift}. For more detailed descriptions of each model and 
-specific prior choices used for the hyperparameters fit in Appendix \ref{sec:modelpriors}. Now that we have our comprehensive data-driven population model over 
+specific prior choices used for the hyperparameters see Appendix \ref{sec:modelpriors}. Now that we have our comprehensive data-driven population model over 
 each of the 7 modeled parameters built, we fit our model using the usual hierarchical Bayesian inference framework (see appendix \ref{sec:hierarchical_inference} for a review) in order to characterize 
-the population of BBHs in the most recent catalog of GW observations, GWTC-3 \citep{GWTC3,o3b_astro_dist}. 
+the population of BBHs in the most recent catalog of GW observations, GWTC-3 \citep{GWTC3,o3b_astro_dist}.

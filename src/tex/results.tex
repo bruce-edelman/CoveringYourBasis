@@ -1,18 +1,18 @@
 \section{Binary Black Hole Population Inference with GWTC-3} \label{sec:results}
 
-We use hierarchical Bayesian inference (see Appendix \ref{sec:hierarchical_inference}) to simultaneously infer the astrophysical mass, spin and redshift distributions of 
+We use hierarchical Bayesian inference (see Appendix \ref{sec:hierarchical_inference}) to simultaneously infer the astrophysical mass, spin, and redshift distributions of 
 binary black holes (BBHs) given a catalog of gravitational wave observations. Following the same cut on the recent GWTC-3 catalog done in the LVK's 
 accompanying BBH population analysis, we have 70 possible BBH mergers with false alarm rates less than 1 per year \citep{GWTC3,o3b_astro_dist}. Since it was concluded to be an outlier of the rest of 
 the BBH population in both GWTC-2 and GWTC-3, we choose to omit the poorly understood event, GW190814 \citep{190814disc,o3a_pop,o3b_astro_dist,Essick_2022}. This leaves us with 
-a catalog of 69 confident BBH mergers, observed over a period of about 2 years, from which we want to infer its population properties. Our study provides the first comprehensive 
-data-driven investigation of the BBH mass, spin and redshift distributions, uncovering new insights and corroborating those found with other methods. 
-We start by looking towards our model's inferences of the mass distribution.
+a catalog of 69 confident BBH mergers, observed over a period of about 2 years, from which we want to infer population properties. Our study provides the first comprehensive 
+data-driven investigation of the BBH mass, spin, and redshift distributions, uncovering new insights and corroborating those found with other methods. 
+We start with our inference of the mass distribution.
 
 \begin{figure*}[ht!]
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/mass_distribution_plot.pdf}
         \caption{The marginal primary mass distribution inferred with the B-Spline model (red), with 64 knots spaced linearly in $\log m_1$, from 6.5\msun 
-        to 100\msun. The solid line shows the population predictive distribution (PPD) and the shaded region, 
+        to 100\msun. The solid line shows the population predictive distribution (PPD), and the shaded region 
         the 90\% credible interval. We show the inferred PPD from the \textsc{PowerlawPeak} (blue) and \textsc{PowerlawSpline} (green) models 
         from the LVK's GWTC-3 population analyses \citep{o3b_astro_dist}.}
         \label{fig:mass_distribution}
@@ -22,22 +22,16 @@ We start by looking towards our model's inferences of the mass distribution.
 
 \subsection{Binary Black Hole Masses} \label{sec:mass_dist}
 
-Figure \ref{fig:mass_distribution} shows the primary mass distribution inferred with our B-Spline model (red), where we see that it recovered consistent 
-features with what was inferred with the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \citep{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
-In particular our B-Spline model finds a peak in merger rate density as a function of primary mass, at both $\sim10\msun$ and $\sim35\msun$ agreeing with those 
-reported using the same dataset in \citet{o3b_astro_dist}. The B-Spline model finds the same feature at $\sim18\msun$ as the \textsc{PowerlawSpline} model, but also 
-agreeing with the \textsc{PowerlawSpline} model, the mass distribution is more uncertain and less constrained in this region than other two confident peaks found.
-Additionally, there is some disagreement at low masses where the models based on power laws show a much higher rate below $\sim8-9\msun$. This is partly due to  
-the minimum mass hyperparameter, which is where the power law ``begins'' in those models. They enforce this hyperparameter as the minimum allowable primary and secondary 
-masses of the catalog. This leads to inferences of $m_\mathrm{min}$ below the minimum observed primary mass in the catalog, $\sim 6.4\msun$, to account for secondary BBH masses 
-that can possibly get to as low as $\sim 3\msun$. Since non-parametric models do not provide meaningful insights where there is no data - we enforce the minimum primary mass of 
-our B-Spline model to be $6.5\msun$, while secondary BBH masses are enforced to be greater than $3\msun$. The lack of observations in the low primary mass region could 
-point towards signs of a decrease in merger rate from a purported ``lower mass gap'' between neutron star and BH masses, or could be a feature of selection effects which make it 
-more unlikely to observe BBHs in that region of parameter space due to small sensitive volumes probed. We also find no evidence for a sharp fall off in merger rate either following 
-the pileup at $\sim35\,\msun$, which is expected if such a pileup was due to pulsational pair instability supernovae (PPISNe), or where the maximum mass truncation of the power law models 
-is inferred. The lack of any high mass truncation along with the most significant peak found to be at $\sim35\msun$, significantly lower than expected, may pose challenges for conventional stellar 
-evolution theory. This could be hinting at the significant presence of subpopulations that avoid PISN during binary formation, but the confirmation of the existence of such subpopulations 
-cannot be determined with current catalog sizes. 
+Figure \ref{fig:mass_distribution} shows the primary mass distribution inferred with our B-Spline model (red), where we see features consistant with those inferred by the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \citep{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
+In particular our B-Spline model finds peaks in merger rate density as a function of primary mass at both $\sim10\msun$ and $\sim35\msun$, agreeing with those 
+reported using the same dataset in \citet{o3b_astro_dist}. The B-Spline model finds the same feature at $\sim18\msun$ as the \textsc{PowerlawSpline} model, but remains consistent with the \textsc{PowerlawSpline} model; the mass distribution is more uncertain in this region.
+We find the largest disagreement at low masses, where the power-law-based models show a higher rate below ${\sim}8-9\msun$. This is partly due to the minimum mass hyperparameter (where the power law ``begins'') serving as the minimum allowable primary and secondary masses of the catalog. This leads to inferences of $m_\mathrm{min}$ below the minimum observed primary mass in the catalog, $\sim 6.4\msun$, to account for secondary BBH masses 
+that can possibly get as low as $\sim 3\msun$. We choose a minimum primary mass for 
+the B-Spline model to be $6.5\msun$, while secondary masses are enforced to be greater than $3\msun$. The lack of observations of binaries with low primary mass make rate estimates in this region strongly model and prior dependent.  We could be seeing signs of a decrease in merger rate from a ``lower mass gap'' between neutron star and BH masses, or we could be seeing fluctuations due to low-number statistics.  Either way we explect this to be resolved with future catalog updates. We also find no evidence for a sharp fall off in merger rate either following 
+the pileup at $\sim35\,\msun$ -- expected if such a pileup was due to pulsational pair instability supernovae (PPISNe) -- or where the maximum mass truncation of the power law models 
+are inferred. The lack of any high mass truncation, along with the peak at $\sim35\msun$ (significantly lower than expected from PPISNe) may pose challenges for conventional stellar 
+evolution theory. This could be hinting at the presence of subpopulations that avoid pair instability supernovae during binary formation, but the confirmation of the existence of such subpopulations 
+cannot be determined with the current catalog. 
 
 \begin{figure}[h]
     \includegraphics[width=\linewidth]{figures/q_distribution_plot.pdf}
