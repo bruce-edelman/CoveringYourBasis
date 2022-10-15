@@ -5,11 +5,11 @@ dependencies:
   - pip
   - python=3.9
   - pip:
-      - numpy
-      - jax  
-      - numpyro
-      - matplotlib
-      - deepdish
-      - scipy
-      - gwpopulation
-      - json2latex
+      - numpy==1.23.3
+      - jax==0.3.21
+      - numpyro==0.10.1
+      - matplotlib==3.6.1
+      - deepdish==0.3.7
+      - scipy==1.9.1
+      - gwpopulation==0.7.0
+      - json2latex==0.0.2
