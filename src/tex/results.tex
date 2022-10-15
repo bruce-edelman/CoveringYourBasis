@@ -54,7 +54,7 @@ divided by the most common primary mass, ${\sim}10\msun$.
     \begin{centering}    
         \includegraphics[width=\linewidth]{figures/iid_spinmag.pdf}
         \caption{The spin magnitude distribution inferred with the B-Spline model (red) with 16 knots spaced linearly from 0 to 1, assuming the components are IID. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
-        For comparison we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+        For comparison, we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:iid_spinmag_dist}
     \end{centering}
     \script{plot_iid_spinmag.py}
@@ -72,11 +72,25 @@ distinct subpopulation of non-spinning or negligibly spinning black holes that c
         \includegraphics[width=\linewidth]{figures/ind_spinmag.pdf}
         \caption{The primary (orange) and secondary (olive) spin magnitude distributions inferred with the B-Spline model
         with 16 knots spaced linearly from 0 to 1. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
-        For comparison we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+        For comparison, we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:ind_spinmag_dist}
     \end{centering}
     \script{plot_ind_spinmag.py}
 \end{figure}
+
+\begin{table*}[ht!]
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        Model & $a_\mathrm{peak}$ & $a_\mathrm{90\%}$ & $\cos{\theta_\mathrm{peak}}$ & $f_{\cos{\theta}<0}$ & $\log_{10}Y$ \\ \hline \hline
+        B-Spline IID & $\CIPlusMinus{\macros[BSplineIIDCompSpins][peak_a]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][a_90percentile]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][peakCosTilt]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][negFrac]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][log10gammaFrac]}$ \\ \hline
+        B-Spline Ind(primary) & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peak_a1]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][a1_90percentile]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt1]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][negFrac1]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10gammaFrac1]}$ \\ \hline
+        B-Spline Ind(secondary) & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peak_a2]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][a2_90percentile]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt2]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][negFrac2]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10gammaFrac2]}$  \\ \hline
+        \textsc{Default} & $\CIPlusMinus{\macros[Default][peak_a]}$ & $\CIPlusMinus{\macros[Default][a_90percentile]}$ & $\CIPlusMinus{\macros[Default][peakCosTilt]}$ & $\CIPlusMinus{\macros[Default][negFrac]}$ & $\CIPlusMinus{\macros[Default][log10gammaFrac]}$ \\ \hline
+    \end{tabular}
+    \caption{Summary of Component Spin distributions inferred both the independent and IID component spin B-Spline models and the \textsc{Default} spin model from \citet{o3b_astro_dist}.}
+    \label{tab:compspins}
+\end{table*}
 
 We model the spin magnitude distributions as IID B-Spline distributions as a check to the assumptions of the \textsc{Default} model. 
 Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the B-Spline model, compared with the \textsc{Default} model. 
@@ -137,13 +151,27 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/ind_spintilt.pdf}
         \caption{The primary (orange) and secondary (olive) spin orientation distributions inferred with the B-Spline model with 16 knots spaced linearly from -1 to 1. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
-        For comparison we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+        For comparison, we show the inferred PPD from the \textsc{Default} (blue) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
         \label{fig:ind_spintilt_dist}
     \end{centering}
     \script{plot_ind_spintilt.py}
 \end{figure}
 
 \subsection{The Effective Spin Dimension}
+
+\begin{table*}[ht!]
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        Model & $\chi_\mathrm{eff,peak}$ & $f_{\chi_\mathrm{eff}<0}$ & $f_{\chi_\mathrm{eff}<-0.3}$ & $f_\mathrm{dyn}$ & $f_\mathrm{HM}$ \\ \hline \hline
+        B-Spline IID & $\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][frac_hm]}$ \\ \hline
+        B-Spline Ind & $\CIPlusMinus{\macros[ChiEffective][ind][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][frac_hm]}$ \\ \hline
+        \textsc{Default} & $\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][default][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][default][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][default][frac_hm]}$ \\ \hline
+        \textsc{Gaussian} & $\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][frac_hm]}$ \\ \hline
+    \end{tabular}
+    \caption{Summary of the effective spin distributions inferred with the B-Spline model variations, along with the \textsc{Default} and \textsc{Gaussian} models from \citet{o3b_astro_dist}.}
+    \label{tab:chieff}
+\end{table*}
 
 \begin{figure} 
     \begin{centering}
@@ -179,7 +207,6 @@ $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][
     \label{fig:rofz}
     \script{rate_vs_z_plot.py}
 \end{figure}
-
 
 \subsection{Merger Rate Evolution with Redshift} \label{sec:redshift}
 

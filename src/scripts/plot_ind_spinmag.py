@@ -20,9 +20,9 @@ for i in range(len(a1_pdfs)):
 
 for ps, lab, c in zip([a1_pdfs, a2_pdfs], ['a1', 'a2'], ['tab:orange', 'tab:olive']):
     if lab == 'a1':
-        label=r'This Work ($p(a_1))$)'
+        label=r'This Work ($p(a_1)$)'
     else:
-        label=r'This Work ($p(a_2))$)'
+        label=r'This Work ($p(a_2)$)'
     ax = plot_mean_and_90CI(ax, a1s, ps, color=c,label=label)    
     high = np.percentile(ps, 95, axis=0)
     if max(high) > maxy:

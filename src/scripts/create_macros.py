@@ -74,12 +74,64 @@ def BSplineIIDSpinMacros():
     frac_neg_cts = np.array(frac_neg_cts)
     posts = load_iid_posterior()
     mags, a_pdfs = load_iid_mag_ppd()
+    peak_mags = []
+    for jj in range(len(a_pdfs)):
+        peak_mags.append(mags[np.argmax(a_pdfs[jj,:])])
+    peak_mags = np.array(peak_mags)
     return {'a_90percentile': save_param_cred_intervals(get_percentile(a_pdfs, mags, 90)),
+            'peak_a': save_param_cred_intervals(peak_mags),
             'lamb': save_param_cred_intervals(posts['lamb']),
             'local_rate': save_param_cred_intervals(posts['rate']),
             'peakCosTilt': save_param_cred_intervals(peak_tilts), 
             'log10gammaFrac': save_param_cred_intervals(np.log10(gamma_fracs)), 
             'negFrac': save_param_cred_intervals(frac_neg_cts)}
+    
+    
+def DefaultSpinMacros():
+    print("Saving Default Component Spin macros...")
+    xs = np.linspace(-1, 1, 1000)
+    tilt_data = dd.io.load(paths.data / 'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_orientation_data.h5')
+    lines = dict()
+    for key in tilt_data["lines"].keys():
+        lines[key] = tilt_data["lines"][key][()]
+        for ii in range(len(lines[key])):
+            lines[key][ii] /= np.trapz(lines[key][ii], xs)
+    ct_pdfs = lines['cos_tilt_1']
+    peak_tilts = []
+    gamma_fracs = []
+    frac_neg_cts = []
+    for jj in range(len(ct_pdfs)):
+        ct_pdfs[jj,:] /= np.trapz(ct_pdfs[jj,:], xs)
+        peak_tilts.append(xs[np.argmax(ct_pdfs[jj,:])])
+        gam = ct_pdfs[jj,xs>=0.9] / ct_pdfs[jj, xs<=-0.9]
+        gamma_fracs.append(gam)
+        neg = xs <= 0
+        frac_neg_cts.append(np.trapz(ct_pdfs[jj,neg], x=xs[neg]))
+    peak_tilts = np.array(peak_tilts)
+    gamma_fracs = np.array(gamma_fracs)
+    frac_neg_cts = np.array(frac_neg_cts)
+    mags = np.linspace(0, 1, 1000)
+    mag_data = dd.io.load(paths.data / 'o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5')
+    lines = dict()
+    peak_mags = []
+    for key in mag_data["lines"].keys():
+        lines[key] = mag_data["lines"][key][()]
+        for ii in range(len(lines[key])):
+            lines[key][ii] /= np.trapz(lines[key][ii], xs)    
+    a_pdfs = lines['a_1']
+    for jj in range(len(a_pdfs)):
+        peak_mags.append(mags[np.argmax(a_pdfs[jj,:])])
+    peak_mags = np.array(peak_mags)
+    posts = load_o3b_posterior('o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json')
+            
+    return {'a_90percentile': save_param_cred_intervals(get_percentile(a_pdfs, mags, 90)),
+            'peak_a': save_param_cred_intervals(peak_mags),
+            'lamb': save_param_cred_intervals(posts['lamb']),
+            'local_rate': save_param_cred_intervals(posts['rate']),
+            'peakCosTilt': save_param_cred_intervals(peak_tilts), 
+            'log10gammaFrac': save_param_cred_intervals(np.log10(gamma_fracs)), 
+            'negFrac': save_param_cred_intervals(frac_neg_cts)}
+    
 
 def BSplineIndSpinMacros():
     print("Saving BSpline Independent Component Spin macros...")
@@ -111,10 +163,19 @@ def BSplineIndSpinMacros():
     frac_neg_cts2 = np.array(frac_neg_cts2)
     posts = load_ind_posterior()
     a1_pdfs, a2_pdfs, mags, mags = load_ind_mag_ppd()
+    peak_mag1s = []
+    peak_mag2s = []
+    for jj in range(len(a1_pdfs)):
+        peak_mag1s.append(mags[np.argmax(a1_pdfs[jj,:])])
+        peak_mag2s.append(mags[np.argmax(a2_pdfs[jj,:])])
+    peak_mag2s = np.array(peak_mag2s)
+    peak_mag1s = np.array(peak_mag1s)
     return {'lamb': save_param_cred_intervals(posts['lamb']),
             'local_rate': save_param_cred_intervals(posts['rate']),
             'a1_90percentile': save_param_cred_intervals(get_percentile(a1_pdfs, mags, 90)),
             'a2_90percentile': save_param_cred_intervals(get_percentile(a2_pdfs, mags, 90)),
+            'peak_a1': save_param_cred_intervals(peak_mag1s),
+            'peak_a2': save_param_cred_intervals(peak_mag2s),
             'peakCosTilt1': save_param_cred_intervals(peak_tilts1), 'peakCosTilt2': save_param_cred_intervals(peak_tilts2), 
             'log10gammaFrac1': save_param_cred_intervals(np.log10(gamma_fracs1)), 'log10gammaFrac2': save_param_cred_intervals(np.log10(gamma_fracs2)), 
             'negFrac1': save_param_cred_intervals(frac_neg_cts1), 'negFrac2': save_param_cred_intervals(frac_neg_cts2)}
@@ -160,6 +221,7 @@ def PLPeakMacros():
 def main():
     macro_dict = {}
     macro_dict["PLPeak"] = PLPeakMacros()
+    macro_dict["Default"] = DefaultSpinMacros()
     macro_dict["BSplineIndependentCompSpins"] = BSplineIndSpinMacros()
     macro_dict["BSplineIIDCompSpins"] = BSplineIIDSpinMacros()
     macro_dict["ChiEffective"] = chi_eff()
