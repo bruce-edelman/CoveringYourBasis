@@ -53,10 +53,10 @@ chosen prior specifications that splines commonly struggle with. Previous studie
 number of spline knots, then either marginalized over the models or used model comparisons to motivate the best choice \citep{Edelman_2022ApJ}. 
 We can avoid this step with the use of penalized splines (or P-Splines) \citep{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}, 
 where one adds a smoothing prior comprised of Gaussian distributions on the differences between neighboring basis spline coefficients. 
-This prior allows one to populate the domain more densely with knots without the worry of extra variance in the inferred spline functions. When also fitting the scale 
-of the smoothing prior (i.e. the width of the Gaussian distributions on the differences), this allows the data to inform the scale of smoothing required. 
-We discuss the details of our smoothing prior implementation in more detail in the next section, Appendix \ref{sec:psplines}, 
-along with our specific prior and basis choices for each model following that in Appendix \ref{sec:modelpriors}.
+This allows for knots to be densely populated across the domain without the worry of extra variance in the inferred spline functions. 
+When also fitting the scale of the smoothing prior (i.e. the width of the Gaussian distributions on the differences), the data will inform the model 
+of the preferred the scale of smoothing required. We discuss the details of our smoothing prior implementation in more detail in the next section, 
+Appendix \ref{sec:psplines}, following with our specific prior and basis choices for each model in Appendix \ref{sec:modelpriors}.
 
 \section{Penalized Splines and Smoothing Priors}\label{sec:psplines}
 
