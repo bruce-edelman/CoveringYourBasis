@@ -10,7 +10,6 @@ rule draw_chieff_samples:
     script:
         "src/scripts/create_chieff_from_compspin.py"
 
-
 rule update_macros:
     input:
         "src/data/bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5",
