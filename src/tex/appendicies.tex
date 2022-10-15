@@ -203,31 +203,31 @@ The total hyper-posterior marginalized over the merger rate and the uncertainty 
     \textsc{B-Spline Primary} & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, \sigma, r, n)$ \\ \cline{2-4} 
      & $\tau_\lambda$ & Smoothing Prior Scale & U(1,100) \\ \cline{2-4}
      & $r$ & order of the difference matrix for the smoothing prior & 2 \\ \cline{2-4} 
-     & $\sigma$ & standard deviation for Gaussian priors on coefficients in the smoothing prior & 6 \\ \cline{2-4} 
+     & $\sigma$ & width of Gaussian priors on coefficients in smoothing prior & 6 \\ \cline{2-4} 
      & $n$ & number of knots in the basis spline & 64 \\ \hline \hline 
     \multicolumn{4}{|c|}{\textbf{Mass Ratio Model Parameters}} \\ \hline
     \textsc{B-Spline Ratio} & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, \sigma, r, n)$ \\ \cline{2-4} 
      & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
      & $r$ & order of the difference matrix for the smoothing prior & 2 \\ \cline{2-4} 
-     & $\sigma$ & standard deviation for Gaussian priors on coefficients in the smoothing prior & 3 \\ \cline{2-4} 
+     & $\sigma$ & width of Gaussian priors on coefficients in smoothing prior & 3 \\ \cline{2-4} 
      & $n$ & number of knots in the basis spline & 18 \\ \hline \hline
     \multicolumn{4}{|c|}{\textbf{Redshift Evolution Model Parameters}} \\ \hline
     \textsc{PowerLaw+B-Spline} & $\lambda$ & slope of redshift evolution power law $(1+z)^\lambda$ &  $\sim \mathcal{N}(0,3)$ \\ \cline{2-4}
     & $\bm{c}$ & Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, \sigma, r, n)$ \\ \cline{2-4} 
      & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
      & $r$ & order of the difference matrix for the smoothing prior & 2 \\ \cline{2-4} 
-     & $\sigma$ & standard deviation for Gaussian priors on coefficients in the smoothing prior & 1 \\ \cline{2-4} 
+     & $\sigma$ & width of Gaussian priors on coefficients in smoothing prior & 1 \\ \cline{2-4} 
      & $n$ & number of knots in the basis spline & 16 \\ \hline \hline 
     \multicolumn{4}{|c|}{\textbf{Spin Distribution Model Parameters}} \\ \hline
     \textsc{B-Spline Magnitude} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, \sigma, r, n)$  \\ \cline{2-4} 
     & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
     & $r$ & order of the difference matrix for the smoothing prior & 2 \\ \cline{2-4} 
-    & $\sigma$ & standard deviation for Gaussian priors on coefficients in the smoothing prior & 1 \\ \cline{2-4} 
+    & $\sigma$ & width of Gaussian priors on coefficients in smoothing prior & 1 \\ \cline{2-4} 
     & $n$ & number of knots in the basis spline & 18 \\ \hline \hline 
     \textsc{B-Spline Tilt} & $\bm{c}$ &  Basis coefficients & $\sim \mathrm{Smooth}(\tau_\lambda, \sigma, r, n)$  \\ \cline{2-4} 
     & $\tau_\lambda$ & Smoothing Prior Scale & U(1,10) \\ \cline{2-4}
     & $r$ & order of the difference matrix for the smoothing prior & 2 \\ \cline{2-4} 
-    & $\sigma$ & standard deviation for Gaussian priors on coefficients in the smoothing prior & 1 \\ \cline{2-4} 
+    & $\sigma$ & width of Gaussian priors on coefficients in smoothing prior & 1 \\ \cline{2-4} 
     & $n$ & number of knots in the basis spline & 16 \\ \hline \hline
     \end{tabular}
     \caption{All hyperparameter prior choices for each of the newly introduced basis spline models from this manuscript. See appendix 
