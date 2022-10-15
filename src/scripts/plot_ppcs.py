@@ -32,7 +32,7 @@ for ax, param in zip(axs, params):
     else:    
         observed = np.array([po[f"{param}_obs_event_{i}"] for i in range(Nobs)])
         synthetic = np.array([po[f"{param}_pred_event_{i}"] for i in range(Nobs)])
-    if param == ['redshift']:
+    if param == 'redshift':
         zmax = max([max(observed), max(synthetic)])
         
     ax.fill_betweenx(
