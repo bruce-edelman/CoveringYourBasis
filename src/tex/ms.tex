@@ -1,21 +1,22 @@
 \documentclass[twocolumn, linenumbers]{aastex631}
 
+\usepackage{showyourwork}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{appendix}
+
+\input{macros}
+\newcommand{\CIPlusMinus}[1]{{#1[median]^{+#1[error plus]}_{-#1[error minus]}}}
+\newcommand{\CIBoundsBracket}[1]{{[#1[5th percentile], #1[95th percentile]]}}
+\newcommand{\CIBoundsDash}[1]{{#1[5th percentile]\textendash#1[95th percentile]}}
+
 \newcommand{\msun}{\ensuremath{{\rm M}_\odot}}
 \newcommand{\result}[1]{\textcolor{red}{#1}}
 \newcommand{\bruce}[1]{\textcolor{blue}{BE: #1}}
 \newcommand{\NewChange}[1]{\textcolor{green}{#1}}
 
-\newcommand{\CIPlusMinus}[1]{{#1[median]^{+#1[error plus]}_{-#1[error minus]}}}
-\newcommand{\CIBoundsBracket}[1]{{[#1[5th percentile], #1[95th percentile]]}}
-\newcommand{\CIBoundsDash}[1]{{#1[5th percentile]\textendash#1[95th percentile]}}
 
 \graphicspath{{./}{figures/}}
-
-\usepackage{showyourwork}
-\usepackage{bm}
-\usepackage{amsmath}
-\usepackage{appendix}
-\input{macros}
 
 
 \begin{document}
@@ -44,8 +45,11 @@ data-rich era of gravitational-wave astronomy.
 \end{abstract}
 
 \input{intro.tex}
+
 \input{methods.tex}
+
 \input{results.tex}
+
 \input{conclusion.tex}
 
 \section{Acknowledgements}\label{sec:acknowledments}
