@@ -43,13 +43,13 @@ def powerlaw_pdf(xx, alpha, low, high):
 
 
 def load_iid_tilt_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5')
     xs = datadict['tilts']
     dRdct = datadict['dRdct']
     return xs, dRdct
 
 def load_ind_tilt_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind14tilt_pl18z_ppds.h5')
     return datadict['tilts'], datadict['dRdct1'], datadict['dRdct2']
 
 def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
@@ -67,7 +67,7 @@ def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
     return ax
 
 def load_iid_mag_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5')
     return datadict['mags'], datadict['dRda']
 
 def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
@@ -85,15 +85,15 @@ def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
     return ax
 
 def load_ind_mag_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind14tilt_pl18z_ppds.h5')
     return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
 
 
 def load_ind_posterior():
-    return dd.io.load(paths.data / 'bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_posterior_samples.h5')
+    return dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind14tilt_pl18z_posterior_samples.h5')
 
 def load_iid_posterior():
-    return dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5')
+    return dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5')
 
 def load_o3b_posterior(filename):
     return read_in_result(paths.data / filename).posterior
@@ -119,7 +119,7 @@ def load_o3b_paper_run_masspdf(filename):
     return marginals['mass_1'], marginals['mass_ratio'], mass_1, mass_ratio
 
 def load_mass_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5')
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
 
