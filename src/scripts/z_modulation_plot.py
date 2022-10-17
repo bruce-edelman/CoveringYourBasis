@@ -36,7 +36,7 @@ ax.axhline(0, color="k", lw=2)
 ax.set_xlabel(r"$z$", fontsize=18)
 ax.set_ylabel(r"$B(z)$", fontsize=18)
 ax.set_xscale('log')
-ax.set_ylim(-2,2)
+ax.set_ylim(-1.2,1.2)
 ax.set_xlim(zs[0], zs[-1])
 ax.grid(True, which="major", ls=":")
 plt.title(r'GWTC-3: Redshift Modulation', fontsize=18);

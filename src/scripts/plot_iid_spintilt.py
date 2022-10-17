@@ -24,7 +24,7 @@ ax.set_xlim(xmin, xmax)
 ax.legend(frameon=False, fontsize=14, loc='upper left');
 ax.grid(True, which="major", ls=":")
 ax.tick_params(labelsize=14)
-ax.set_ylim(0, 2.)
+ax.set_ylim(0, 1.6)
 
 plt.title(f'GWTC-3: Spin Tilt Distribution', fontsize=18);
 fig.tight_layout()

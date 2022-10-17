@@ -32,7 +32,7 @@ ax.set_ylabel(r'$p(\cos{\theta})$', fontsize=18)
 
 ax.set_xlim(xmin, xmax)
 
-ax.set_ylim(0, 2)
+ax.set_ylim(0, 1.6)
 ax.legend(frameon=False, fontsize=14, loc='upper left');
 ax.grid(True, which="major", ls=":")
 ax.tick_params(labelsize=14)

@@ -22,7 +22,7 @@ ax.set_xlabel(r'$a$', fontsize=18)
 ax.set_ylabel(r'$p(a)$', fontsize=18)
 
 ax.set_xlim(xmin, xmax)
-ax.set_ylim(0, 6)
+ax.set_ylim(0, 4.25)
 ax.legend(frameon=False, fontsize=14);
 ax.grid(True, which="major", ls=":")
 ax.tick_params(labelsize=14)
