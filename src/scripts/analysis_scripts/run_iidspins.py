@@ -12,7 +12,7 @@ from argparse import ArgumentParser
 from gwinferno.models.spline_perturbation import PowerlawSplineRedshiftModel
 from gwinferno.interpolation import LogXLogYBSpline, LogYBSpline, LogXBSpline
 from gwinferno.models.bsplines.separable import BSplinePrimaryBSplineRatio, BSplineIIDSpinMagnitudes, BSplineIIDSpinTilts
-from gwinferno.models.bsplines.smoothing import calculate_penalty
+from gwinferno.models.bsplines.smoothing import apply_difference_prior
 from gwinferno.data_collection import load_injections, load_posterior_samples
 from gwinferno.analysis import hierarchical_likelihood
 from gwinferno.plotting import plot_mass_dist, plot_iid_spin_dist, plot_m1_vs_z_ppc, plot_rofz, plot_ppc_brontosaurus
@@ -23,27 +23,27 @@ def load_parser():
     parser = ArgumentParser()
     parser.add_argument('--data-dir', type=str, default='/home/bruce.edelman/projects/GWTC3_allevents/')
     parser.add_argument('--inj-file', type=str, default='/home/bruce.edelman/projects/GWTC3_allevents/o1o2o3_mixture_injections.hdf5')
-    parser.add_argument('--outdir', type=str, default='results')
-    parser.add_argument('--mmin', type=float, default=3.0)
+    parser.add_argument('--outdir', type=str, default='paper_results')
+    parser.add_argument('--mmin', type=float, default=5.0)
     parser.add_argument('--mmax', type=float, default=100.0)
-    parser.add_argument('--mass-knots', type=int, default=100)
-    parser.add_argument('--mag-knots', type=int, default=30)
-    parser.add_argument('--q-knots', type=int, default=30)
-    parser.add_argument('--tilt-knots', type=int, default=25)
-    parser.add_argument('--z-knots', type=int, default=20)
-    parser.add_argument('--chains', type=int, default=1)
+    parser.add_argument('--mass-knots', type=int, default=64)
+    parser.add_argument('--mag-knots', type=int, default=18)
+    parser.add_argument('--q-knots', type=int, default=18)
+    parser.add_argument('--tilt-knots', type=int, default=18)
+    parser.add_argument('--z-knots', type=int, default=18)
+    parser.add_argument('--chains', type=int, default=4)
     parser.add_argument('--samples', type=int, default=1500)
-    parser.add_argument('--thinning', type=int, default=1)
+    parser.add_argument('--thinning', type=int, default=2)
     parser.add_argument('--warmup', type=int, default=500)
     parser.add_argument('--skip-inference', action='store_true', default=False)
     return parser.parse_args()
 
 
-def setup_mass_BSpline_model(injdata, pedata, pmap, nknots, qknots, mmin=3.0, mmax=100.0):
+def setup_mass_BSpline_model(injdata, pedata, pmap, nknots, qknots, mmin=5.0, mmax=100.0):
     m1per_pe = np.min(np.min(pedata[pmap['mass_1']], axis=0))
     m1per_inj = np.min(injdata[pmap['mass_1']])
     m1min = max([m1per_inj, m1per_pe])
-    m1min = 6.5
+    m1min = 5.0
     print(f"Basis Spline model in m1 w/ {nknots} knots logspaced from {m1min} to {mmax}...")
     print(f"Basis Spline model in q w/ {qknots} knots linspaced from {mmin/mmax} to 1...")
 
@@ -111,26 +111,28 @@ def model(mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, To
     mag_knots = mag_model.primary_model.nknots 
     tilt_knots = tilt_model.primary_model.nknots
     z_knots = z_model.nknots 
+    pen_deg = 2
     
-    mass_cs = numpyro.sample('mass_cs', dist.Normal(0,5), sample_shape=(mass_knots,))
-    mass_tau = numpyro.sample("mass_tau", dist.Uniform(1,100))
-    numpyro.factor("mass_log_smoothing_penalty", calculate_penalty(mass_cs, mass_tau, degree=2))
+    mass_cs = numpyro.sample('mass_cs', dist.Normal(0,6), sample_shape=(mass_knots,))
+    mass_tau = numpyro.sample("mass_tau", dist.Uniform(2,1000))
+    numpyro.factor("mass_log_smoothing_prior", apply_difference_prior(mass_cs, mass_tau, degree=pen_deg))
 
     q_cs = numpyro.sample('q_cs', dist.Normal(0,4), sample_shape=(q_knots,))
-    q_tau = numpyro.sample("q_tau", dist.Uniform(1,10))
-    numpyro.factor("q_log_smoothing_penalty", calculate_penalty(q_cs, q_tau, degree=2))
+    q_tau = numpyro.sample("q_tau", dist.Uniform(1,100))
+    numpyro.factor("q_log_smoothing_prior", apply_difference_prior(q_cs, q_tau, degree=pen_deg))
 
-    mag_cs = numpyro.sample('mag_cs', dist.Normal(0,2), sample_shape=(mag_knots,))
-    mag_tau = numpyro.sample("mag_tau", dist.Uniform(1,10))
-    numpyro.factor("mag_log_smoothing_penalty", calculate_penalty(mag_cs, mag_tau, degree=2))
-    tilt_cs = numpyro.sample('tilt_cs', dist.Normal(0,2), sample_shape=(tilt_knots,))
+    mag_cs = numpyro.sample('mag_cs', dist.Normal(0,1), sample_shape=(mag_knots,))
+    mag_tau = numpyro.sample("mag_tau",dist.Uniform(1,10))
+    numpyro.factor("mag_log_smoothing_prior", apply_difference_prior(mag_cs, mag_tau, degree=pen_deg))
+    tilt_cs = numpyro.sample('tilt_cs', dist.Normal(0,1), sample_shape=(tilt_knots,))
     tilt_tau = numpyro.sample("tilt_tau", dist.Uniform(1,10))
-    numpyro.factor("tilt_log_smoothing_penalty", calculate_penalty(tilt_cs, tilt_tau, degree=2))
+    numpyro.factor("tilt_log_smoothing_prior", apply_difference_prior(tilt_cs, tilt_tau, degree=pen_deg))
 
     lamb = numpyro.sample("lamb", dist.Normal(0,3))
-    z_cs = numpyro.sample('z_cs', dist.Normal(0,1), sample_shape=(z_knots,))
-    z_tau = numpyro.sample("z_tau",dist.Uniform(1,10))
-    numpyro.factor("z_log_smoothing_penalty", calculate_penalty(z_cs, z_tau, degree=2))
+    z_cs = numpyro.sample('z_cs', dist.Normal(0,1), sample_shape=(z_knots-1,))
+    z_cs = jnp.concatenate([jnp.zeros(1),z_cs])
+    z_tau = numpyro.sample("z_tau", dist.Uniform(1,10))
+    numpyro.factor("z_log_smoothing_prior", apply_difference_prior(z_cs, z_tau, degree=pen_deg))
     
     if not sample_prior:
         def get_weights(z,prior):
@@ -145,7 +147,8 @@ def model(mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, To
         hierarchical_likelihood(peweights, injweights, total_inj=total_inj, Nobs=Nobs, Tobs=Tobs, 
                                 surv_hypervolume_fct=z_model.normalization, vtfct_kwargs=dict(lamb=lamb,cs=z_cs), marginalize_selection=False,
                                 min_neff_cut=True, posterior_predictive_check=True, pedata=pedict, injdata=injdict, 
-                                param_names=['mass_1', 'mass_ratio', 'a_1', 'a_2', 'cos_tilt_1', 'cos_tilt_2', 'redshift'])
+                                param_names=['mass_1', 'mass_ratio', 'a_1', 'a_2', 'cos_tilt_1', 'cos_tilt_2', 'redshift'], 
+                                m1min=5.0, m2min=5.0, mmax=100.0)
 
 
 def calculate_m1q_ppds(mcoefs, qcoefs, mass_model, nknots, qknots, mmin, m1mmin, mmax): 
@@ -188,6 +191,7 @@ def calculate_rate_of_z_ppds(lamb, z_cs, rate, model):
     zs = model.zs
     rs = np.zeros((len(lamb), len(zs)))
     def calc_rz(cs,l,r):
+        cs = jnp.concatenate([jnp.array([0]),cs])
         return r * jnp.power(1.0 + zs, l) * jnp.exp(model.interpolator.project(model.norm_design_matrix, (model.nknots, 1), cs))
     calc_rz = jit(calc_rz)
     _ = calc_rz(z_cs[0],lamb[0],rate[0])
@@ -204,14 +208,14 @@ def main():
         RNG = random.PRNGKey(0)
         MCMC_RNG, PRIOR_RNG, _RNG = random.split(RNG, num=3)
         kernel = NUTS(model)
-        mcmc = MCMC(kernel, thinning=args.thinning, num_warmup=args.warmup//2, num_samples=args.samples//2, num_chains=args.chains)
+        mcmc = MCMC(kernel, thinning=args.thinning, num_warmup=args.warmup, num_samples=args.samples, num_chains=args.chains, chain_method='sequential')
         print("running mcmc: sampling prior...")
         mcmc.run(PRIOR_RNG, mass, spin, z, pedict, injdict, float(total_inj), nObs, obs_time, sample_prior=True) 
         prior = mcmc.get_samples()
         dd.io.save(f'{label}_prior_samples.h5', prior)
         
         kernel = NUTS(model)
-        mcmc = MCMC(kernel, thinning=args.thinning, num_warmup=args.warmup, num_samples=args.samples, num_chains=args.chains)
+        mcmc = MCMC(kernel, thinning=args.thinning, num_warmup=args.warmup, num_samples=args.samples, num_chains=args.chains, chain_method='sequential')
         print("running mcmc: sampling posterior...")
         mcmc.run(MCMC_RNG, mass, spin, z, pedict, injdict, float(total_inj), nObs, obs_time, sample_prior=False) 
         mcmc.print_summary()
