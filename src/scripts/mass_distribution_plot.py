@@ -17,7 +17,7 @@ def plot_o3b_res(ax, fi, m1=True, col='tab:blue', lab='PP', bounds=False, fill_a
     return ax
 
 
-mmin = 6
+mmin = 5.5
 mmax = 100
 ms, m_pdfs, qs, q_pdfs = load_mass_ppd()
 for jj in range(len(m_pdfs)):

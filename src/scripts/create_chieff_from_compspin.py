@@ -17,12 +17,12 @@ warnings.filterwarnings('ignore')
 
 
 def draw_chieff_samples_gwpop(result, magmodel, tiltmodel, massmodel, ndraws=500, nsamples=2000):
-    mags = np.linspace(0,1,2000)
+    mags = np.linspace(0,1,1500)
     a1s, a2s = np.meshgrid(mags, mags)
-    m1s = np.linspace(2,100,200)
-    qs = np.linspace(0.05, 1, 2000)
+    m1s = np.linspace(2,100,2000)
+    qs = np.linspace(0.05, 1, 1000)
     mms, qqs = np.meshgrid(m1s, qs)
-    ctilts = np.linspace(-1,1,2000)
+    ctilts = np.linspace(-1,1,1500)
     ct1s, ct2s = np.meshgrid(ctilts, ctilts)
     
     magdata = {'a_1': a1s, 'a_2': a2s}
@@ -62,17 +62,17 @@ def chi_eff(samples):
     return (samples['a_1']*samples['cos_tilt_1'] + samples['mass_ratio']*samples['a_2']*samples['cos_tilt_2']) / (1.0 + samples['mass_ratio'])
 
 def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, qnknots, magnknots, tiltnknots, ndraws=500, nsamples=2000, iid=False):
-    mags = jnp.linspace(0,1,2000)
+    mags = jnp.linspace(0,1,1500)
     a1s, a2s = jnp.meshgrid(mags, mags)
-    m1s = jnp.linspace(3,100,200)
-    qs = jnp.linspace(3.0/100.0, 1, 2000)
+    m1s = jnp.linspace(3,100,2000)
+    qs = jnp.linspace(3.0/100.0, 1, 1000)
     mms, qqs = jnp.meshgrid(m1s, qs)
-    ctilts = jnp.linspace(-1,1,2000)
+    ctilts = jnp.linspace(-1,1,1500)
     ct1s, ct2s = jnp.meshgrid(ctilts, ctilts)
-    mmin = 6.5
+    mmin = 5.0
     mmax = 100.0
     
-    mass_model = massmodel(massnknots, qnknots, mms, m1s, qqs, qs, m1min=mmin, m2min=3.0, mmax=mmax, basis_m=LogXLogYBSpline, basis_q=LogYBSpline, normalize=True)
+    mass_model = massmodel(massnknots, qnknots, mms, m1s, qqs, qs, m1min=mmin, m2min=5.0, mmax=mmax, basis_m=LogXLogYBSpline, basis_q=LogYBSpline, normalize=True)
     
     if iid:
         mag_model = magmodel(magnknots, a1s, a2s, mags, mags, basis=LogYBSpline, normalize=True)

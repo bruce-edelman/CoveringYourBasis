@@ -106,7 +106,7 @@ for ax, param in zip(axs, params):
     ax.grid(which="both", ls=":", lw=1)
     ax.set_xlabel(param_latex[param], fontsize=18)
     if param == "mass_1":
-        ax.set_xlim(6.5, 200)
+        ax.set_xlim(5, 100)
         ax.set_xscale("log")
         ax.set_ylabel("Cumulative Probability", fontsize=16)
     elif param == 'cos_tilt' or param == 'chi_eff':
@@ -117,7 +117,7 @@ for ax, param in zip(axs, params):
         ax.set_xscale('log')
         ax.set_xlim(0.05, zmax)
     elif param == 'mass_ratio':
-        ax.set_xlim(0.03,1)
+        ax.set_xlim(0.05,1)
         ax.legend(frameon=False, fontsize=16)
     else:
         ax.legend(frameon=False, fontsize=16)
