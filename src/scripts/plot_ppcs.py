@@ -23,7 +23,7 @@ param_latex = {
 }
 
 nplot = len(params)
-figx, figy = 16,4
+figx, figy = 18,5
 fig, axs = plt.subplots(nrows=1, ncols=nplot, sharey='row', figsize=(figx,figy))
 
 Nobs = 69
@@ -101,17 +101,17 @@ for ax, param in zip(axs, params):
         min(np.min(synthetic), np.min(observed)),
         max(np.max(synthetic), np.max(observed)),
     )
-    ax.tick_params(labelsize=11)
+    ax.tick_params(labelsize=13)
     ax.set_ylim(0, 1)
     ax.grid(which="both", ls=":", lw=1)
-    ax.set_xlabel(param_latex[param], fontsize=20)
+    ax.set_xlabel(param_latex[param], fontsize=18)
     if param == "mass_1":
         ax.set_xlim(6.5, 200)
         ax.set_xscale("log")
         ax.set_ylabel("Cumulative Probability", fontsize=16)
     elif param == 'cos_tilt' or param == 'chi_eff':
-        ax.set_xticks([-1, -0.75, -0.5, -0.25, -0, 0.25, 0.5, 0.75, 1])
-        ax.set_xticklabels([-1, -0.75, -0.5, -0.25, -0, 0.25, 0.5, 0.75, 1])
+        ax.set_xticks([-1, -0.5, 0, 0.5, 1])
+        ax.set_xticklabels([-1, -0.5, 0, 0.5, 1])
         ax.set_xlim(-1, 1)
     elif param == "redshift":
         ax.set_xscale('log')
@@ -121,8 +121,8 @@ for ax, param in zip(axs, params):
         ax.legend(frameon=False, fontsize=16)
     else:
         ax.legend(frameon=False, fontsize=16)
-        ax.set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-        ax.set_xticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+        ax.set_xticks([0, 0.25, 0.5, 0.75, 1])
+        ax.set_xticklabels([0, 0.25, 0.5, 0.75, 1])
         ax.set_xlim(0, 1)
         
 plt.suptitle(f'GWTC-3: B-Spline Model Posterior Predictive Checks', fontsize=22);
