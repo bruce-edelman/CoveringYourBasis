@@ -49,7 +49,7 @@ def load_iid_tilt_ppd():
     return xs, dRdct
 
 def load_ind_tilt_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind14tilt_pl18z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_ppds.h5')
     return datadict['tilts'], datadict['dRdct1'], datadict['dRdct2']
 
 def plot_o3b_spintilt(ax, fi,ct1=False, col='tab:blue', lab='PP'):
@@ -85,12 +85,12 @@ def plot_o3b_spinmag(ax, fi, a1=True, col='tab:blue', lab='PP'):
     return ax
 
 def load_ind_mag_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind14tilt_pl18z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_ppds.h5')
     return datadict['dRda1'], datadict['dRda2'], datadict['mags'], datadict['mags']
 
 
 def load_ind_posterior():
-    return dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind14tilt_pl18z_posterior_samples.h5')
+    return dd.io.load(paths.data / 'bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5')
 
 def load_iid_posterior():
     return dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5')

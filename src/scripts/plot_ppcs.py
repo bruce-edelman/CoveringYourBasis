@@ -27,7 +27,7 @@ figx, figy = 18,5
 fig, axs = plt.subplots(nrows=1, ncols=nplot, sharey='row', figsize=(figx,figy))
 
 Nobs = 69
-po = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5')
+po = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5')
 
 for ax, param in zip(axs, params):
     if param == 'a' or param == 'cos_tilt':

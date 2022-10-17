@@ -5,10 +5,10 @@ from utils import plot_mean_and_90CI
 import deepdish as dd
 
 def load_plbspline_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
-    prior_datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_prior_ppds.h5')
-    posterior = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5')
-    prior = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_prior_samples.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5')
+    prior_datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_prior_ppds.h5')
+    posterior = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5')
+    prior = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_prior_samples.h5')
     return datadict['zs'], datadict['Rofz'], prior_datadict['zs'], prior_datadict['Rofz'], posterior['lamb'], prior['lamb'], posterior['rate']
 
 def get_modulation(R,z,L,rate=None):

@@ -32,7 +32,7 @@ def load_plsplinemass_ppd():
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
 def load_bsplinemass_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5')
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
 #plspl_ms, plspl_mpdfs, plspl_qs, plspl_qpdfs = load_plsplinemass_ppd()
