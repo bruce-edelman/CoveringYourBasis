@@ -15,7 +15,7 @@
 </a>
 </p>
 
-# Cover Your Basis: Comprehensive Data-Driven Probes of the Binary Black Hole Population
+# Cover Your Basis: Comprehensive Data-Driven Characterization of the Binary Black Hole Population
 
 ## [Download Paper PDF](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/ms.pdf) -- [Download Paper Source](https://github.com/bruce-edelman/CoveringYourBasis/raw/main-pdf/arxiv.tar.gz)
 
@@ -39,34 +39,3 @@ The data is all either hosted on zenodo and will be downloaded or programmatical
 ## Scripts
 
 Scripts that run the intermediate pipeline steps and read/plot the data to create all figures and macros used in the paper are stored in `src/scripts/`
-
-## Outline
-
-Main manuscript file: `src/tex/ms.tex` -- Check mark denotes how 'Done' the writing status is given current comments:
-
-- [x] Abstract (`src/tex/ms.tex`)
-- [x] Intro (`src/tex/intro.tex`)
-- [x] Constructing a Basis (`src/tex/methods.tex`)
-- [x] Binary Black Hole Population Inference with GWTC-3 (`src/tex/results.tex`)
-  - [x] Binary Black Hole Masses
-  - [x] Binary Black Hole Spins
-    - [x] Spin Magnitude
-    - [x] Spin Orientation
-    - [x] The Effective Spin Dimension
-- [x] Astrophysical Implications (`src/tex/conclusion.tex`)
-- [x] Conclusion (`src/tex/conclusion.tex`)
-- [x] Acknowledgements (`src/tex/ms.tex`)
-- [ ] Appendices (`src/tex/appendicies.tex`)
-  - [x] Penalized Splines and Smoothing
-  - [x] Hierarchical Bayesian Inference
-  - [ ] Model specification
-
-## Non-Writing Paper TODO's
-- High Priority
-  - [ ] Finish adding citations where I left comments
-  - [x] Make Table for Model appendix
-- Medium Priority
-  - [ ] Decide on Author List 
-  - [x] Final title?
-- Low Priority
-  - [x] Make showyourwork widget buttons not overlap figure captions
