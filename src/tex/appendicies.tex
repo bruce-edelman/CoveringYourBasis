@@ -256,3 +256,16 @@ We model modulations to the underlying probability density with the multiplicati
 where $B(\log z)$ is the B-Spline interpolated from knots spaced linearly in $\log z$ space. 
 We enumerate each of our specific model hyperparameter 
 and prior choices in table \ref{tab:model_priors}.
+
+
+\section{Posterior Predictive Checks} \label{sec:ppcs}
+
+\begin{figure*}[ht!]
+    \includegraphics[width=\linewidth]{figures/ppc_plot.pdf}
+    \caption{Posterior predictive checks showing the CDFs of the observed (black) and predicted (red) distributions of GWTC-3 sized catalogs for each posterior sample of the IID spin B-Spline model. The shaded regions show 90\% credible intervals and the solid red line is the median of the predicted distribution.
+    \label{fig:ppc}
+    \script{plot_ppcs.py}
+\end{figure*}
+
+We follow the posterior predictive checking procedure done in recent population studies to validate our models inferences \citep{o3a_pop,Edelman_2022ApJ}. 
+For each posterior sample describing our model's inferred population we reweigh the observed event samples and the found injections to that population and draw a set 69 (size of GWTC-3 BBH catalog) samples to construct the observed and predicted distributions we show in \ref{fig:ppc}. When the observed region stays encompassed within the predicted region the model is performing well, which we see across each of the fit parameters. 
