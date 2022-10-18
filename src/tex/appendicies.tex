@@ -125,7 +125,7 @@ see Figure \ref{fig:spline_basis}, as opposed to stacking them at the bounds.
 \section{Hierarchical Bayesian Inference} \label{sec:hierarchical_inference}
 
 % This appendix goes over in detail the hierarchical bayeisan inference framework
-We use hierarchical Bayesian inference to infer the population properties of CBCs. We want to infer the number density of merging compact binaries  
+We use hierarchical Bayesian inference to infer the population properties of compact binaries. We want to infer the number density of merging compact binaries  
 in the universe and how this can change with their masses, spins, etc. Often times it is useful to formulate the question in terms of the 
 merger rates which is the number of mergers per $Gpc^{3}$ co-moving volume per year. For a set of hyperparameters, $\Lambda$, $\lambda$, and overall 
 merger rate, $\mathcal{R}$, we write the overall number density of BBH mergers in the universe as: 
@@ -139,8 +139,8 @@ where up above, we denote the co-moving volume element as $dV_c$ \citep{hogg_cos
 catalog with the related factor of $1+z$ converting this detector-frame time to source-frame. We assume a Lambda CDM cosmology using 
 the cosmological parameters from \citet{Planck2015}. We model the merger rate evolving with redshift following a power law distribution: 
 $p(z|\lambda) \propto \frac{dV_c}{dz}\frac{1}{1+z}(1+z)^\lambda$ \citep{Fishbach_2018redshift}. When integrating equation \ref{number_density} across all $\theta$
-and out to some maximum redshift, $z_\mathrm{max}$, we get the total number of CBCs in the universe out to that redshift. We follow previous notations, \
-letting $\{d_i\}$ represent the set of data from $N_\mathrm{obs}$ CBCs observed with gravitational waves. The merger rate is then described as an inhomogeneous 
+and out to some maximum redshift, $z_\mathrm{max}$, we get the total number of compact binaries in the universe out to that redshift. We follow previous notations, \
+letting $\{d_i\}$ represent the set of data from $N_\mathrm{obs}$ compact binaries observed with gravitational waves. The merger rate is then described as an inhomogeneous 
 Poisson process and after imposing the usual log-uniform prior on the merger rate, we marginalize over the merger rate, $\mathcal{R}$, and arrive at the posterior
 distribution of our hyperparameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}.
 
@@ -149,7 +149,7 @@ distribution of our hyperparameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}.
 \end{equation}
 
 \noindent
-where above, we replaced the integrals over each event's likelihood with ensemble averages over $K_i$ posterior samples. Above, $j$
+where above, we replaced the integrals over each event's likelihood with ensemble averages over $K_i$ posterior samples \citep{gwtc3DATA}. Above, $j$
 indexes the $K_i$ posterior samples from each event and $\pi(\theta, z)$ is the default prior used by parameter estimations that 
 produced the posterior samples for each event. In the analyses of GWTC-3, either the default prior used was uniform in detector frame masses, 
 component spins and Euclidean volume or the posterior samples were re-weighted to such a prior before using them in our analysis. 

@@ -2,7 +2,7 @@
 
 We use hierarchical Bayesian inference (see Appendix \ref{sec:hierarchical_inference}) to simultaneously infer the astrophysical mass, spin, and redshift distributions of 
 binary black holes (BBHs) given a catalog of gravitational wave observations. Following the same cut on the recent GWTC-3 catalog done in the LVK's 
-accompanying BBH population analysis, we have 70 possible BBH mergers with false alarm rates less than 1 per year \citep{GWTC3,o3b_astro_dist}. Since it was concluded to be an outlier of the rest of 
+accompanying BBH population analysis, we have 70 possible BBH mergers with false alarm rates less than 1 per year \citep{GWTC3,o3b_astro_dist,gwtc3DATA}. Since it was concluded to be an outlier of the rest of 
 the BBH population in both GWTC-2 and GWTC-3, we choose to omit the poorly understood event, GW190814 \citep{190814disc,o3a_pop,o3b_astro_dist,Essick_2022}. This leaves us with 
 a catalog of 69 confident BBH mergers, observed over a period of about 2 years, from which we want to infer population properties. Our study provides the first comprehensive 
 data-driven investigation of the BBH mass, spin, and redshift distributions, uncovering new insights and corroborating those found with other methods. 
@@ -22,7 +22,7 @@ We start with our inference of the mass distribution.
 
 \subsection{Binary Black Hole Masses} \label{sec:mass_dist}
 
-Figure \ref{fig:mass_distribution} shows the primary mass distribution inferred with our B-Spline model (red), where we see features consistent with those inferred by the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \citep{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
+Figure \ref{fig:mass_distribution} shows the primary mass distribution inferred with our B-Spline model (red), where we see features consistent with those inferred by the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \citep{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist,gwtc3_POPDATA}. 
 In particular our B-Spline model finds peaks in merger rate density as a function of primary mass at both $\sim10\msun$ and $\sim35\msun$, agreeing with those 
 reported using the same dataset in \citet{o3b_astro_dist}. The B-Spline model finds the same feature at $\sim18\msun$ as the \textsc{PowerlawSpline} model, but remains consistent with the \textsc{PowerlawPeak} model; the mass distribution is more uncertain in this region.
 We find the largest disagreement at low masses, where the power-law-based models show a higher rate below ${\sim}8-9\msun$. This is partly due to the minimum mass hyperparameter (where the power law ``begins'') serving as the minimum allowable primary and secondary masses of the catalog. This leads to inferences of $m_\mathrm{min}$ below the minimum observed primary mass in the catalog, which is $\sim 6.4\msun$, to account for secondary BBH masses lower than that. We choose to fix the minimum black hole mass for both primary and secondaries to $5\msun$, 
