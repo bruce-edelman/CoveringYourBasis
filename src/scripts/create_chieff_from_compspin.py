@@ -145,11 +145,11 @@ def main():
     MassModel = Model([SinglePeakSmoothedMassDistribution(mmin=2.0, mmax=100.0)])
     mspl_post = dd.io.load(paths.data / "bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_posterior_samples.h5")
     chi_effs_mspl = draw_chieff_samples(mspl_post, MSplinePrimaryMSplineRatio, MSplineIndependentSpinMagnitudes, MSplineIndependentSpinTilts, 
-                                        64, 18, 18, 18)
+                                        64, 16, 14, 16)
     pchieffs, chieffs = chi_eff_kde_ppd(chi_effs_mspl)
     mspl_post_iid = dd.io.load(paths.data / "bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5")
     chi_effs_mspl_iid = draw_chieff_samples(mspl_post_iid, MSplinePrimaryMSplineRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts, 
-                                            64, 18, 18, 18, iid=True)
+                                            64, 18, 16, 16, iid=True)
     pchieffs_iid, chieffs_iid = chi_eff_kde_ppd(chi_effs_mspl_iid)
     o3b_default_spin_result = read_in_result(paths.data / "o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json")
     chi_effs_o3b_default = draw_chieff_samples_gwpop(o3b_default_spin_result, DefaultSpinMagModel, DefaultSpinTiltModel, MassModel)
