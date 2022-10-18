@@ -32,7 +32,7 @@ def load_plsplinemass_ppd():
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
 def load_bsplinemass_ppd():
-    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5')
+    datadict = dd.io.load(paths.data / 'bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_ppds.h5')
     return datadict['m1s'], datadict['dRdm1'], datadict['qs'], datadict['dRdq']
 
 #plspl_ms, plspl_mpdfs, plspl_qs, plspl_qpdfs = load_plsplinemass_ppd()
@@ -59,7 +59,7 @@ logticks = np.array([6,8,10,20,40,70,100])
 axs.set_xticks(logticks)
 axs.get_xaxis().set_major_formatter(ScalarFormatter())
 axs.grid(True, which="major", ls=":")
-axs.set_xlim(mmin+0.5, mmax)
+axs.set_xlim(6.5, mmax)
 plt.title(f'GWTC-3: BBH Primary Mass Distribution', fontsize=18);
 fig.tight_layout()
 plt.savefig(paths.figures / 'mass_distribution_plot.pdf', dpi=300);

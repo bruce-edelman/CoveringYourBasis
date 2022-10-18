@@ -246,9 +246,9 @@ The number of degrees of freedom, $n$, and the difference
 penalty order for the smoothing prior, $r$. Additionally, one must choose a prior distribution on the smoothing prior scale hyperparameter, 
 $\tau_\lambda$, which we take to be Uniform. For the primary mass distribution we model the log probability with a B-Spline interpolated 
 in $\log(m_1)$ space. We follow a similar scheme for the models in mass ratio and spin, except we model the log probability with 
-B-Splines that are interpolated in $q$, $a_i$ or $\cos{\theta_i}$ space. We adopt a minimum black hole mass of $5\msun$, 
-and maximum of $100\msun$ with the equally spaced in this range. The knots for the mass ratio B-Spline are equally spaced 
-from $\frac{m_\mathrm{min}}{m_\mathrm{max}}=0.05$ to $1$. There is motivation for the evolution of the merger rate with redshift 
+B-Splines that are interpolated in $q$, $a_i$ or $\cos{\theta_i}$ space. We adopt a minimum black hole mass of $3\msun$ for the secondary components and $6\msun$ for the primary, 
+and a maximum of $100\msun$ with the knots equally spaced in this range. The knots for the mass ratio B-Spline are equally spaced 
+from $\frac{m_\mathrm{min}}{m_\mathrm{max}}=0.03$ to $1$. There is motivation for the evolution of the merger rate with redshift 
 to follow a power law form since it should be related to the star formation rate \citep{Madau_2014}, 
 motivating our adoption of a semi-parametric approach where we use B-Splines to model modulations to the 
 simpler underlying \textsc{PowerlawRedshift} model \citep{Fishbach_2018redshift,Edelman_2022ApJ}. 
