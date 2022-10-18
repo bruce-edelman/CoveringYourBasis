@@ -69,10 +69,10 @@ def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, q
     mms, qqs = jnp.meshgrid(m1s, qs)
     ctilts = jnp.linspace(-1,1,1500)
     ct1s, ct2s = jnp.meshgrid(ctilts, ctilts)
-    mmin = 5.0
+    mmin = 6.5
     mmax = 100.0
     
-    mass_model = massmodel(massnknots, qnknots, mms, m1s, qqs, qs, m1min=mmin, m2min=5.0, mmax=mmax, basis_m=LogXLogYBSpline, basis_q=LogYBSpline, normalize=True)
+    mass_model = massmodel(massnknots, qnknots, mms, m1s, qqs, qs, m1min=mmin, m2min=3.0, mmax=mmax, basis_m=LogXLogYBSpline, basis_q=LogYBSpline, normalize=True)
     
     if iid:
         mag_model = magmodel(magnknots, a1s, a2s, mags, mags, basis=LogYBSpline, normalize=True)
@@ -145,11 +145,11 @@ def main():
     MassModel = Model([SinglePeakSmoothedMassDistribution(mmin=2.0, mmax=100.0)])
     mspl_post = dd.io.load(paths.data / "bsplines_64m1_18q_ind16mag_ind14tilt_pl16z_posterior_samples.h5")
     chi_effs_mspl = draw_chieff_samples(mspl_post, MSplinePrimaryMSplineRatio, MSplineIndependentSpinMagnitudes, MSplineIndependentSpinTilts, 
-                                        64, 16, 14, 16)
+                                        64, 18, 16, 14)
     pchieffs, chieffs = chi_eff_kde_ppd(chi_effs_mspl)
     mspl_post_iid = dd.io.load(paths.data / "bsplines_64m1_18q_iid18mag_iid16tilt_pl16z_posterior_samples.h5")
     chi_effs_mspl_iid = draw_chieff_samples(mspl_post_iid, MSplinePrimaryMSplineRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts, 
-                                            64, 18, 16, 16, iid=True)
+                                            64, 18, 18, 16, iid=True)
     pchieffs_iid, chieffs_iid = chi_eff_kde_ppd(chi_effs_mspl_iid)
     o3b_default_spin_result = read_in_result(paths.data / "o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json")
     chi_effs_o3b_default = draw_chieff_samples_gwpop(o3b_default_spin_result, DefaultSpinMagModel, DefaultSpinTiltModel, MassModel)
