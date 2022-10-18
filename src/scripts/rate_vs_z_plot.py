@@ -25,7 +25,7 @@ ax = plot_mean_and_90CI(ax, pl_zs, pl_dR, color='tab:blue', bounds=True, fill_al
 ax.plot(zs, me[0] * (1.0 + zs) ** 2.7, lw=5, alpha=0.25, color="k", label=r"SFR: $\lambda_z=2.7$")
 
 ax.set_xlabel(r"$z$", fontsize=18)
-ax.set_ylabel(r"$\mathcal{R}(z)$", fontsize=18)
+ax.set_ylabel(r"$\mathcal{R}(z)\,\mathrm{Gpc}^{-3}\mathrm{yr}^{-1}$", fontsize=18)
 ax.set_yscale("log")
 ax.set_xscale("log")
 ax.set_ylim(5,1e3)

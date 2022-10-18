@@ -11,7 +11,14 @@ default = ppds["Default"]
 mspl = ppds["BSplineInd"]
 mspl2 = ppds['BSplineIID']
 ax = plot_mean_and_90CI(ax, default["chieffs"], default["pchieff"], color='tab:blue', label='Default \n(Abbott et. al. 2021b)', bounds=False)
-ax = plot_mean_and_90CI(ax, mspl["chieffs"], mspl["pchieff"], color='tab:purple', label='This Work (Ind Spin)', bounds=False)
+
+with open(paths.data / "gaussian-spin-xeff-xp-ppd-data.json", 'r') as jf:
+    o3b_gaussian_data = json.load(jf)
+    o3b_gaussian_chi_eff_grid = np.array(o3b_gaussian_data['chi_eff_grid'])
+    o3b_gaussian_chi_eff_data = np.array(o3b_gaussian_data['chi_eff_pdfs'])
+
+ax = plot_mean_and_90CI(ax, o3b_gaussian_chi_eff_grid, o3b_gaussian_chi_eff_data, color='k', label='Gaussian \n(Abbott et. al. 2021b)', bounds=False)
+ax = plot_mean_and_90CI(ax, mspl["chieffs"], mspl["pchieff"], color='tab:orange', label='This Work (Ind Spin)', bounds=False)
 
 #handpicked_ppds = dd.io.load(
 #    paths.data / "BSpline_50m1_24chieff_smoothprior_powerlaw_q_z_fitlamb_ppds.h5"
@@ -23,11 +30,6 @@ ax = plot_mean_and_90CI(ax, mspl["chieffs"], mspl["pchieff"], color='tab:purple'
 #    pchiefss[i, :] /= norm
 #ax = plot_mean_and_90CI(ax, xs, pchiefss, color='tab:red', label='BSpline Chi Eff')
 
-with open(paths.data / "gaussian-spin-xeff-xp-ppd-data.json", 'r') as jf:
-    o3b_gaussian_data = json.load(jf)
-    o3b_gaussian_chi_eff_grid = np.array(o3b_gaussian_data['chi_eff_grid'])
-    o3b_gaussian_chi_eff_data = np.array(o3b_gaussian_data['chi_eff_pdfs'])
-ax = plot_mean_and_90CI(ax, o3b_gaussian_chi_eff_grid, o3b_gaussian_chi_eff_data, color='tab:green', label='Gaussian \n(Abbott et. al. 2021b)', bounds=False)
 ax = plot_mean_and_90CI(ax, mspl2["chieffs"], mspl2["pchieff"], color='tab:red', label='This Work (IID Spin)', bounds=True, fill_alpha=0.125)
 plt.xlim(-0.65, 0.5)
 plt.ylim(0, 5.25)
