@@ -6,12 +6,12 @@ is a piece-wise polynomial of order $k$ polynomials stitched together from defin
 They provide a useful and cheap way to interpolate generically smooth functions from a finite sampling of ``knot'' heights. 
 Basis splines of order $k$ are a set of order $k$ polynomials that form a complete basis for any spline function of order $k$. 
 Therefore, given an array of knot locations, $\mathbf{t}$ or knot vector, there exists a single unique linear combination of basis splines 
-for every possible spline function interpolated from knots, $\mathbf{t}$. The basis components for a given knot vector can be constructed  
-using the Cox-de Boor recursion formula \citep{deBoor78,monotone_regression_splines}. Given knots $t_0$, $t_1$,...,$t_{i+k}$ 
-the base case and recursion relation that generates this particular basis are defined as:
+for every possible spline function interpolated from $\mathbf{t}$. To construct a basis of $n$ components and knots, $t_0$, $t_1$,...,$t_{i+k}$, 
+we use the Cox-de Boor recursion formula \citep{deBoor78,monotone_regression_splines}. The recursion starts with the $k=0$ (constant) case and recursively constructs 
+the basis components of higher orders. The base case and recursion relation that generates this particular basis are defined as:
 
 \begin{equation}
-    B_{i,1}(x | \mathbf{t}) = 
+    B_{i,0}(x | \mathbf{t}) = 
     \begin{cases}
         1, & \text{if } t_i \leq x < t_{i+1} \\
         0, & \text{otherwise}
@@ -70,9 +70,9 @@ or the resulting spline function is flat when the basis coefficients are equal (
 the differences between adjacent knot coefficients get larger, one gets a smoothing effect on the spline function \citep{eilers2021practical}. 
 With hierarchical Bayesian inference as our statistical framework, we formulate the penalized likelihood of \citet{eilers2021practical}'s P-Splines with 
 their Bayesian analog \citep{BayesianPSplines}. The Bayesian P-Spline prior places Gaussian distributions over the $r$-th order differences of the 
-coefficients \citep{BayesianPSplines,Jullion2007RobustSO}. This is also sometimes referred to as a Gaussian random walk prior. 
+coefficients \citep{BayesianPSplines,Jullion2007RobustSO}. This is also sometimes referred to as a Gaussian random walk prior, and is similar in spirit to a Gaussian process prior used to regularize or smooth histogram bin heights as done in other non-parametric population studies \citep{Mandel_2016,o3b_astro_dist}. 
 For a spline basis with $n$ degree's of freedom, and a difference penalty of order of $r$ (see \citet{eilers2021practical}), 
-the smoothing prior is defined as:
+the smoothing prior on our basis spline coefficients, $\bm{c}$ is defined as:
 
 \begin{eqnarray}
 \bm{c} \sim \mathcal{N}(0, \sigma) \\
@@ -116,32 +116,32 @@ scale that the data prefers.
 %the power-law like mass distributions that are commonly used. 
 
 This prior is imparting a natural attraction of the coefficients closer to each other in order to smooth the spline function, so one 
-must ensure that the spline function is in fact flat given all equal coefficients. There needs to be $n+k$ knots to construct an order-k 
+must ensure that the spline function is in fact flat given all equal coefficients. There needs to be $n+k+1$ knots to construct an order-k 
 basis with n degrees of freedom. Some studies place knots on top of each other at hard parameter boundaries \citep{deBoor78,monotone_regression_splines}, 
 which may seem motivated, but this violates the above condition necessary for the P-Spline prior. We follow the distinction in \citet{eilers2021practical} 
-that such a smoothing prior is only valid with ``proper'' spline bases. A proper basis is where all $n+k$ knots are evenly and equally spaced, 
+that such a smoothing prior is only valid with ``proper'' spline bases. A proper basis is where all $n+k+1$ knots are evenly and equally spaced, 
 see Figure \ref{fig:spline_basis}, as opposed to stacking them at the bounds.
 
 \section{Hierarchical Bayesian Inference} \label{sec:hierarchical_inference}
 
 % This appendix goes over in detail the hierarchical bayeisan inference framework
-We use hierarchical Bayesian inference to infer the population properties of CBCs. We want to infer the number density of merging CBCs 
+We use hierarchical Bayesian inference to infer the population properties of CBCs. We want to infer the number density of merging compact binaries  
 in the universe and how this can change with their masses, spins, etc. Often times it is useful to formulate the question in terms of the 
-merger rates which is the number of mergers per $Gpc^{3}$ co-moving volume per year. For a set of hyperparameters, $\Lambda$, $\lambda$, and local ($z=0$) 
-merger rate density, $\mathcal{R}_0$, we write the overall number density of BBH mergers in the universe as: 
+merger rates which is the number of mergers per $Gpc^{3}$ co-moving volume per year. For a set of hyperparameters, $\Lambda$, $\lambda$, and overall 
+merger rate, $\mathcal{R}$, we write the overall number density of BBH mergers in the universe as: 
 
 \begin{equation} \label{number_density}
-     \frac{dN(\theta, z | \mathcal{R}_0, \Lambda, \lambda)}{d\theta dz} = \frac{dV_c}{dz}\bigg(\frac{T_\mathrm{obs}}{1+z}\bigg) \frac{d\mathcal{R}(\theta, z | \mathcal{R}_0, \Lambda, \lambda)}{d\theta} = \mathcal{R}_0 p(\theta | \Lambda) p(z | \lambda)
+     \frac{dN(\theta, z | \mathcal{R}, \Lambda, \lambda)}{d\theta dz} = \frac{dV_c}{dz}\bigg(\frac{T_\mathrm{obs}}{1+z}\bigg) \frac{d\mathcal{R}(\theta, z | \mathcal{R}_0, \Lambda, \lambda)}{d\theta} = \mathcal{R} p(\theta | \Lambda) p(z | \lambda)
 \end{equation}
 
 \noindent
-Where up above, we denote the co-moving volume element as $dV_c$ \citep{hogg_cosmo}, and $T_\mathrm{obs}$ as the observing time period that produced the 
+where up above, we denote the co-moving volume element as $dV_c$ \citep{hogg_cosmo}, and $T_\mathrm{obs}$ as the observing time period that produced the 
 catalog with the related factor of $1+z$ converting this detector-frame time to source-frame. We assume a Lambda CDM cosmology using 
 the cosmological parameters from \citet{Planck2015}. We model the merger rate evolving with redshift following a power law distribution: 
-$p(z|\lambda) \propto \frac{dV_c}{dz}\frac{1}{1+z}(1+z)^\lambda$ \cite{Fishbach_2018redshift}. When integrating equation \ref{number_density} across all $\theta$
+$p(z|\lambda) \propto \frac{dV_c}{dz}\frac{1}{1+z}(1+z)^\lambda$ \citep{Fishbach_2018redshift}. When integrating equation \ref{number_density} across all $\theta$
 and out to some maximum redshift, $z_\mathrm{max}$, we get the total number of CBCs in the universe out to that redshift. We follow previous notations, \
 letting $\{d_i\}$ represent the set of data from $N_\mathrm{obs}$ CBCs observed with gravitational waves. The merger rate is then described as an inhomogeneous 
-Poisson process and after imposing the usual log-uniform prior on the merger rate, we marginalize over the local merger rate, $\mathcal{R}_0$, and arrive at the posterior
+Poisson process and after imposing the usual log-uniform prior on the merger rate, we marginalize over the merger rate, $\mathcal{R}$, and arrive at the posterior
 distribution of our hyperparameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}.
 
 \begin{equation}
@@ -149,7 +149,7 @@ distribution of our hyperparameters, $\Lambda$ \citep{Mandel_2019, Vitale_2021}.
 \end{equation}
 
 \noindent
-Where above, we replaced the integrals over each event's likelihood with ensemble averages over $K_i$ posterior samples. Above, $j$
+where above, we replaced the integrals over each event's likelihood with ensemble averages over $K_i$ posterior samples. Above, $j$
 indexes the $K_i$ posterior samples from each event and $\pi(\theta, z)$ is the default prior used by parameter estimations that 
 produced the posterior samples for each event. In the analyses of GWTC-3, either the default prior used was uniform in detector frame masses, 
 component spins and Euclidean volume or the posterior samples were re-weighted to such a prior before using them in our analysis. 
@@ -181,7 +181,7 @@ with the Monte Carlo sum estimate $\mu$, and its corresponding variance and effe
 \end{equation}
 
 \noindent
-Where the sum is only over the $N_\mathrm{found}$ injections that were successfully detected out of $N_\mathrm{inj}$ total injections, 
+where the sum is only over the $N_\mathrm{found}$ injections that were successfully detected out of $N_\mathrm{inj}$ total injections, 
 and $p_\mathrm{inj}(\theta, z)$ is the reference distribution from which the injections were drawn. We use the LVK released injection sets that describe the 
 detector sensitivities over the first, second and third observing runs \citep{o1o2o3_injection_sets}. Additionally, we follow the procedure 
 outlined in \citet{Farr_2019} to marginalize the uncertainty in our estimate of $\xi(\Lambda, \lambda)$, in which we verify that $N_\mathrm{eff}$ is 

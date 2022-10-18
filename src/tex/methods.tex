@@ -1,7 +1,7 @@
 \section{Building the Model} \label{sec:methods}
 
-We construct our data-driven model with the application of basis splines, or B-Splines \citep{deBoor78}. B-Splines of order $k$ are a set of order $k-1$ polynomials that 
-span the space of possible spline functions interpolated from a given set of knot locations. The basis representation of the splines allows for the computationally
+We construct our data-driven model with the application of basis splines, or B-Splines \citep{deBoor78}. B-Splines of order $k$ are a set of order $k$ polynomials that 
+span the space of possible spline functions interpolated from a given set of knot locations. For all B-Splines used in our model we use a third order basis which consists of individual cubic polynomials. The basis representation of the splines allows for the computationally
 expensive interpolation to be done in a single preprocessing step -- amortizing the cost of model evaluation during inference. To mitigate the unwanted side effects of 
 adding extra knots and to avoid running a model grid of differing numbers of knots (as in \citet{Edelman_2022ApJ}), we use the smoothing prior for Bayesian P-Splines \citep{eilers2021practical,BayesianPSplines,Jullion2007RobustSO}, 
 allowing the data to pick the optimal scale needed to fit the present features. We discuss basis splines, the smoothing prior, and our specific prior choices on hyperparameters in Appendix \ref{sec:basis_splines}, \ref{sec:psplines} and \ref{sec:modelpriors}.
@@ -12,10 +12,10 @@ spin degrees of freedom of a binary merger: component spin magnitudes $a_1$ and 
 We assume the polar spin angles are uniformly distributed in the orbital plane. For the primary mass distribution, we model the log probability with a B-Spline interpolated over 
 knots linearly spaced in $\log(m_1)$ from a minimum black hole mass, which we fix to $5\msun$, and a maximum mass 
 that we set to $100\msun$. We then have the hyper-prior on primary mass with log probability density 
-$\log(p(m_1 | \bm{c})) \propto B_{k}(\log(m_1) | \bm{c})$, where $B_{k}$ is the 
-$k$-th order B-Spline function with basis coefficients $\bm{c}$. We follow the same procedure 
+$\log(p(m_1 | \bm{c})) \propto B_{k=3}(\log(m_1) | \bm{c})$, where $B_{k=3}$ is the 
+cubic B-Spline function with a vector of basis coefficients $\bm{c}$. We follow the same procedure 
 for the models in mass ratio and spin distributions with knots spaced linearly across each domain 
-so that we have $\log(p(\theta | \bm{c}_\theta)) \propto B_{k}(\theta | \bm{c}_\theta)$, 
+so that we have $\log(p(\theta | \bm{c}_\theta)) \propto B_{k=3}(\theta | \bm{c}_\theta)$, 
 where $\theta$ can be $q$, $a_1$, $a_2$, $\cos{\theta_1}$ or $\cos{\theta_2}$. 
 For the spin magnitude and tilt distributions we construct two versions of the model: first, we model  
 each component's distribution as independently and identically distribution (IID), 
@@ -26,6 +26,5 @@ from the Planck 2015 results \citep{Planck2015}. This defines an analytical mapp
 We take a semi-parametric approach to model the evolution of the merger rate with redshift, following \citet{Edelman_2022ApJ}, that parameterizes modulations to an underlying model 
 with splines (in our case basis splines). We use the \textsc{PowerlawRedshift} model as the underlying distribution to modulate, which has a single hyperparameter, $\lambda_z$, and 
 probability density defined as: $p(z|\lambda_z)\propto \frac{dV_c}{dz}(1+z)^{\lambda_z-1}$ \citep{Fishbach_2018redshift}. For more detailed descriptions of each model and 
-specific prior choices used for the hyperparameters see Appendix \ref{sec:modelpriors}. Now that we have our comprehensive data-driven population model over 
-each of the 7 modeled parameters built, we fit our model using the usual hierarchical Bayesian inference framework (see appendix \ref{sec:hierarchical_inference} for a review) in order to characterize 
-the population of BBHs in the most recent catalog of GW observations, GWTC-3 \citep{GWTC3,o3b_astro_dist}.
+specific prior choices used for the hyperparameters see Appendix \ref{sec:modelpriors}. Now that we have our comprehensive data-driven population model built, we simultaneously fit the basis spline models on the BBH masses, spins and redshift. We use the usual hierarchical Bayesian inference framework (see appendix \ref{sec:hierarchical_inference} for a review; \citet{o1o2_pop,o3a_pop,o3b_astro_dist}), to perform the most 
+extensive characterization of the population of BBHs to date using the most recent catalog of GW observations, GWTC-3 \citep{GWTC3}.

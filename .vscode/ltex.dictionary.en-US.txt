@@ -43,3 +43,4 @@ semi-parameteric
 isotropically
 ShowYourWork
 post-Newtownian
+misalignments

@@ -24,7 +24,7 @@ We start with our inference of the mass distribution.
 
 Figure \ref{fig:mass_distribution} shows the primary mass distribution inferred with our B-Spline model (red), where we see features consistent with those inferred by the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \citep{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist}. 
 In particular our B-Spline model finds peaks in merger rate density as a function of primary mass at both $\sim10\msun$ and $\sim35\msun$, agreeing with those 
-reported using the same dataset in \citet{o3b_astro_dist}. The B-Spline model finds the same feature at $\sim18\msun$ as the \textsc{PowerlawSpline} model, but remains consistent with the \textsc{PowerlawSpline} model; the mass distribution is more uncertain in this region.
+reported using the same dataset in \citet{o3b_astro_dist}. The B-Spline model finds the same feature at $\sim18\msun$ as the \textsc{PowerlawSpline} model, but remains consistent with the \textsc{PowerlawPeak} model; the mass distribution is more uncertain in this region.
 We find the largest disagreement at low masses, where the power-law-based models show a higher rate below ${\sim}8-9\msun$. This is partly due to the minimum mass hyperparameter (where the power law ``begins'') serving as the minimum allowable primary and secondary masses of the catalog. This leads to inferences of $m_\mathrm{min}$ below the minimum observed primary mass in the catalog, which is $\sim 6.4\msun$, to account for secondary BBH masses lower than that. We choose to fix the minimum black hole mass for both primary and secondaries to $5\msun$, 
 similar to the inferred minimum mass in \citet{o3b_astro_dist}. The lack of observations of binaries with low primary mass make rate estimates in this region strongly model and prior dependent. We could be seeing signs of a decrease in merger rate from a ``lower mass gap'' between neutron star and BH masses, or we could be seeing fluctuations due to low-number statistics.  Either way we expect this to be resolved with future catalog updates. We also find no evidence for a sharp fall off in merger rate either following 
 the pileup at ${\sim}35\,\msun$ -- expected if such a pileup was due to pulsational pair instability supernovae (PPISNe) -- or where the maximum mass truncation of the power law models 
@@ -96,11 +96,11 @@ Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution
 The B-Spline model results are consistent with those using the Beta distribution, peaking near $a\sim0.2$, with 90\% of BBH spins below 
 \result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][a_90percentile]}$} at 90\% credibility. The B-Spline model does not impose vanishing support at the extremal values like the Beta distribution, 
 allowing it to probe the zero-spin question. We find broad support, with large variance, for non-zero probabilities at $a_i=0$, but cannot confidently determine the presence of 
-a significant non-spinning subpopulation, corroborating similar recent conclusions \citep{BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin}. 
+a significant non-spinning subpopulation, corroborating similar recent conclusions \citep{BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin,Mould2022}. 
 We repeat the same analysis with independent B-Spline distributions for each spin magnitude component. In figure \ref{fig:ind_spinmag_dist} 
 we show the inferred primary (orange), and secondary (olive) spin magnitude distributions inferred when relaxing the IID assumption. We find that the primary spin magnitude distribution 
 peaks slightly higher, at $a\sim0.25$, than the IID B-Spline model, but with similar support at near vanishing spins. The secondary spin magnitude distribution is more uncertain due to the 
-higher measurement uncertainty when inferring the secondary spins of BBH systems. The secondary distribution also peaks at smaller spin magnitudes of $a\sim0.15$, showing potentially rates at $a\sim0$ than the primary distribution or B-Spline IID spin magnitude distribution in figure \ref{fig:iid_spinmag_dist}, though uncertainties are large. While the distributions are broadly consistent, we could be seeing the first signs that component spin magnitude distributions are uniquely distributed. 
+higher measurement uncertainty when inferring the secondary spins of BBH systems. The secondary distribution also peaks at smaller spin magnitudes of $a\sim0.15$, showing potentially rates at $a\sim0$ than the primary distribution or B-Spline IID spin magnitude distribution in figure \ref{fig:iid_spinmag_dist}, though uncertainties are large. While the distributions are broadly consistent, we could be seeing signs that component spin magnitude distributions are uniquely distributed, which can be produced through mass-ratio reversal in isolated binary evolution \citep{Mould2022}.
 
 \subsubsection{Spin Orientation}
 
@@ -125,8 +125,9 @@ use-case where data-driven models can help us understand the population.
 Figure \ref{fig:iid_spintilt_dist} shows the inferred spin magnitude distribution with the IID spin B-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
 The B-Spline inferences have large uncertainties but start to show the same features as found and discussed in \citet{spinitasyoulike}. 
 We find a distribution that instead of intrinsically peaking at $\cos{\theta}=1$, is found to peak at: $\cos{\theta}=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][peakCosTilt]}$}, at 
-90\% credibility. We find less, but still considerable support for misaligned spins (i.e. $\cos{\theta}<0$), compared to the \textsc{Default} model. Specifically we 
-find that the fraction of misaligned systems is $f_{\cos{\theta}<0}=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][negFrac]}$}. This implies 
+90\% credibility. We find less, but still considerable support for misaligned spins (i.e. $\cos{\theta}<0$), consistent with other recent studies \citep{o3a_pop,o3b_astro_dist,Callister_NoEvidence}. Specifically we 
+find that the fraction of misaligned systems is $f_{\cos{\theta}<0}=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][negFrac]}$}, compared to 
+$f_{\cos{\theta}<0}=$\result{$\CIPlusMinus{\macros[Default][negFrac]}$} with the \textsc{Default} model from \citet{o3b_astro_dist}. This implies 
 the presence of an isotropic component as expected by dynamical formation channels, albeit less than with the \textsc{Default} model. To quantify the 
 amount of isotropy in the tilt distribution we calculate $\log_{10}Y$, where $Y$ is the ratio of nearly aligned tilts to nearly anti-aligned, 
 introduced in \citet{spinitasyoulike} and defined as:
@@ -185,16 +186,17 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
 
 While the component spin magnitudes and tilts are more directly tied to formation physics, they are typically poorly measured.  The best-measured spin quantity, which enters at the highest post-Newtownian order, is the effective spin: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. Figure \ref{fig:chieff_dist} 
 shows the inferred effective spin distribution with the two versions of our B-Spline models (red and purple), 
-along with results on the \textsc{Default} and \textsc{Gaussian} models from \citet{o3b_astro_dist}. We find considerable agreement 
-among the effective spin distributions, but the more flexible B-Spline models in component spins more closely resemble results form the \textsc{Gaussian} model that directly models $\chi_\mathrm{eff}$, than the \textsc{Default} model. This could indicate that the population fit is driven by $\chi_\mathrm{eff}$ 
+along with results on the \textsc{Default} \citep{Talbot_2017} and \textsc{Gaussian} \citep{Miller2020} models from \citet{o3b_astro_dist}. We find considerable agreement 
+among the effective spin distributions, but the more flexible B-Spline models in component spins more closely resemble results from the \textsc{Gaussian} model that directly models $\chi_\mathrm{eff}$, than the \textsc{Default} model. This could indicate that the population fit is driven by $\chi_\mathrm{eff}$ 
 more than the component spin dimensions. The B-Spline model finds very similar shapes to the other models, with a peak centered at 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$}, compared to 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} with the \textsc{Default} model and 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$} with the \textsc{Gaussian} $\chi_\mathrm{eff}$ model. 
-As for spin misalignment, we calculate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and 
-find for the B-Spline model $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$}, compared to 
-$f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} with the \textsc{Default} model and 
-$f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$} with the Gaussian $\chi_\mathrm{eff}$ model.
+As for spin misalignment, we calculate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and find similar 
+agreement with previous work \citep{o3a_pop,o3b_astro_dist,Callister_NoEvidence}. We find for the B-Spline model 
+$f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$}, compared to 
+$f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} and $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$} 
+with the \textsc{Default} and \textsc{Gaussian} models from \citet{o3b_astro_dist}.
 
 \begin{figure}[h]
     \includegraphics[width=\linewidth]{figures/rate_vs_z_plot.pdf}
@@ -219,8 +221,8 @@ found $\lambda_z = $\result{$\CIPlusMinus{\macros[PLPeak][lamb]}$} when inferred
 flexible model infers a power law slope of $\lambda_z = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][lamb]}$}. We show the basis spline modulations or departure 
 from the power law in \ref{fig:z_modulation} compared to the prior -- showing where we cannot constrain any significant deviations from the simpler parametric power law model. 
 The extra freedom of our model does inflate the uncertainty in its rate estimates, especially at $z\sim0$ where there are not any observations in the catalog. 
-We find a local ($z=0$) merger rate of $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][local_rate]}$} using the B-Spline modulation model 
-which compares to $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[PLPeak][local_rate]}$} for the GWTC-3 result. 
+We find a local ($z=0$) merger rate of $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][local_rate]}\,Gpc^{-3}yr^{-1}$} using the B-Spline modulation model 
+which compares to $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[PLPeak][local_rate]}\,Gpc^{-3}yr^{-1}$} for the GWTC-3 result. 
 
 \begin{figure}[h]
     \includegraphics[width=\linewidth]{figures/z_modulation_plot.pdf}
