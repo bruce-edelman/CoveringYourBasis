@@ -40,8 +40,8 @@ def get_percentile(pdfs, xs, perc):
 
 def get_mass_peaks(ms, ps):
     low_sel = ms < 15
-    mid_sel = (16 < ms) & (ms < 23)
-    high_sel = (24 < ms) & (ms < 44)
+    mid_sel = (15 <= ms) & (ms < 25)
+    high_sel = (25 <= ms) & (ms < 45)
     peaks = {'10': [], '18': [], '35': []}
     for i in range(ps.shape[0]):
         for sel,k in zip([low_sel, mid_sel, high_sel], ['10', '18', '35']):
