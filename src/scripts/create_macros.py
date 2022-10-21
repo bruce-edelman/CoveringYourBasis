@@ -38,6 +38,17 @@ def get_percentile(pdfs, xs, perc):
         x.append(xs[i])
     return np.array(x)
 
+def get_mass_peaks(ms, ps):
+    low_sel = ms < 15
+    mid_sel = (15 <= ms) & (ms < 25)
+    high_sel = (25 <= ms) & (ms < 45)
+    peaks = {'10': [], '18': [], '35': []}
+    for i in range(ps.shape[0]):
+        for sel,k in zip([low_sel, mid_sel, high_sel], ['10', '18', '35']):
+            idx = np.argmax(ps[i,sel])
+            peaks[k].append(ms[sel][idx])
+    return peaks
+    
 def BSplineMassMacros():
     print("Saving Mass Distribution Macros...")
     ms, m_pdfs, _, _ = load_mass_ppd()
@@ -51,10 +62,15 @@ def BSplineMassMacros():
     ps_mpdfs, _, ps_ms, _ = load_o3b_paper_run_masspdf(paths.data / 'spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5')
     ps_m1s = get_percentile(plpeak_mpdfs, plpeak_ms, 1) 
     ps_m99s = get_percentile(ps_mpdfs, ps_ms, 99)
-    ps_m75s = get_percentile(ps_mpdfs, ps_ms, 75)  
+    ps_m75s = get_percentile(ps_mpdfs, ps_ms, 75)
+    bspline_peaks = get_mass_peaks(ms, m_pdfs)
     return {'PLPeak': {'m_1percentile': save_param_cred_intervals(plpeak_m1s), 'm_75percentile': save_param_cred_intervals(plpeak_m75s), 'm_99percentile': save_param_cred_intervals(plpeak_m99s)}, 
-            'BSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_75percentile': save_param_cred_intervals(m75s), 'm_99percentile': save_param_cred_intervals(m99s)}, 
+            'BSpline': {'m_1percentile': save_param_cred_intervals(m1s), 'm_75percentile': save_param_cred_intervals(m75s), 'm_99percentile': save_param_cred_intervals(m99s), 
+                        'peaks': {'10': save_param_cred_intervals(np.array(bspline_peaks['10'])), 
+                                  '18': save_param_cred_intervals(np.array(bspline_peaks['18'])), 
+                                  '35': save_param_cred_intervals(np.array(bspline_peaks['35']))}}, 
             'PLSpline': {'m_1percentile': save_param_cred_intervals(ps_m1s), 'm_75percentile': save_param_cred_intervals(ps_m75s), 'm_99percentile': save_param_cred_intervals(ps_m99s)}}
+
 
 def BSplineIIDSpinMacros():
     print("Saving BSpline IID Component Spin macros...")

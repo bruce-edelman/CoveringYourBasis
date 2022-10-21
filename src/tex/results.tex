@@ -24,9 +24,11 @@ We start with our inference of the mass distribution.
 
 Figure \ref{fig:mass_distribution} shows the primary mass distribution inferred with our B-Spline model (red), where we see features consistent with those inferred by the \textsc{PowerlawPeak} and \textsc{PowerlawSpline} mass models \citep{Talbot_2018,o3a_pop,Edelman_2022ApJ,o3b_astro_dist,gwtc3_POPDATA}. 
 In particular our B-Spline model finds peaks in merger rate density as a function of primary mass at both $\sim10\msun$ and $\sim35\msun$, agreeing with those 
-reported using the same dataset in \citet{o3b_astro_dist}. The B-Spline model finds the same feature at $\sim18\msun$ as the \textsc{PowerlawSpline} model, but remains consistent with the \textsc{PowerlawPeak} model; the mass distribution is more uncertain in this region.
+reported using the same dataset in \citet{o3b_astro_dist}.  The B-Spline model finds the same feature at $\sim18\msun$ as the \textsc{PowerlawSpline} model, but remains consistent with the \textsc{PowerlawPeak} model; the mass distribution is more uncertain in this region. For each of these features we find the local maximums occurring at primary masses of \result{$\CIPlusMinus{\macros[MassDistribution][BSpline][peaks][10]}\,\msun$},  
+\result{$\CIPlusMinus{\macros[MassDistribution][BSpline][peaks][18]}\,\msun$}, and  
+\result{$\CIPlusMinus{\macros[MassDistribution][BSpline][peaks][35]}\,\msun$} all at 90\% credibility.
 We find the largest disagreement at low masses, where the power-law-based models show a higher rate below ${\sim}8-9\msun$. This is partly due to the minimum mass hyperparameter (where the power law ``begins'') serving as the minimum allowable primary and secondary masses of the catalog. This leads to inferences of $m_\mathrm{min}$ below the minimum observed primary mass in the catalog, which is $\sim 6.4\msun$, to account for secondary BBH masses lower than that. We choose to fix the minimum black hole mass for both primary and secondaries to $5\msun$, 
-similar to the inferred minimum mass in \citet{o3b_astro_dist}. The lack of observations of binaries with low primary mass make rate estimates in this region strongly model and prior dependent. We could be seeing signs of a decrease in merger rate from a ``lower mass gap'' between neutron star and BH masses, or we could be seeing fluctuations due to low-number statistics.  Either way we expect this to be resolved with future catalog updates. We also find no evidence for a sharp fall off in merger rate either following 
+similar to the inferred minimum mass in \citet{o3b_astro_dist}. The lack of observations of binaries with low primary mass make rate estimates in this region strongly model dependent, while our flexible model provides an informed upper limit on the rate in this region and given the selection effects and that there are no observations. We could be seeing signs of a decrease in merger rate from a ``lower mass gap'' between neutron star and BH masses, or we could be seeing fluctuations due to low-number statistics.  Either way we expect this to be resolved with future catalog updates. We also find no evidence for a sharp fall off in merger rate either following 
 the pileup at ${\sim}35\,\msun$ -- expected if such a pileup was due to pulsational pair instability supernovae (PPISNe) -- or where the maximum mass truncation of the power law models 
 are inferred. The lack of any high mass truncation, along with the peak at $\sim35\msun$ (significantly lower than expected from PPISNe) may pose challenges for conventional stellar 
 evolution theory. This could be hinting at the presence of subpopulations that avoid pair instability supernovae during binary formation, but the confirmation of the existence of such subpopulations 
@@ -85,14 +87,14 @@ distinct subpopulation of non-spinning or negligibly spinning black holes that c
         B-Spline IID & $\CIPlusMinus{\macros[BSplineIIDCompSpins][peak_a]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][a_90percentile]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][peakCosTilt]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][negFrac]}$ & $\CIPlusMinus{\macros[BSplineIIDCompSpins][log10gammaFrac]}$ \\ \hline
         B-Spline Ind(primary) & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peak_a1]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][a1_90percentile]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt1]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][negFrac1]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10gammaFrac1]}$ \\ \hline
         B-Spline Ind(secondary) & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peak_a2]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][a2_90percentile]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][peakCosTilt2]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][negFrac2]}$ & $\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10gammaFrac2]}$  \\ \hline
-        \textsc{Default} & $\CIPlusMinus{\macros[Default][peak_a]}$ & $\CIPlusMinus{\macros[Default][a_90percentile]}$ & $\CIPlusMinus{\macros[Default][peakCosTilt]}$ & $\CIPlusMinus{\macros[Default][negFrac]}$ & $\CIPlusMinus{\macros[Default][log10gammaFrac]}$ \\ \hline
+        \textsc{Default} \citep{o3b_astro_dist} & $\CIPlusMinus{\macros[Default][peak_a]}$ & $\CIPlusMinus{\macros[Default][a_90percentile]}$ & $\CIPlusMinus{\macros[Default][peakCosTilt]}$ & $\CIPlusMinus{\macros[Default][negFrac]}$ & $\CIPlusMinus{\macros[Default][log10gammaFrac]}$ \\ \hline
     \end{tabular}
     \caption{Summary of Component Spin distributions inferred both the independent and IID component spin B-Spline models and the \textsc{Default} spin model from \citet{o3b_astro_dist}.}
     \label{tab:compspins}
 \end{table*}
 
-We model the spin magnitude distributions as IID B-Spline distributions as a check to the assumptions of the \textsc{Default} model. 
-Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the B-Spline model, compared with the \textsc{Default} model. 
+We model the spin magnitude distributions as IID B-Spline distributions. 
+Figure \ref{fig:iid_spinmag_dist} shows the inferred spin magnitude distribution with the B-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
 The B-Spline model results are consistent with those using the Beta distribution, peaking near $a\sim0.2$, with 90\% of BBH spins below 
 \result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][a_90percentile]}$} at 90\% credibility. The B-Spline model does not impose vanishing support at the extremal values like the Beta distribution, 
 allowing it to probe the zero-spin question. We find broad support, with large variance, for non-zero probabilities at $a_i=0$, but cannot confidently determine the presence of 
@@ -104,7 +106,7 @@ higher measurement uncertainty when inferring the secondary spins of BBH systems
 
 \subsubsection{Spin Orientation}
 
-The \textsc{Default} spin model (used by \citet{o3b_astro_dist}) also assumes the spin orientation of both components are identical and independently distributed (IID), with a mixture model over an
+The \textsc{Default} spin model (used in \citet{o3a_pop, o3b_astro_dist}) also assumes the spin orientation of both components are identical and independently distributed (IID), with a mixture model over an
 aligned and an isotropic component. The aligned component is modeled with a truncated Gaussian distribution with mean at $\cos{\theta}=1$ and variance a free 
 hyperparameter to be fit \citep{Talbot_2017,Wysocki_2019,o3a_pop,o3b_astro_dist}. This provides a simple 2-parameter model motivated by simple distributions expected from the two main formation scenario families, allowing 
 for a straightforward interpretation of results. One possible limitation however, is that by construction this distribution is forced to peak at perfectly aligned spins, 
@@ -166,8 +168,8 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
         Model & $\chi_\mathrm{eff,peak}$ & $f_{\chi_\mathrm{eff}<0}$ & $f_{\chi_\mathrm{eff}<-0.3}$ & $f_\mathrm{dyn}$ & $f_\mathrm{HM}$ \\ \hline \hline
         B-Spline IID & $\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][iid][frac_hm]}$ \\ \hline
         B-Spline Ind & $\CIPlusMinus{\macros[ChiEffective][ind][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][ind][frac_hm]}$ \\ \hline
-        \textsc{Default} & $\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][default][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][default][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][default][frac_hm]}$ \\ \hline
-        \textsc{Gaussian} & $\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][frac_hm]}$ \\ \hline
+        \textsc{Default} \citep{o3b_astro_dist} & $\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][default][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][default][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][default][frac_hm]}$ \\ \hline
+        \textsc{Gaussian} \citep{o3b_astro_dist}  & $\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelowNeg0p3]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][frac_dyn]}$ & $\CIPlusMinus{\macros[ChiEffective][gaussian][frac_hm]}$ \\ \hline
     \end{tabular}
     \caption{Summary of the effective spin distributions inferred with the B-Spline model variations, along with the \textsc{Default} and \textsc{Gaussian} models from \citet{o3b_astro_dist}.}
     \label{tab:chieff}
@@ -187,11 +189,10 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
 While the component spin magnitudes and tilts are more directly tied to formation physics, they are typically poorly measured.  The best-measured spin quantity, which enters at the highest post-Newtownian order, is the effective spin: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. Figure \ref{fig:chieff_dist} 
 shows the inferred effective spin distribution with the two versions of our B-Spline models (red and purple), 
 along with results on the \textsc{Default} \citep{Talbot_2017} and \textsc{Gaussian} \citep{Miller2020} models from \citet{o3b_astro_dist}. We find considerable agreement 
-among the effective spin distributions, but the more flexible B-Spline models in component spins more closely resemble results from the \textsc{Gaussian} model that directly models $\chi_\mathrm{eff}$, than the \textsc{Default} model. This could indicate that the population fit is driven by $\chi_\mathrm{eff}$ 
-more than the component spin dimensions. The B-Spline model finds very similar shapes to the other models, with a peak centered at 
+among the effective spin distributions, but the more flexible B-Spline models in component spins more closely resemble results from the \textsc{Default} model, also using the component spins. The B-Spline model finds very similar shapes to the other models, with a single peak centered at 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$}, compared to 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][PeakChiEff]}$} with the \textsc{Default} model and 
-$\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$} with the \textsc{Gaussian} $\chi_\mathrm{eff}$ model. 
+$\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][PeakChiEff]}$} with the \textsc{Gaussian} $\chi_\mathrm{eff}$ models from \citet{o3b_astro_dist}. 
 As for spin misalignment, we calculate the fraction of systems with effective spins that are misaligned (i.e. $\chi_\mathrm{eff}<0$) and find similar 
 agreement with previous work \citep{o3a_pop,o3b_astro_dist,Callister_NoEvidence}. We find for the B-Spline model 
 $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$}, compared to 
