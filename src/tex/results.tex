@@ -34,7 +34,7 @@ are inferred. The lack of any high mass truncation, along with the peak at $\sim
 evolution theory. This could be hinting at the presence of subpopulations that avoid pair instability supernovae during binary formation, but the confirmation of the existence of such subpopulations 
 cannot be determined with the current catalog. 
 
-\begin{figure}[ht]
+\begin{figure}[hb!]
     \includegraphics[width=\linewidth]{figures/q_distribution_plot.pdf}
     \caption{The marginal mass ratio distribution inferred with the B-Spline model (red), with 18 knots spaced linearly in $q$, from 0.05 to 1. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
     We show the inferred PPD from the \textsc{PowerlawPeak} (blue) and \textsc{PowerlawSpline} (green) models from the LVK's GWTC-3 population analyses \citep{o3b_astro_dist}.}
@@ -51,7 +51,7 @@ divided by the most common primary mass, ${\sim}10\msun$.
 
 \subsection{Binary Black Hole Spins} \label{sec:spin_dist}
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \begin{centering}    
         \includegraphics[width=\linewidth]{figures/iid_spinmag.pdf}
         \caption{The spin magnitude distribution inferred with the B-Spline model (red) with 16 knots spaced linearly from 0 to 1, assuming the components are IID. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
@@ -68,7 +68,7 @@ The Beta distribution provides a simple 2-parameter model that can produce a wid
 the Beta distribution non-singular (i.e. $\alpha>1$ and $\beta>1$) enforces a spin magnitude that always has $p(a_i=0) = 0$. Recent studies have proposed the possible existence of a 
 distinct subpopulation of non-spinning or negligibly spinning black holes that can elude discovery with such a model \citep{FullerMa2019,RouletGWTC2Pop,BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin}. 
 
-\begin{figure}[ht]
+\begin{figure}[hb!]
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/ind_spinmag.pdf}
         \caption{The primary (orange) and secondary (olive) spin magnitude distributions inferred with the B-Spline model
@@ -114,7 +114,7 @@ i.e. $\cos{\theta}=1$. While this may be a reasonable assumption, \citet{spinita
 used to model the spin orientation distribution and found considerable evidence that the distribution peaks away from $\cos{\theta}=1$. Again, this provides a clear 
 use-case where data-driven models can help us understand the population.
 
-\begin{figure}
+\begin{figure}[ht]
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/iid_spintilt.pdf}
         \caption{The spin orientation distribution inferred with the B-Spline model (red) with 16 knots spaced linearly from -1 to 1, and assuming the components are IID. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
@@ -149,7 +149,7 @@ $f_{\cos{\theta_2}<0}=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins
 for each component distribution and find: $\log_{10}Y_1=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10gammaFrac1]}$} and 
 $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10gammaFrac2]}$}.
 
-\begin{figure}
+\begin{figure}[ht]
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/ind_spintilt.pdf}
         \caption{The primary (orange) and secondary (olive) spin orientation distributions inferred with the B-Spline model with 16 knots spaced linearly from -1 to 1. The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. 
@@ -161,7 +161,7 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
 
 \subsection{The Effective Spin Dimension}
 
-\begin{figure} 
+\begin{figure}[ht]
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/chi_eff.pdf}
         \caption{The effective spin distribution inferred with the B-Spline IID spin model (red). The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. We show the inferred $\chi_\mathrm{eff}$ 
