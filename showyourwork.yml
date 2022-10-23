@@ -1,5 +1,6 @@
 version: 0.4.0
-
+stamp:
+  enabled: false
 dependencies:
   src/tex/ms.tex:
     - src/tex/macros.tex
