@@ -1,4 +1,5 @@
 version: 0.4.0
+verbose: true
 stamp:
   enabled: true
   xpos: 0.4
