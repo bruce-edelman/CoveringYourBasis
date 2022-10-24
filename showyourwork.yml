@@ -1,6 +1,6 @@
 version: 0.4.0
 stamp:
-  enabled: false
+  enabled: true
   xpos: 0.4
   ypos: 0.35
 dependencies:
