@@ -6,7 +6,7 @@ import json
 from utils import plot_mean_and_90CI
 
 fig, ax = plt.subplots(1,1,figsize=(7,5))
-ppds = dd.io.load(paths.data / "chi_eff_ppds.h5")
+ppds = dd.io.load(paths.data / "chi_eff_chi_p_ppds.h5")
 default = ppds["Default"]
 mspl = ppds["BSplineInd"]
 mspl2 = ppds['BSplineIID']

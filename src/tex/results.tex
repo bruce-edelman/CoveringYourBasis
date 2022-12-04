@@ -175,19 +175,29 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
 
 \subsection{The Effective Spin Dimension}
 
-\begin{figure}[ht!]
+\begin{figure*}[ht!]
     \begin{centering}
-        \includegraphics[width=\linewidth]{figures/chi_eff.pdf}
-        \caption{The effective spin distribution inferred with the B-Spline IID spin model (red). The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. We show the inferred $\chi_\mathrm{eff}$ 
-        PPD from the independent component spin B-Spline model (purple), and both the \textsc{Default} (blue) model and the 
-        Gaussian $\chi_\mathrm{eff}$ (green) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
-        \label{fig:chieff_dist}
+        \includegraphics[width=\linewidth]{figures/effspin.pdf}
+        \caption{The effective (left) and precessing (right) spin distributions inferred with the B-Spline IID spin model (red). The solid line shows the population predictive distribution (PPD), and the shaded region the 90\% credible interval. We show the inferred PPDs from the independent component spin B-Spline model (purple), and both the \textsc{Default} (blue) model and the 
+        Gaussian (green) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+        \label{fig:eff_dist}
     \end{centering}
-    \script{plot_chieff.py}
-\end{figure}
+    \script{plot_effspin.py}
+\end{figure*}
 
-While the component spin magnitudes and tilts are more directly tied to formation physics, they are typically poorly measured.  The best-measured spin quantity, which enters at the highest post-Newtownian order, is the effective spin: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. Figure \ref{fig:chieff_dist} 
-shows the inferred effective spin distribution with the two versions of our B-Spline models (red and purple), 
+%\begin{figure}[ht!]
+%    \begin{centering}
+   %     \includegraphics[width=\linewidth]{figures/chi_p.pdf}
+   %     \caption{The effective precessing spin distribution inferred with the B-Spline IID spin model (red). The solid line shows the population predictive %distribution (PPD), and the shaded region the 90\% credible interval. We show the inferred $\chi_\mathrm{p}$ 
+   %     PPD from the independent component spin B-Spline model (purple), and both the \textsc{Default} (blue) model and the 
+   %     Gaussian $\chi_\mathrm{p}$ (green) model from \citet{o3b_astro_dist}, the LVK's GWTC-3 population analyses.}
+   %     \label{fig:chip_dist}
+   % \end{centering}
+   % \script{plot_chip.py}
+% \end{figure}
+
+While the component spin magnitudes and tilts are more directly tied to formation physics, they are typically poorly measured.  The best-measured spin quantity, which enters at the highest post-Newtownian order, is the effective spin: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. Figure \ref{fig:eff_dist} 
+shows the inferred effective spin and precessing spin distributions with the two versions of our B-Spline models (red and purple), 
 along with results on the \textsc{Default} \citep{Talbot_2017} and \textsc{Gaussian} \citep{Miller2020} models from \citet{o3b_astro_dist}. We find considerable agreement 
 among the effective spin distributions, but the more flexible B-Spline models in component spins more closely resemble results from the \textsc{Default} model, also using the component spins. The B-Spline model finds very similar shapes to the other models, with a single peak centered at 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$}, compared to 

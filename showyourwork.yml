@@ -20,10 +20,16 @@ dependencies:
     - src/data/chi_eff_ppds.h5
   src/scripts/plot_ppcs.py:
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
-  src/scripts/plot_chieff.py:
-    - src/data/chi_eff_ppds.h5
+  src/scripts/plot_effspin.py:
+    - src/data/chi_eff_chi_p_ppds.h5
     - src/data/gaussian-spin-xeff-xp-ppd-data.json
-  src/scripts/create_chieff_from_compspin.py:
+  src/scripts/plot_chieff.py:
+    - src/data/chi_eff_chi_p_ppds.h5
+    - src/data/gaussian-spin-xeff-xp-ppd-data.json
+  src/scripts/plot_chip.py:
+    - src/data/chi_eff_chi_p_ppds.h5
+    - src/data/gaussian-spin-xeff-xp-ppd-data.json
+  src/scripts/create_effspin_from_compspin.py:
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
     - src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5
