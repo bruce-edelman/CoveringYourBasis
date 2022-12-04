@@ -44,3 +44,4 @@ isotropically
 ShowYourWork
 post-Newtownian
 misalignments
+Vitale

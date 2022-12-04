@@ -114,24 +114,24 @@ def model(mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, To
     pen_deg = 2
     
     mass_cs = numpyro.sample('mass_cs', dist.Normal(0,6), sample_shape=(mass_knots,))
-    mass_tau = numpyro.sample("mass_tau", dist.Uniform(2,1000))
+    mass_tau = numpyro.sample("mass_tau", dist.TruncatedNormal(loc=1.0, scale=3*mass_knots, low=1.0)) #dist.Uniform(2,1000))
     numpyro.factor("mass_log_smoothing_prior", apply_difference_prior(mass_cs, mass_tau, degree=pen_deg))
 
     q_cs = numpyro.sample('q_cs', dist.Normal(0,4), sample_shape=(q_knots,))
-    q_tau = numpyro.sample("q_tau", dist.Uniform(1,100))
+    q_tau = numpyro.sample("q_tau", dist.TruncatedNormal(loc=1.0, scale=3*q_knots, low=1.0)) #dist.Uniform(1,100))
     numpyro.factor("q_log_smoothing_prior", apply_difference_prior(q_cs, q_tau, degree=pen_deg))
 
     mag_cs = numpyro.sample('mag_cs', dist.Normal(0,1), sample_shape=(mag_knots,))
-    mag_tau = numpyro.sample("mag_tau",dist.Uniform(1,10))
+    mag_tau = numpyro.sample("mag_tau",dist.TruncatedNormal(loc=1.0, scale=3*mag_knots, low=1.0)) #dist.Uniform(1,10))
     numpyro.factor("mag_log_smoothing_prior", apply_difference_prior(mag_cs, mag_tau, degree=pen_deg))
     tilt_cs = numpyro.sample('tilt_cs', dist.Normal(0,1), sample_shape=(tilt_knots,))
-    tilt_tau = numpyro.sample("tilt_tau", dist.Uniform(1,10))
+    tilt_tau = numpyro.sample("tilt_tau", dist.TruncatedNormal(loc=1.0, scale=3*tilt_knots, low=1.0)) #dist.Uniform(1,10))
     numpyro.factor("tilt_log_smoothing_prior", apply_difference_prior(tilt_cs, tilt_tau, degree=pen_deg))
 
     lamb = numpyro.sample("lamb", dist.Normal(0,3))
     z_cs = numpyro.sample('z_cs', dist.Normal(0,1), sample_shape=(z_knots-1,))
     z_cs = jnp.concatenate([jnp.zeros(1),z_cs])
-    z_tau = numpyro.sample("z_tau", dist.Uniform(1,10))
+    z_tau = numpyro.sample("z_tau", dist.TruncatedNormal(loc=1.0, scale=3*z_knots, low=1.0)) #dist.Uniform(1,10))
     numpyro.factor("z_log_smoothing_prior", apply_difference_prior(z_cs, z_tau, degree=pen_deg))
     
     if not sample_prior:
