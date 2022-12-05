@@ -123,7 +123,7 @@ use-case where data-driven models can help us understand the population.
     \script{plot_iid_spintilt.py}
 \end{figure}
 
-Figure \ref{fig:iid_spintilt_dist} shows the inferred spin magnitude distribution with the IID spin B-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
+Figure \ref{fig:iid_spintilt_dist} shows the inferred spin orientation distribution with the IID spin B-Spline model, compared with the \textsc{Default} model from \citet{o3b_astro_dist}. 
 The B-Spline inferences have large uncertainties but start to show the same features as found and discussed in \citet{spinitasyoulike}. 
 We find a distribution that instead of intrinsically peaking at $\cos{\theta}=1$, is found to peak at: $\cos{\theta}=$\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][peakCosTilt]}$}, at 
 90\% credibility. We find less, but still considerable support for misaligned spins (i.e. $\cos{\theta}<0$), consistent with other recent studies \citep{o3a_pop,o3b_astro_dist,Callister_NoEvidence}. Specifically we 
@@ -195,8 +195,8 @@ $\log_{10}Y_2=$\result{$\CIPlusMinus{\macros[BSplineIndependentCompSpins][log10g
    % \script{plot_chip.py}
 % \end{figure}
 
-While the component spin magnitudes and tilts are more directly tied to formation physics, they are typically poorly measured.  The best-measured spin quantity, which enters at the highest post-Newtownian order, is the effective spin: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. Figure \ref{fig:eff_dist} 
-shows the inferred effective spin and precessing spin distributions with the two versions of our B-Spline models (red and purple), 
+While the component spin magnitudes and tilts are more directly tied to formation physics, they are typically poorly measured.  The best-measured spin quantity, which enters at the highest post-Newtownian order, is the effective spin: $\chi_\mathrm{eff} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$. There is additionally an effective precessing spin parameter, $\chi_\mathrm{p} = \frac{a_1\cos{\theta_1} + qa_2\cos{\theta_2}}{1+q}$, that quantifies the amount of spin precession given the systems mass ratio and component spin magnitudes and orientation. 
+Figure \ref{fig:eff_dist} shows the inferred effective spin and precessing spin distributions with the two versions of our B-Spline models (red and purple), 
 along with results on the \textsc{Default} \citep{Talbot_2017} and \textsc{Gaussian} \citep{Miller2020} models from \citet{o3b_astro_dist}. We find considerable agreement 
 among the effective spin distributions, but the more flexible B-Spline models in component spins more closely resemble results from the \textsc{Default} model, also using the component spins. The B-Spline model finds very similar shapes to the other models, with a single peak centered at 
 $\chi_\mathrm{eff}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][PeakChiEff]}$}, compared to 
@@ -206,7 +206,7 @@ As for spin misalignment, we calculate the fraction of systems with effective sp
 agreement with previous work \citep{o3a_pop,o3b_astro_dist,Callister_NoEvidence}. We find for the B-Spline model 
 $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][iid][FracBelow0]}$}, compared to 
 $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][default][FracBelow0]}$} and $f_{\chi_\mathrm{eff}<0}=$\result{$\CIPlusMinus{\macros[ChiEffective][gaussian][FracBelow0]}$} 
-with the \textsc{Default} and \textsc{Gaussian} models from \citet{o3b_astro_dist}.
+with the \textsc{Default} and \textsc{Gaussian} models from \citet{o3b_astro_dist}. The precessing spin distributions inferred with the B-Spline models exhibit a similar shape to the \textsc{Default} model, but with a much fatter tail towards highly precessing systems, driven by the extra support for highly spinning components seen in figures \ref{fig:iid_spinmag_dist} and \ref{fig:iid_spinmag_dist}.
 
 \begin{figure}[ht!]
     \includegraphics[width=\linewidth]{figures/rate_vs_z_plot.pdf}
