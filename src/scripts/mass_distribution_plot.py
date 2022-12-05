@@ -46,7 +46,7 @@ for ax, xs, ps, lab in zip([axs], [ms], [m_pdfs], ['m1']):
     ax = plot_mean_and_90CI(ax, bspl_ms, bspl_mpdfs, color='tab:red', label='This Work', bounds=True)
     ax.legend(frameon=False, fontsize=14);
     ax.set_xlabel(r'$m_1 \,\,[M_\odot]$', fontsize=18)
-    ax.set_ylabel(r'$p(m_1) \,\,[M_\odot^{-1}]$', fontsize=18)
+    ax.set_ylabel(r'$p(m_1)$', fontsize=18)
     ax.grid(True, which="major", ls=":")
     ax.tick_params(labelsize=14)
     
