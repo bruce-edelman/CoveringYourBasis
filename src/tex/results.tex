@@ -43,8 +43,8 @@ evolution theory. This could be hinting at the presence of subpopulations that a
 cannot be determined with the current catalog.
 
 
-The marginal mass ratio distribution inferred by the B-spline model is shown in figure \ref{fig:q_distribution}.  These results suggest we may be seeing the first signs of departure from a simple power law behavior.  We find a potential plateau or decrease in the merger rate near equal mass ratios, as well as a broader tail towards unequal mass ratios 
-than the power law based models find. Our results also suggest a shallower slope from $q\sim0.3$ to $q\sim0.7$, though uncertainty is larger in this region. The sharp decrease in rate just below 
+The marginal mass ratio distribution inferred by the B-spline model is shown in figure \ref{fig:q_distribution}.  These results suggest we may be seeing the first signs of departure from a simple power law behavior.  We find a potential signs of a plateau or decrease in the merger rate near equal mass ratios, as well as a broader tail towards unequal mass ratios 
+than the power law based models find, although a smooth power law is still consistent with these results given the large uncertainties. Our results also suggest a shallower slope from $q\sim0.3$ to $q\sim0.7$, though uncertainty is larger in this region. The sharp decrease in rate just below 
 $q\sim0.5$ is due to the minimum mass ratio truncation defined by $q_\mathrm{min}=\frac{m_\mathrm{min}}{m_1}$. When marginalizing over the primary mass 
 distribution with a strong peak at $10\msun$, the mass ratio distribution truncates at $q\sim0.5$: the minimum mass, $5\msun$, 
 divided by the most common primary mass, ${\sim}10\msun$. 
@@ -100,9 +100,8 @@ The B-Spline model results are consistent with those using the Beta distribution
 allowing it to probe the zero-spin question. We find broad support, with large variance, for non-zero probabilities at $a_i=0$, but cannot confidently determine the presence of 
 a significant non-spinning subpopulation, corroborating similar recent conclusions \citep{BuildBetterSpinModels,Callister_NoEvidence,GWTC3MonashSpin,Mould2022}. 
 We repeat the same analysis with independent B-Spline distributions for each spin magnitude component. In figure \ref{fig:ind_spinmag_dist} 
-we show the inferred primary (orange), and secondary (olive) spin magnitude distributions inferred when relaxing the IID assumption. We find that the primary spin magnitude distribution 
-peaks slightly higher, at $a\sim0.25$, than the IID B-Spline model, but with similar support at near vanishing spins. The secondary spin magnitude distribution is more uncertain due to the 
-higher measurement uncertainty when inferring the secondary spins of BBH systems. The secondary distribution also peaks at smaller spin magnitudes of $a\sim0.15$, showing potentially rates at $a\sim0$ than the primary distribution or B-Spline IID spin magnitude distribution in figure \ref{fig:iid_spinmag_dist}, though uncertainties are large. While the distributions are broadly consistent, we could be seeing signs that component spin magnitude distributions are uniquely distributed, which can be produced through mass-ratio reversal in isolated binary evolution \citep{Mould2022}.
+we show the inferred primary (orange), and secondary (olive) spin magnitude distributions inferred when relaxing the IID assumption. We find no signs that the spin magnitude distributions are not IID but that the primary spin magnitude distribution peaks slightly higher, at $a\sim0.25$, than the IID B-Spline model in figure \ref{fig:iid_spinmag_dist}, but with similar support at near vanishing spins. The secondary spin magnitude distribution is more uncertain due to the 
+higher measurement uncertainty when inferring the secondary spins of BBH systems \citep{1403.0129,1611.01122}. The secondary distribution also peaks at smaller spin magnitudes of $a\sim0.15$, showing potentially rates at $a\sim0$ than the primary distribution or B-Spline IID spin magnitude distribution in figure \ref{fig:iid_spinmag_dist}, though uncertainties are large. While the distributions are broadly consistent, we could be seeing signs that component spin magnitude distributions are uniquely distributed, which can be produced through mass-ratio reversal in isolated binary evolution \citep{Mould2022}.
 
 \subsubsection{Spin Orientation}
 
@@ -240,5 +239,5 @@ found $\lambda_z = $\result{$\CIPlusMinus{\macros[PLPeak][lamb]}$} when inferred
 flexible model infers a power law slope of $\lambda_z = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][lamb]}$}. We show the basis spline modulations or departure 
 from the power law in \ref{fig:z_modulation} compared to the prior -- showing where we cannot constrain any significant deviations from the simpler parametric power law model. 
 The extra freedom of our model does inflate the uncertainty in its rate estimates, especially at $z\sim0$ where there are not any observations in the catalog. 
-We find a local ($z=0$) merger rate of $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][local_rate]}\,Gpc^{-3}yr^{-1}$} using the B-Spline modulation model 
-which compares to $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[PLPeak][local_rate]}\,Gpc^{-3}yr^{-1}$} for the GWTC-3 result. 
+We find a local ($z=0$) merger rate of $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[BSplineIIDCompSpins][local_rate]}\,\mathrm{Gpc}^{-3}\mathrm{yr}^{-1}$} using the B-Spline modulation model 
+which compares to $\mathcal{R}_0 = $\result{$\CIPlusMinus{\macros[PLPeak][local_rate]}\,\mathrm{Gpc}^{-3}\mathrm{yr}^{-1}$} for the GWTC-3 result. 
