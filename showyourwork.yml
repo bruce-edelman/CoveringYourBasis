@@ -74,7 +74,7 @@ dependencies:
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_prior_samples.h5
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_prior_ppds.h5
 datasets:
-  10.5072/zenodo.1114865:
+  10.5281/zenodo.7422514:
     contents:
       bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5: src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
       bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5: src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5
