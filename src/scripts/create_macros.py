@@ -17,7 +17,7 @@ def round_sig(f, sig=2):
 
 def save_param_cred_intervals(param_data):
     return  {'median': round_sig(np.median(param_data)), 
-             'error plus':round_sig(np.percentile(param_data, 95)-np.mean(param_data)), 
+             'error plus':round_sig(np.percentile(param_data, 95)-np.median(param_data)), 
              'error minus': round_sig(np.median(param_data)-np.percentile(param_data, 5)),
              '5th percentile': round_sig(np.percentile(param_data, 5)), 
              '95th percentile': round_sig(np.percentile(param_data, 95)), 
