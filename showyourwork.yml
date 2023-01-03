@@ -4,20 +4,20 @@ stamp:
   xpos: 0.4
   ypos: 0.35
 dependencies:
-  src/tex/ms.tex:
-    - src/tex/macros.tex
-    - src/tex/intro.tex
-    - src/tex/methods.tex
-    - src/tex/results.tex
-    - src/tex/conclusion.tex
-    - src/tex/appendicies.tex
-  src/tex/macros.tex:
-    - src/scripts/create_macros.py
+  src/scripts/create_effspin_from_compspin.py:
+    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
+    - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
+    - src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5
+  src/scripts/create_macros.py:
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
     - src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5
     - src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_ppds.h5
     - src/data/chi_eff_ppds.h5
+    - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
+    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
+    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
+    - src/data/gaussian-spin-xeff-xp-ppd-data.json
   src/scripts/plot_ppcs.py:
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
   src/scripts/plot_spin_ppcs.py:
@@ -31,10 +31,6 @@ dependencies:
   src/scripts/plot_chip.py:
     - src/data/chi_eff_chi_p_ppds.h5
     - src/data/gaussian-spin-xeff-xp-ppd-data.json
-  src/scripts/create_effspin_from_compspin.py:
-    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
-    - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
-    - src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5
   src/scripts/plot_iid_spinmag.py:
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_magnitude_data.h5
@@ -51,16 +47,6 @@ dependencies:
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5
     - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
     - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
-  src/scripts/create_macros.py:
-    - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5
-    - src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5
-    - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5
-    - src/data/bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_ppds.h5
-    - src/data/chi_eff_ppds.h5
-    - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
-    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json
-    - src/data/o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
-    - src/data/gaussian-spin-xeff-xp-ppd-data.json
   src/scripts/q_distribution_plot.py:
     - src/data/bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_ppds.h5
     - src/data/spline_20n_mass_m_iid_mag_iid_tilt_powerlaw_redshift_mass_data.h5
