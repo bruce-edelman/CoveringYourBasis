@@ -44,3 +44,7 @@ isotropically
 ShowYourWork
 post-Newtownian
 misalignments
+Vitale
+PrecessingIMRPHM
+IMRPhenomXPHM
+a-priori

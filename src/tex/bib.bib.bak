@@ -1,62 +1,5 @@
 @string{june = {June}}
 
-@article{1307.6232,
- adsnote = {Provided by the SAO/NASA Astrophysics Data System},
- adsurl = {https://ui.adsabs.harvard.edu/abs/2014PhRvD..89h4006P},
- archiveprefix = {arXiv},
- author = {{Pan}, Yi and {Buonanno}, Alessandra and {Taracchini}, Andrea and {Kidder}, Lawrence E. and {Mrou{\'e}}, Abdul H. and {Pfeiffer}, Harald P. and {Scheel}, Mark A. and {Szil{\'a}gyi}, B{\'e}la},
- doi = {10.1103/PhysRevD.89.084006},
- eid = {084006},
- eprint = {1307.6232},
- journal = {\prd},
- keywords = {04.25.D-, 04.25.dg, 04.25.Nx, 04.30.-w, Numerical relativity, Numerical studies of black holes and black-hole binaries, Post-Newtonian approximation, perturbation theory, related approximations, Gravitational waves: theory, General Relativity and Quantum Cosmology},
- month = {April},
- number = {8},
- pages = {084006},
- primaryclass = {gr-qc},
- title = {{Inspiral-merger-ringdown waveforms of spinning, precessing black-hole binaries in the effective-one-body formalism}},
- volume = {89},
- year = {2014}
-}
-
-@article{1308.3271,
- adsnote = {Provided by the SAO/NASA Astrophysics Data System},
- adsurl = {https://ui.adsabs.harvard.edu/abs/2014PhRvL.113o1101H},
- archiveprefix = {arXiv},
- author = {{Hannam}, Mark and {Schmidt}, Patricia and {Boh{\'e}}, Alejandro and {Haegel}, Le{\"\i}la and {Husa}, Sascha and {Ohme}, Frank and {Pratten}, Geraint and {P{\"u}rrer}, Michael},
- doi = {10.1103/PhysRevLett.113.151101},
- eid = {151101},
- eprint = {1308.3271},
- journal = {\prl},
- keywords = {04.30.Db, 04.25.Nx, 04.80.Nn, 95.55.Ym, Wave generation and sources, Post-Newtonian approximation, perturbation theory, related approximations, Gravitational wave detectors and experiments, Gravitational radiation detectors, mass spectrometers, and other instrumentation and techniques, General Relativity and Quantum Cosmology},
- month = {October},
- number = {15},
- pages = {151101},
- primaryclass = {gr-qc},
- title = {{Simple Model of Complete Precessing Black-Hole-Binary Gravitational Waveforms}},
- volume = {113},
- year = {2014}
-}
-
-@article{1311.2544,
- adsnote = {Provided by the SAO/NASA Astrophysics Data System},
- adsurl = {https://ui.adsabs.harvard.edu/abs/2014PhRvD..89f1502T},
- archiveprefix = {arXiv},
- author = {{Taracchini}, Andrea and {Buonanno}, Alessandra and {Pan}, Yi and {Hinderer}, Tanja and {Boyle}, Michael and {Hemberger}, Daniel A. and {Kidder}, Lawrence E. and {Lovelace}, Geoffrey and {Mrou{\'e}}, Abdul H. and {Pfeiffer}, Harald P. and {Scheel}, Mark A. and {Szil{\'a}gyi}, B{\'e}la and {Taylor}, Nicholas W. and {Zenginoglu}, Anil},
- doi = {10.1103/PhysRevD.89.061502},
- eid = {061502},
- eprint = {1311.2544},
- journal = {\prd},
- keywords = {04.25.D-, 04.25.dg, 04.25.Nx, 04.30.-w, Numerical relativity, Numerical studies of black holes and black-hole binaries, Post-Newtonian approximation, perturbation theory, related approximations, Gravitational waves: theory, General Relativity and Quantum Cosmology},
- month = {March},
- number = {6},
- pages = {061502},
- primaryclass = {gr-qc},
- title = {{Effective-one-body model for black-hole binaries with generic mass ratios and spins}},
- volume = {89},
- year = {2014}
-}
-
 @article{1403.0129,
  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
  adsurl = {https://ui.adsabs.harvard.edu/abs/2014PhRvL.112y1101V},
@@ -205,44 +148,6 @@
  year = {2020}
 }
 
-@article{2004.06503,
- adsnote = {Provided by the SAO/NASA Astrophysics Data System},
- adsurl = {https://ui.adsabs.harvard.edu/abs/2021PhRvD.103j4056P},
- archiveprefix = {arXiv},
- author = {{Pratten}, Geraint and {Garc{\'\i}a-Quir{\'o}s}, Cecilio and {Colleoni}, Marta and {Ramos-Buades}, Antoni and {Estell{\'e}s}, H{\'e}ctor and {Mateu-Lucena}, Maite and {Jaume}, Rafel and {Haney}, Maria and {Keitel}, David and {Thompson}, Jonathan E. and {Husa}, Sascha},
- doi = {10.1103/PhysRevD.103.104056},
- eid = {104056},
- eprint = {2004.06503},
- journal = {\prd},
- keywords = {General Relativity and Quantum Cosmology},
- month = {May},
- number = {10},
- pages = {104056},
- primaryclass = {gr-qc},
- title = {{Computationally efficient models for the dominant and subdominant harmonic modes of precessing binary black holes}},
- volume = {103},
- year = {2021}
-}
-
-@article{2004.09442,
- adsnote = {Provided by the SAO/NASA Astrophysics Data System},
- adsurl = {https://ui.adsabs.harvard.edu/abs/2020PhRvD.102d4055O},
- archiveprefix = {arXiv},
- author = {{Ossokine}, Serguei and {Buonanno}, Alessandra and {Marsat}, Sylvain and {Cotesta}, Roberto and {Babak}, Stanislav and {Dietrich}, Tim and {Haas}, Roland and {Hinder}, Ian and {Pfeiffer}, Harald P. and {P{\"u}rrer}, Michael and {Woodford}, Charles J. and {Boyle}, Michael and {Kidder}, Lawrence E. and {Scheel}, Mark A. and {Szil{\'a}gyi}, B{\'e}la},
- doi = {10.1103/PhysRevD.102.044055},
- eid = {044055},
- eprint = {2004.09442},
- journal = {\prd},
- keywords = {General Relativity and Quantum Cosmology},
- month = {August},
- number = {4},
- pages = {044055},
- primaryclass = {gr-qc},
- title = {{Multipolar effective-one-body waveforms for precessing binary black holes: Construction and validation}},
- volume = {102},
- year = {2020}
-}
-
 @article{2018AJ....156..123A,
  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
  adsurl = {https://ui.adsabs.harvard.edu/abs/2018AJ....156..123A},
@@ -280,38 +185,6 @@
  title = {{SciPy 1.0: fundamental algorithms for scientific computing in Python}},
  volume = {17},
  year = {2020}
-}
-
-@article{2108.01045,
- adsnote = {Provided by the SAO/NASA Astrophysics Data System},
- adsurl = {https://ui.adsabs.harvard.edu/abs/2021arXiv210801045T},
- archiveprefix = {arXiv},
- author = {{The LIGO Scientific Collaboration} and {the Virgo Collaboration} and {Abbott}, R. and {Abbott}, T.~D. and {Acernese}, F. and {Ackley}, K. and {Adams}, C. and {Adhikari}, N. and {Adhikari}, R.~X. and {Adya}, V.~B. and et al.},
- eid = {arXiv:2108.01045},
- eprint = {2108.01045},
- journal = {arXiv e-prints},
- keywords = {General Relativity and Quantum Cosmology},
- month = {August},
- pages = {arXiv:2108.01045},
- primaryclass = {gr-qc},
- title = {{GWTC-2.1: Deep Extended Catalog of Compact Binary Coalescences Observed by LIGO and Virgo During the First Half of the Third Observing Run}},
- year = {2021}
-}
-
-@article{2210.12287,
- adsnote = {Provided by the SAO/NASA Astrophysics Data System},
- adsurl = {https://ui.adsabs.harvard.edu/abs/2022arXiv221012287G},
- archiveprefix = {arXiv},
- author = {{Golomb}, Jacob and {Talbot}, Colm},
- eid = {arXiv:2210.12287},
- eprint = {2210.12287},
- journal = {arXiv e-prints},
- keywords = {Astrophysics - High Energy Astrophysical Phenomena, General Relativity and Quantum Cosmology},
- month = {October},
- pages = {arXiv:2210.12287},
- primaryclass = {astro-ph.HE},
- title = {{Searching for structure in the binary black hole spin distribution}},
- year = {2022}
 }
 
 @article{aLIGO,
@@ -2649,18 +2522,4 @@ Noah D. Goodman},
  title = {{Suspicious Siblings: The Distribution of Mass and Spin across Component Black Holes in Isolated Binary Evolution}},
  volume = {933},
  year = {2022}
-}
-
-@dataset{edelman_bruce_2022_7422514,
-  author       = {Edelman, Bruce and
-                  Farr, Ben and
-                  Doctor, Zoheyr},
-  title        = {{Cover Your Basis: Comprehensive Data-Driven 
-                   Characterization of the Binary Black Hole
-                   Population}},
-  month        = dec,
-  year         = 2022,
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.7422514},
-  url          = {https://doi.org/10.5281/zenodo.7422514}
 }

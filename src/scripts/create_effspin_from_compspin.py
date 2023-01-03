@@ -1,6 +1,5 @@
 import numpy as np
 import jax.numpy as jnp
-from scipy.stats import gaussian_kde
 from gwpopulation.cupy_utils import trapz
 from gwpopulation.conversions import convert_to_beta_parameters
 from gwpopulation.models.mass import SinglePeakSmoothedMassDistribution
@@ -8,7 +7,7 @@ from gwpopulation.models.spin import iid_spin_orientation_gaussian_isotropic, ii
 from bilby.core.result import read_in_result
 from bilby.hyper.model import Model
 from jax import jit
-from utils import LogXLogYBSpline, LogYBSpline, MSplineIndependentSpinTilts, MSplineIndependentSpinMagnitudes, MSplinePrimaryMSplineRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts
+from utils import LogXLogYBSpline, LogYBSpline, MSplineIndependentSpinTilts, MSplineIndependentSpinMagnitudes, MSplinePrimaryMSplineRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts, ReflectionBoundedKDE
 import deepdish as dd
 from tqdm import trange
 import paths
@@ -16,7 +15,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def draw_chieff_samples_gwpop(result, magmodel, tiltmodel, massmodel, ndraws=500, nsamples=2000):
+def draw_chieff_chip_samples_gwpop(result, magmodel, tiltmodel, massmodel, ndraws=500, nsamples=2000):
     mags = np.linspace(0,1,1500)
     a1s, a2s = np.meshgrid(mags, mags)
     m1s = np.linspace(2,100,2000)
@@ -56,12 +55,18 @@ def draw_chieff_samples_gwpop(result, magmodel, tiltmodel, massmodel, ndraws=500
         samples['cos_tilt_2'][i,:] = np.random.choice(ctilts, p=pc2/np.sum(pc2), size=nsamples)
         samples['mass_1'][i,:] = np.random.choice(m1s, p=pm1/np.sum(pm1), size=nsamples)
         samples['mass_ratio'][i,:] = np.random.choice(qs, p=pq/np.sum(pq), size=nsamples)
-    return chi_eff(samples)
+    return chi_eff(samples), chi_p(samples)
 
 def chi_eff(samples):
     return (samples['a_1']*samples['cos_tilt_1'] + samples['mass_ratio']*samples['a_2']*samples['cos_tilt_2']) / (1.0 + samples['mass_ratio'])
 
-def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, qnknots, magnknots, tiltnknots, ndraws=500, nsamples=2000, iid=False):
+def chi_p(samples):
+    sint1 = np.sqrt(1.0 - samples['cos_tilt_1']**2)
+    sint2 = np.sqrt(1.0 - samples['cos_tilt_2']**2)
+    return np.maximum(samples['a_1'] * sint1, ((3.0 + 4.0 * samples['mass_ratio']) / (4.0 + 3.0 * samples['mass_ratio'])) * samples['mass_ratio'] * samples['a_2'] * sint2)
+
+
+def draw_chieff_chip_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, qnknots, magnknots, tiltnknots, ndraws=500, nsamples=2000, iid=False):
     mags = jnp.linspace(0,1,1500)
     a1s, a2s = jnp.meshgrid(mags, mags)
     m1s = jnp.linspace(3,100,2000)
@@ -125,7 +130,7 @@ def draw_chieff_samples(posterior, massmodel, magmodel, tiltmodel, massnknots, q
         samples['mass_1'][i,:] = np.random.choice(m1s, p=pm1/np.sum(pm1), size=nsamples)
         samples['mass_ratio'][i,:] = np.random.choice(qs, p=pq/np.sum(pq), size=nsamples)
     
-    return chi_eff(samples)   
+    return chi_eff(samples), chi_p(samples)
     
     
 
@@ -133,7 +138,16 @@ def chi_eff_kde_ppd(samples):
     x = np.linspace(-1,1,1000)
     pxs = []
     for ii in range(samples.shape[0]):
-        k = gaussian_kde(samples[ii])
+        k = ReflectionBoundedKDE(samples[ii], xlow=-1, xhigh=1)
+        px = k(x)
+        pxs.append(px)
+    return np.array(pxs), x
+
+def chi_p_kde_ppd(samples):
+    x = np.linspace(0,1,1000)
+    pxs = []
+    for ii in range(samples.shape[0]):
+        k = ReflectionBoundedKDE(samples[ii], xlow=0, xhigh=1)
         px = k(x)
         pxs.append(px)
     return np.array(pxs), x
@@ -144,20 +158,27 @@ def main():
     DefaultSpinMagModel = Model([iid_spin_magnitude_beta])
     MassModel = Model([SinglePeakSmoothedMassDistribution(mmin=2.0, mmax=100.0)])
     mspl_post = dd.io.load(paths.data / "bsplines_64m1_18q_ind18mag_ind18tilt_pl18z_posterior_samples.h5")
-    chi_effs_mspl = draw_chieff_samples(mspl_post, MSplinePrimaryMSplineRatio, MSplineIndependentSpinMagnitudes, MSplineIndependentSpinTilts, 
+    chi_effs_mspl, chi_p_mspl = draw_chieff_chip_samples(mspl_post, MSplinePrimaryMSplineRatio, MSplineIndependentSpinMagnitudes, MSplineIndependentSpinTilts, 
                                         64, 18, 18, 18)
     pchieffs, chieffs = chi_eff_kde_ppd(chi_effs_mspl)
+    pchips, chips = chi_p_kde_ppd(chi_p_mspl)
     mspl_post_iid = dd.io.load(paths.data / "bsplines_64m1_18q_iid18mag_iid18tilt_pl18z_posterior_samples.h5")
-    chi_effs_mspl_iid = draw_chieff_samples(mspl_post_iid, MSplinePrimaryMSplineRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts, 
+    chi_effs_mspl_iid, chi_p_mspl_iid = draw_chieff_chip_samples(mspl_post_iid, MSplinePrimaryMSplineRatio, MSplineIIDSpinMagnitudes, MSplineIIDSpinTilts, 
                                             64, 18, 18, 18, iid=True)
     pchieffs_iid, chieffs_iid = chi_eff_kde_ppd(chi_effs_mspl_iid)
+    pchips_iid, chips_iid = chi_p_kde_ppd(chi_p_mspl_iid)
+    
     o3b_default_spin_result = read_in_result(paths.data / "o1o2o3_mass_c_iid_mag_iid_tilt_powerlaw_redshift_result.json")
-    chi_effs_o3b_default = draw_chieff_samples_gwpop(o3b_default_spin_result, DefaultSpinMagModel, DefaultSpinTiltModel, MassModel)
+    chi_effs_o3b_default, chi_p_o3b_default = draw_chieff_chip_samples_gwpop(o3b_default_spin_result, DefaultSpinMagModel, DefaultSpinTiltModel, MassModel)
     pchieffs_def, chieffs_def = chi_eff_kde_ppd(chi_effs_o3b_default)
-    datadict = {'BSplineInd': {'pchieff': pchieffs, 'chieffs': chieffs}, 
-                'BSplineIID': {'pchieff': pchieffs_iid, 'chieffs': chieffs_iid}, 
-                'Default': {'pchieff':pchieffs_def, 'chieffs':chieffs_def}}
-    dd.io.save(paths.data / "chi_eff_ppds.h5", datadict)
+    pchips_def, chips_def = chi_p_kde_ppd(chi_p_o3b_default)
+    datadict = {'BSplineInd': {'pchieff': pchieffs, 'chieffs': chieffs, 
+                               'pchip': pchips, 'chips': chips},
+                'BSplineIID': {'pchieff': pchieffs_iid, 'chieffs': chieffs_iid, 
+                               'pchip': pchips_iid, 'chips': chips_iid}, 
+                'Default': {'pchieff':pchieffs_def, 'chieffs':chieffs_def, 
+                            'pchip':pchips_def, 'chips':chips_def}}
+    dd.io.save(paths.data / "chi_eff_chi_p_ppds.h5", datadict)
 
 if __name__ == "__main__":
     main()

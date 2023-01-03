@@ -3,6 +3,7 @@ import jax.numpy as jnp
 import paths
 from bilby.core.result import read_in_result
 import deepdish as dd
+from scipy.stats import gaussian_kde as kde
 
 
 def plot_mean_and_90CI(ax, xs, ar, color, label, bounds=True, CI=90, traces=None, tracecolor='k', fill_alpha=0.08, median=False, mean=True):
@@ -669,3 +670,81 @@ class MSplinePrimaryMSplineRatio(object):
 
     def __call__(self, ndim, mcoefs, qcoefs):
         return self.ratio_model(ndim, qcoefs) * self.primary_model(ndim, mcoefs)
+
+
+class BoundedKDE(kde):
+    """Base class to handle the BoundedKDE
+
+    Parameters
+    ----------
+    pts: np.ndarray
+        The datapoints to estimate a bounded kde from
+    xlow: float
+        The lower bound of the distribution
+    xhigh: float
+        The upper bound of the distribution
+    """
+    def __init__(self, pts, xlow=None, xhigh=None, *args, **kwargs):
+        pts = np.atleast_1d(pts)
+        if pts.ndim != 1:
+            raise TypeError("BoundedKDE can only be one-dimensional")
+        super(BoundedKDE, self).__init__(pts.T, *args, **kwargs)
+        self._xlow = xlow
+        self._xhigh = xhigh
+
+    @property
+    def xlow(self):
+        """The lower bound of the x domain
+        """
+        return self._xlow
+
+    @property
+    def xhigh(self):
+        """The upper bound of the x domain
+        """
+        return self._xhigh
+
+
+class ReflectionBoundedKDE(BoundedKDE):
+    """Represents a one-dimensional Gaussian kernel density estimator
+    for a probability distribution function that exists on a bounded
+    domain. The bounds are treated as reflections
+
+    Parameters
+    ----------
+    pts: np.ndarray
+        The datapoints to estimate a bounded kde from
+    xlow: float
+        The lower bound of the distribution
+    xhigh: float
+        The upper bound of the distribution
+    """
+    def __init__(self, pts, xlow=None, xhigh=None, *args, **kwargs):
+        super(ReflectionBoundedKDE, self).__init__(
+            pts, xlow=xlow, xhigh=xhigh, *args, **kwargs
+        )
+
+    def evaluate(self, pts):
+        """Return an estimate of the density evaluated at the given
+        points
+        """
+        x = pts.T
+        pdf = super(ReflectionBoundedKDE, self).evaluate(pts.T)
+        if self.xlow is not None:
+            pdf += super(ReflectionBoundedKDE, self).evaluate(2 * self.xlow - x)
+        if self.xhigh is not None:
+            pdf += super(ReflectionBoundedKDE, self).evaluate(2 * self.xhigh - x)
+        return pdf
+
+    def __call__(self, pts):
+        pts = np.atleast_1d(pts)
+        out_of_bounds = np.zeros(pts.shape[0], dtype='bool')
+
+        if self.xlow is not None:
+            out_of_bounds[pts < self.xlow] = True
+        if self.xhigh is not None:
+            out_of_bounds[pts > self.xhigh] = True
+
+        results = self.evaluate(pts)
+        results[out_of_bounds] = 0.
+        return results

@@ -12,3 +12,5 @@
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qwhere up above, we denote the co-moving volume element as \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, and \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q as the observing time period that produced the catalog with the related factor of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q converting this detector-frame time to source-frame.\\E$"}
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qwhere above, we replaced the integrals over each event's likelihood with ensemble averages over \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q posterior samples.\\E$"}
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qwhere the sum is only over the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q injections that were successfully detected out of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q total injections, and \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is the reference distribution from which the injections were drawn.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_chip.py\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qplot_effspin.py\\E$"}

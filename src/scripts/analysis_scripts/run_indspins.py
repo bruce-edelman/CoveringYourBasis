@@ -7,7 +7,7 @@ import numpy as np
 from tqdm import trange
 from jax import jit, random
 from numpyro import distributions as dist
-from numpyro.infer import MCMC, NUTS
+from numpyro.infer import MCMC, NUTS, init_to_sample
 from argparse import ArgumentParser
 from gwinferno.models.spline_perturbation import PowerlawSplineRedshiftModel
 from gwinferno.interpolation import LogXLogYBSpline, LogYBSpline, LogXBSpline
@@ -16,6 +16,7 @@ from gwinferno.models.bsplines.smoothing import apply_difference_prior
 from gwinferno.data_collection import load_injections, load_posterior_samples
 from gwinferno.analysis import hierarchical_likelihood
 from gwinferno.plotting import plot_mass_dist, plot_ind_spin_dist, plot_m1_vs_z_ppc, plot_rofz, plot_ppc_brontosaurus
+from gwinferno.conversions import chieff_from_q_component_spins, chip_from_q_component_spins
 az.style.use("arviz-darkgrid")
 
 
@@ -23,7 +24,7 @@ def load_parser():
     parser = ArgumentParser()
     parser.add_argument('--data-dir', type=str, default='/home/bruce.edelman/projects/GWTC3_allevents/')
     parser.add_argument('--inj-file', type=str, default='/home/bruce.edelman/projects/GWTC3_allevents/o1o2o3_mixture_injections.hdf5')
-    parser.add_argument('--outdir', type=str, default='paper_results')
+    parser.add_argument('--outdir', type=str, default='results')
     parser.add_argument('--mmin', type=float, default=5.0)
     parser.add_argument('--mmax', type=float, default=100.0)
     parser.add_argument('--mass-knots', type=int, default=64)
@@ -32,10 +33,11 @@ def load_parser():
     parser.add_argument('--tilt-knots', type=int, default=18)
     parser.add_argument('--z-knots', type=int, default=18)
     parser.add_argument('--chains', type=int, default=4)
-    parser.add_argument('--samples', type=int, default=1500)
-    parser.add_argument('--thinning', type=int, default=2)
-    parser.add_argument('--warmup', type=int, default=500)
+    parser.add_argument('--samples', type=int, default=3000)
+    parser.add_argument('--thinning', type=int, default=4)
+    parser.add_argument('--warmup', type=int, default=1000)
     parser.add_argument('--skip-inference', action='store_true', default=False)
+    parser.add_argument('--unif-prior', action='store_true', default=False)
     return parser.parse_args()
 
 def setup_mass_BSpline_model(injdata, pedata, pmap, nknots, qknots, mmin=5.0, mmax=100.0):
@@ -66,7 +68,8 @@ def setup_spin_BSpline_model(injdata, pedata, pmap, magnknots, tiltnknots):
                                             injdata[pmap['a_1']], injdata[pmap['a_2']], basis=LogYBSpline, normalize=True)
     tiltmodel = BSplineIndependentSpinTilts(tiltnknots, tiltnknots, pedata[pmap['cos_tilt_1']], pedata[pmap['cos_tilt_2']], 
                                         injdata[pmap['cos_tilt_1']], injdata[pmap['cos_tilt_2']], basis=LogYBSpline, normalize=True)
-        
+    print(f"Basis Spline Independent model in spin magnitudes w/ {magnknots} knots linspaced from 0 to 1...")
+    print(f"Basis Spline Independent model in cosine of spin tilt angles w/ {tiltnknots} knots linspaced from -1 to 1...")    
     return {'mag': magmodel, 'tilt': tiltmodel}
 
 
@@ -74,6 +77,7 @@ def setup_redshift_model(z_knots, injdata, pedata, pmap):
     z_pe = pedata[pmap['redshift']]
     z_inj = injdata[pmap['redshift']]
     model = PowerlawSplineRedshiftModel(z_knots, z_pe, z_inj, basis=LogXBSpline)
+    print(f"Powerlaw + Basis Spline model in z w/ {z_knots} knots logspaced from {model.zmin} to {model.zmax}...")
     return model
 
 
@@ -95,13 +99,49 @@ def setup(args):
     injdict = {k: injdata[param_map[k]] for k in param_names}
     pedict = {k: pedata[param_map[k]] for k in param_names}
     
+    injdict['chi_eff'] = chieff_from_q_component_spins(injdict['mass_ratio'], injdict['a_1'], injdict['a_2'], 
+                                                       injdict['cos_tilt_1'], injdict['cos_tilt_2'])
+    injdict['chi_p'] = chip_from_q_component_spins(injdict['mass_ratio'], injdict['a_1'], injdict['a_2'], 
+                                                       injdict['cos_tilt_1'], injdict['cos_tilt_2'], bk=jnp)
+    pedict['chi_eff'] = chieff_from_q_component_spins(pedict['mass_ratio'], pedict['a_1'], pedict['a_2'], 
+                                                      pedict['cos_tilt_1'], pedict['cos_tilt_2'])
+    pedict['chi_p'] = chip_from_q_component_spins(pedict['mass_ratio'], pedict['a_1'], pedict['a_2'], 
+                                                  pedict['cos_tilt_1'], pedict['cos_tilt_2'], bk=jnp)
     print(f"{len(injdict['redshift'])} found injections out of {total_inj} total")
     print(f"Observed {nObs} events, each with {pedict['redshift'].shape[1]} samples, over an observing time of {obs_time} yrs")    
-    
-    return mass_model, spin_models, z_model, pedict, injdict, total_inj, nObs, obs_time, min_m1_interp
+    prior_scales = setup_prior_scales(pedict, mass_model, z_model, nObs)
+    #print("Prior Scales = \n", prior_scales)
+    return prior_scales, mass_model, spin_models, z_model, pedict, injdict, total_inj, nObs, obs_time, min_m1_interp
 
+def setup_prior_scales(ped, mm, zm, N):
+    stds = {'m1': [], 'q': [], 'a1': [], 'ct1': [], 'a2': [], 'ct2': [], 'z': []}
+    for i in range(N):
+        m1 = ped['mass_1'][i,:]
+        q = ped['mass_ratio'][i,:]
+        a1 = ped['a_1'][i,:]
+        ct1 = ped['cos_tilt_1'][i,:]
+        a2 = ped['a_2'][i,:]
+        ct2 = ped['cos_tilt_2'][i,:]
+        z = ped['redshift'][i,:]
+        stds['m1'].append(jnp.std(jnp.log(m1)))
+        stds['q'].append(jnp.std(q))
+        stds['a1'].append(jnp.std(a1))
+        stds['ct1'].append(jnp.std(ct1))
+        stds['a2'].append(jnp.std(a2))
+        stds['ct2'].append(jnp.std(ct2))
+        stds['z'].append(jnp.std(jnp.log(z)))
+    pscs =  {'mass': jnp.median(jnp.array(stds['m1'])), 'mass_ratio': jnp.median(jnp.array(stds['q'])), 
+            'redshift': jnp.median(jnp.array(stds['z'])), 
+            'a1s': jnp.median(jnp.array(stds['a1'])), 'ct1s': jnp.median(jnp.array(stds['ct1'])), 
+            'a2s': jnp.median(jnp.array(stds['a2'])), 'ct2s': jnp.median(jnp.array(stds['ct2']))}
+    pscs['mass'] /= jnp.log(mm.primary_model.xmax)-jnp.log(mm.primary_model.xmin)
+    pscs['redshift'] /= jnp.log(zm.zmax)-jnp.log(zm.zmin)
+    pscs['mass_ratio'] /= (1.0 - mm.primary_model.xmin/mm.primary_model.xmax)
+    pscs['ct1s'] /= 2.0
+    pscs['ct2s'] /= 2.0
+    return pscs
 
-def model(mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, Tobs, sample_prior=False):
+def model(smoothing_scales, mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, Tobs, sample_prior=False, unif_prior=False):
     mass_knots = mass_model.primary_model.nknots
     q_knots = mass_model.ratio_model.nknots
     mag_model = spin_models['mag']
@@ -111,18 +151,31 @@ def model(mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, To
     z_knots = z_model.nknots 
     pen_deg = 2
     
-    mass_cs = numpyro.sample('mass_cs', dist.Normal(0,6), sample_shape=(mass_knots,))
-    mass_tau = numpyro.sample("mass_tau", dist.Uniform(2,1000))
+    mass_cs = numpyro.sample('mass_cs', dist.Normal(0,4), sample_shape=(mass_knots,))
+    if unif_prior:
+        mass_tau = numpyro.sample("mass_tau", dist.Uniform(2,1000))
+    else:
+        mass_tau_inv = numpyro.sample("mass_tau_inv", dist.HalfNormal(smoothing_scales['mass']))
+        mass_tau = numpyro.deterministic("mass_tau", 1./mass_tau_inv)
     numpyro.factor("mass_log_smoothing_prior", apply_difference_prior(mass_cs, mass_tau, degree=pen_deg))
-
     q_cs = numpyro.sample('q_cs', dist.Normal(0,4), sample_shape=(q_knots,))
-    q_tau = numpyro.sample("q_tau", dist.Uniform(1,100))
+    if unif_prior:
+        q_tau = numpyro.sample("q_tau", dist.Uniform(1,100))
+    else:    
+        q_tau_inv = numpyro.sample("q_tau_inv", dist.HalfNormal(smoothing_scales['mass_ratio']))
+        q_tau = numpyro.deterministic("q_tau", 1./q_tau_inv)
     numpyro.factor("q_log_smoothing_prior", apply_difference_prior(q_cs, q_tau, degree=pen_deg))
 
-    mag_cs = numpyro.sample('mag_cs', dist.Normal(0,1), sample_shape=(mag_knots,2))
-    mag_tau = numpyro.sample("mag_tau",dist.Uniform(1,10),sample_shape=(2,))
-    tilt_cs = numpyro.sample('tilt_cs', dist.Normal(0,1), sample_shape=(tilt_knots,2))
-    tilt_tau = numpyro.sample("tilt_tau", dist.Uniform(1,10),sample_shape=(2,))
+    mag_cs = numpyro.sample('mag_cs', dist.Normal(0,4), sample_shape=(mag_knots,2))
+    tilt_cs = numpyro.sample('tilt_cs', dist.Normal(0,4), sample_shape=(tilt_knots,2))
+    if unif_prior:
+        mag_tau = numpyro.sample("mag_tau", dist.Uniform(1,100), sample_shape=(2,))
+        tilt_tau = numpyro.sample("tilt_tau", dist.Uniform(1,100), sample_shape=(2,))
+    else:
+        mag_tau_inv = numpyro.sample("mag_tau_inv", dist.HalfNormal(jnp.array([smoothing_scales['a1s'], smoothing_scales['a2s']])))
+        mag_tau = numpyro.deterministic("mag_tau",1./mag_tau_inv)
+        tilt_tau_inv = numpyro.sample("tilt_tau_inv", dist.HalfNormal(jnp.array([smoothing_scales['ct1s'], smoothing_scales['ct2s']])))
+        tilt_tau = numpyro.deterministic("tilt_tau",1./tilt_tau_inv)
     for i in range(2):
         numpyro.factor(f"mag{i}_log_smoothing_prior", apply_difference_prior(mag_cs[:,i], mag_tau[i], degree=pen_deg))
         numpyro.factor(f"tilt{i}_log_smoothing_prior", apply_difference_prior(tilt_cs[:,i], tilt_tau[i], degree=pen_deg))
@@ -130,7 +183,11 @@ def model(mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, To
     lamb = numpyro.sample("lamb", dist.Normal(0,3))
     z_cs = numpyro.sample('z_cs', dist.Normal(0,1), sample_shape=(z_knots-1,))
     z_cs = jnp.concatenate([jnp.zeros(1),z_cs])
-    z_tau = numpyro.sample("z_tau", dist.Uniform(1,10))
+    if unif_prior:
+        z_tau = numpyro.sample("z_tau", dist.Uniform(1,10))
+    else:
+        z_tau_inv = numpyro.sample("z_tau_inv", dist.HalfNormal(smoothing_scales['redshift']))
+        z_tau = numpyro.deterministic("z_tau", 1./z_tau_inv)
     numpyro.factor("z_log_smoothing_prior", apply_difference_prior(z_cs, z_tau, degree=pen_deg))
     
     if not sample_prior:
@@ -146,7 +203,7 @@ def model(mass_model, spin_models, z_model, pedict, injdict, total_inj, Nobs, To
         hierarchical_likelihood(peweights, injweights, total_inj=total_inj, Nobs=Nobs, Tobs=Tobs, 
                                 surv_hypervolume_fct=z_model.normalization, vtfct_kwargs=dict(lamb=lamb,cs=z_cs), marginalize_selection=False,
                                 min_neff_cut=True, posterior_predictive_check=True, pedata=pedict, injdata=injdict, 
-                                param_names=['mass_1', 'mass_ratio', 'a_1', 'a_2', 'cos_tilt_1', 'cos_tilt_2', 'redshift'], 
+                                param_names=['mass_1', 'mass_ratio', 'a_1', 'a_2', 'cos_tilt_1', 'cos_tilt_2', 'redshift', 'chi_eff', 'chi_p'], 
                                 m1min=5.0, m2min=5.0, mmax=100.0)
 
 
@@ -216,31 +273,32 @@ def calculate_rate_of_z_ppds(lamb, z_cs, rate, model):
     
 def main():
     args = load_parser()
-    label=f'{args.outdir}/bsplines_{args.mass_knots}m1_{args.q_knots}q_ind{args.mag_knots}mag_ind{args.tilt_knots}tilt_pl{args.z_knots}z'
-    mass, spin, z, pedict, injdict, total_inj, nObs, obs_time, min_m1 = setup(args)
+    if args.unif_prior:
+        label=f'{args.outdir}/bsplines_{args.mass_knots}m1_{args.q_knots}q_ind{args.mag_knots}mag_ind{args.tilt_knots}tilt_pl{args.z_knots}z_oldprior'
+    else:
+        label=f'{args.outdir}/bsplines_{args.mass_knots}m1_{args.q_knots}q_ind{args.mag_knots}mag_ind{args.tilt_knots}tilt_pl{args.z_knots}z_newprior'
+    sm_sc, mass, spin, z, pedict, injdict, total_inj, nObs, obs_time, min_m1 = setup(args)
     if not args.skip_inference:
         RNG = random.PRNGKey(0)
         MCMC_RNG, PRIOR_RNG, _RNG = random.split(RNG, num=3)
-        kernel = NUTS(model)
+        kernel = NUTS(model, init_strategy=init_to_sample)
         mcmc = MCMC(kernel, thinning=args.thinning, num_warmup=args.warmup, num_samples=args.samples, num_chains=args.chains, chain_method='sequential')
         print("running mcmc: sampling prior...")
-        mcmc.run(PRIOR_RNG, mass, spin, z, pedict, injdict, float(total_inj), nObs, obs_time, sample_prior=True) 
+        mcmc.run(PRIOR_RNG, sm_sc, mass, spin, z, pedict, injdict, float(total_inj), nObs, obs_time, sample_prior=True, unif_prior=args.unif_prior) 
         prior = mcmc.get_samples()
         dd.io.save(f'{label}_prior_samples.h5', prior)
         
-        kernel = NUTS(model)
+        kernel = NUTS(model, init_strategy=init_to_sample)
         mcmc = MCMC(kernel, thinning=args.thinning, num_warmup=args.warmup, num_samples=args.samples, num_chains=args.chains, chain_method='sequential')
         print("running mcmc: sampling posterior...")
-        mcmc.run(MCMC_RNG, mass, spin, z, pedict, injdict, float(total_inj), nObs, obs_time, sample_prior=False) 
+        mcmc.run(MCMC_RNG, sm_sc, mass, spin, z, pedict, injdict, float(total_inj), nObs, obs_time, sample_prior=False, unif_prior=args.unif_prior)
         mcmc.print_summary()
         posterior = mcmc.get_samples()
         dd.io.save(f'{label}_posterior_samples.h5', posterior)
         plot_params = [
-            "detection_efficency",
             "lamb",
             "log_nEff_inj",
             "log_nEffs",
-            "logBFs",
             "log_l",
             "mag_cs",
             "mag_tau",
@@ -248,8 +306,8 @@ def main():
             "mass_tau",
             "q_cs", 
             "q_tau",
+            "q_tau_inv",
             "rate",
-            "surveyed_hypervolume",
             "tilt_cs",
             "tilt_tau",
             "z_cs", 
@@ -269,7 +327,8 @@ def main():
     del fig
     
     print("plotting m1 brontasaurus PPC...")
-    fig = plot_ppc_brontosaurus(posterior, nObs, min_m1, args.mmax, z.zmax)
+    fig = plot_ppc_brontosaurus(posterior, nObs, min_m1, args.mmax, z.zmax,
+                                params=["mass_1","mass_ratio","redshift","a_1","a_2","cos_tilt_1","cos_tilt_2","chi_eff","chi_p"])
     plt.savefig(f'{label}_m1_ppc_brontosaurus.png')
     del fig
     

@@ -42,7 +42,7 @@ with this computational advantage, allow for high fidelity modeling of two-dimen
     \begin{centering}
         \includegraphics[width=\linewidth]{figures/spline_basis_plot.pdf}
         \caption{Plot showing a ``proper'' (see appendix \ref{sec:psplines}) normalized B-Spline basis of order 3 (cubic) with 20 degrees of freedom and equal weights for each component. 
-        In black, we show the resulting spline function given equal weights and denote the location of the knots with gray x's.}
+        In black, we show the resulting spline function given equal weights and denote the location of the knots with gray x's. \LinkExplainer}
         \label{fig:spline_basis}
     \end{centering}
     \script{spline_basis_plot.py}
@@ -85,35 +85,6 @@ The $\tau_\lambda$ controls the ``strength'' of the smoothing, or the inverse va
 place uniform priors on $\tau_\lambda$ marginalize over this smoothing scale hyperparameter to let the data inform the optimal scale needed.
 When there are a very large number of knots, such that your domain is densely populated with basis coefficients, this allows the freedom for the model to find the smoothing 
 scale that the data prefers. 
-
-%One downside of this prior specification as noted in \citet{BayesianPSplines} and \citet{Jullion2007RobustSO}, is the dependence on 
-%one's choice of value for the $b$ hyperparameter in the Gamma distribution for $\tau_\lambda$. The models introduced in \citet{Jullion2007RobustSO} show how 
-%to alleviate this. W model $\tau_\lambda$ with a mixture model composed of multiple Gamma distributions each with varying values for $b$. 
-%With this we now have the full prior on $\tau_\lambda$ as:
-
-%\begin{align}
-%    \bm{p} \sim \mathcal{D}(m) \\
-%    p(\tau_\lambda | \bm{p}) = \sum_i^m p_i \Gamma(1, b_i)
-%\end{align}
-
-%\noindent Above $\mathcal{D}(m)$, denotes a Dirichlet distribution with $m$ degrees of freedom and ones as the concentration parameters, 
-%and the $b_i$'s are $m$ different b shape parameters for the Gamma distribution.
-
-%Additionally one can implement a spatially adaptive smoothing prior which allows for a smoothing prior
-%that can smoothly evolve over the domain of your spline function. This is done in practice by having the $\tau_\lambda$ parameter evolve smoothly
-%across the knots. \bruce{CITE BAYESIAN PSPLINES}, formulates a spatially adaptive prior in this way by adding in $n-r-1$ additional parameters that
-%effectively modulate the $\tau_\lambda$ across each difference. We now replace our prior on the coeficients with:
-
-%\begin{eqnarray}
-%\bm{\lambda} \sim \mathcal{G}(\omega, \omega), \\
-%\bm{\Lambda} \equiv \mathrm{diag}\big(1, \lambda_0,...,\lambda_{n-r-1}\big), \\
-%p(\bm{c} | \tau_\lambda) \propto \exp \big[ -\frac{1}{2} \tau_\lambda \bm{c}^{\mathrm{T}} \bm{D_r}^{\mathrm{T}} \bm{\Lambda} \bm{D_r} \bm{c} \big] e^{-n\bm{c}}
-%\end{eqnarray}
-
-%Where above the matrix $\bm{\Lambda}$ a diagonal matrix of shape $(n-r \times n-r)$, and $\omega$ an arbitrarily small value such that the Gamma distribution 
-%prior on $\bm{\lambda}$ has a mean of 1 and an arbitrarily large variance. This enforces a smooth evolution of the smoothing penalty 
-%across the domain that is being analyzed. This type of prior is especiially important when modeling distributions that span large orders of magnitude like 
-%the power-law like mass distributions that are commonly used. 
 
 This prior is imparting a natural attraction of the coefficients closer to each other in order to smooth the spline function, so one 
 must ensure that the spline function is in fact flat given all equal coefficients. There needs to be $n+k+1$ knots to construct an order-k 
@@ -262,10 +233,17 @@ and prior choices in table \ref{tab:model_priors}.
 
 \begin{figure}
     \includegraphics[width=\linewidth]{figures/ppc_plot.pdf}
-    \caption{Posterior predictive checks showing the CDFs of the observed (black) and predicted (red) distributions of GWTC-3 sized catalogs for each posterior sample of the IID spin B-Spline model. The shaded regions show 90\% credible intervals and the solid red line is the median of the predicted distribution.}
+    \caption{Posterior predictive checks showing the CDFs of the observed (black) and predicted (red) distributions of GWTC-3 sized catalogs for each posterior sample of the IID spin B-Spline model. The shaded regions show 90\% credible intervals and the solid red line is the median of the predicted distribution. \LinkExplainer}
     \label{fig:ppc}
     \script{plot_ppcs.py}
 \end{figure}
 
+\begin{figure}
+    \includegraphics[width=\linewidth]{figures/spin_ppc_plot.pdf}
+    \caption{Posterior predictive checks showing the CDFs of the observed (black) and predicted (red) distributions of GWTC-3 sized catalogs for each posterior sample of the IID spin B-Spline model. The shaded regions show 90\% credible intervals and the solid red line is the median of the predicted distribution. \LinkExplainer}
+    \label{fig:spin_ppc}
+    \script{plot_spin_ppcs.py}
+\end{figure}
+
 We follow the posterior predictive checking procedure done in recent population studies to validate our models inferences \citep{o3a_pop,Edelman_2022ApJ}. 
-For each posterior sample describing our model's inferred population we reweigh the observed event samples and the found injections to that population and draw a set 69 (size of GWTC-3 BBH catalog) samples to construct the observed and predicted distributions we show in figure \ref{fig:ppc}. When the observed region stays encompassed within the predicted region the model is performing well, which we see across each of the fit parameters. 
+For each posterior sample describing our model's inferred population we reweigh the observed event samples and the found injections to that population and draw a set 69 (size of GWTC-3 BBH catalog) samples to construct the observed and predicted distributions we show in figure \ref{fig:ppc} and figure \ref{fig:spin_ppc}. When the observed region stays encompassed within the predicted region the model is performing well, which we see across each of the fit parameters. 
