@@ -247,3 +247,8 @@ and prior choices in table \ref{tab:model_priors}.
 
 We follow the posterior predictive checking procedure done in recent population studies to validate our models inferences \citep{o3a_pop,Edelman_2022ApJ}. 
 For each posterior sample describing our model's inferred population we reweigh the observed event samples and the found injections to that population and draw a set 69 (size of GWTC-3 BBH catalog) samples to construct the observed and predicted distributions we show in figure \ref{fig:ppc} and figure \ref{fig:spin_ppc}. When the observed region stays encompassed within the predicted region the model is performing well, which we see across each of the fit parameters. 
+
+\section{Reproducibility}
+\label{sec:reproducibility}
+
+In the spirit of open source and reproducible science, this study was done using the reproducibility software \href{https://github.com/showyourwork/showyourwork}{\showyourwork} \citep{Luger2021}, which leverages continuous integration to programmatically download the data from \href{https://zenodo.org/}{zenodo.org}, create the figures, and compile the manuscript. Each figure caption contains two links that point towards the dataset (stored on zenodo) used in the corresponding figure, and to the script used to make the figure (at the commit corresponding to the current build of the manuscript). The git repository associated to this study is publicly available at \url{https://github.com/bruce-edelman/CoveringYourBasis}, which allows anyone to re-build the entire manuscript. The datasets and all analysis or figure generating scripts are all stored on \href{https://zenodo.org/}{zenodo.org} at \url{https://zenodo.org/record/7566301} \citep{edelman_bruce_2022_7422514}.
